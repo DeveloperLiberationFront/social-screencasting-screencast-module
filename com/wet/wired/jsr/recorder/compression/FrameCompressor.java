@@ -29,7 +29,8 @@ package com.wet.wired.jsr.recorder.compression;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.zip.GZIPOutputStream;
+import java.util.zip.Deflater;
+import java.util.zip.DeflaterOutputStream;
 
 import edu.ncsu.lubick.ScreenRecordingModule;
 
@@ -38,6 +39,9 @@ public class FrameCompressor {
 	private FramePacket frame;
 	private OutputStream oStream;
 	private boolean currentFrameHasChanges;
+	private Deflater deflator = new Deflater(Deflater.BEST_SPEED);
+	private DeflaterOutputStream zO;
+	private ByteArrayOutputStream bO;
 
 
 	public FrameCompressor(OutputStream oStream, int frameSize) {
@@ -223,17 +227,28 @@ public class FrameCompressor {
 
 		if (ScreenRecordingModule.useCompression)
 		{
-			ByteArrayOutputStream bO = new ByteArrayOutputStream();
-
+			
+			if (bO == null)
+			{
+				bO = new ByteArrayOutputStream();
+			}
+			
+			if (zO == null)
+			{
+				//zO = new GZIPOutputStream(bO);
+				zO = new DeflaterOutputStream(bO, deflator, numBytesToWrite);
+			}
+			
+			//Makes way for the next compressed bit (makes a new header...)
+			deflator.reset();
 			byte[] bA;
-
-			GZIPOutputStream zO = new GZIPOutputStream(bO);
-
+			
 			zO.write(dataToWrite, 0, numBytesToWrite);
-			zO.close();
-			bO.close();
+			zO.finish();
 
 			bA = bO.toByteArray();
+			
+			
 
 			oStream.write((bA.length & 0xFF000000) >>> 24);
 			oStream.write((bA.length & 0x00FF0000) >>> 16);
@@ -242,6 +257,7 @@ public class FrameCompressor {
 
 			oStream.write(bA);
 			oStream.flush();
+			bO.reset();
 		}
 		else 
 		{
@@ -253,5 +269,9 @@ public class FrameCompressor {
 			oStream.write(dataToWrite);
 			oStream.flush();
 		}
+	}
+
+	public void stop() {
+		//Do nothing
 	}
 }

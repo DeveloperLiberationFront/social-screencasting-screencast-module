@@ -126,6 +126,7 @@ public abstract class ScreenRecorder implements Runnable {
 					}
 				}
 			}
+			compressor.stop();
 		}
 	}
 
@@ -139,6 +140,7 @@ public abstract class ScreenRecorder implements Runnable {
 
 	public void triggerRecordingStop() {
 		recording = false;
+		
 	}
 
 	public void run() {
@@ -177,6 +179,7 @@ public abstract class ScreenRecorder implements Runnable {
 
 		running = false;
 		recording = false;
+		
 
 		listener.recordingStopped();
 	}

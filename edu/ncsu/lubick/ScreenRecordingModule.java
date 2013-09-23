@@ -54,9 +54,9 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 		FileOutputStream oStream = new FileOutputStream(fileName);
 		recorder = new DesktopScreenRecorder(oStream, recorderBoss);
 		recorder.startRecording();
-		System.out.println("recording for 30 seconds" + (useCompression?"with compression":" without compression"));
+		System.out.println("recording for 120 seconds" + (useCompression?" with compression":" without compression"));
 
-		for(int i = 1;i<=30;i++)
+		for(int i = 1;i<=120;i++)
 		{
 			System.out.println(i);
 			Thread.sleep(1000);

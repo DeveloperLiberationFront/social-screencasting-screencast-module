@@ -30,7 +30,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.zip.GZIPInputStream;
+import java.util.zip.InflaterInputStream;
 
 import edu.ncsu.lubick.ScreenRecordingModule;
 
@@ -137,8 +137,10 @@ public class FrameDecompressor {
 			if (ScreenRecordingModule.useCompression)
 			{
 				ByteArrayInputStream bI = new ByteArrayInputStream(zData);
-				GZIPInputStream zI = new GZIPInputStream(bI);
-
+				
+				//GZIPInputStream zI = new GZIPInputStream(bI);
+				InflaterInputStream zI = new InflaterInputStream(bI);
+				
 				byte[] buffer = new byte[1000];
 				sizeRead = zI.read(buffer);
 

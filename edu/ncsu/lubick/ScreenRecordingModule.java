@@ -13,7 +13,11 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 	
 	public static boolean useCompression = true;
 
+	public static boolean useBufferedFrameCompressor = true;
+	
 	private static DesktopScreenRecorder recorder;
+
+	
 
 	/**
 	 * @param args

@@ -10,6 +10,8 @@ import com.wet.wired.jsr.recorder.ScreenRecorderListener;
 
 public class ScreenRecordingModule implements ScreenRecorderListener
 {
+	
+	public static boolean useCompression = true;
 
 	private static DesktopScreenRecorder recorder;
 
@@ -20,9 +22,7 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 	{
 		ScreenRecorderListener recorderBoss = new ScreenRecordingModule();
 
-		System.out.println(System.getenv());
-		
-		Thread.sleep(3000);
+		//System.out.println(System.getenv());
 
 		File scratchDir = new File("scratch/");
 		if (!scratchDir.exists())
@@ -50,9 +50,9 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 		FileOutputStream oStream = new FileOutputStream(fileName);
 		recorder = new DesktopScreenRecorder(oStream, recorderBoss);
 		recorder.startRecording();
-		System.out.println("recording for 10 seconds");
+		System.out.println("recording for 30 seconds" + (useCompression?"with compression":" without compression"));
 
-		for(int i = 1;i<=60;i++)
+		for(int i = 1;i<=30;i++)
 		{
 			System.out.println(i);
 			Thread.sleep(1000);

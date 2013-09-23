@@ -3,10 +3,6 @@ package edu.ncsu.lubick;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.util.Date;
-import java.util.Scanner;
 
 import com.wet.wired.jsr.converter.RecordingConverter;
 import com.wet.wired.jsr.recorder.DesktopScreenRecorder;
@@ -25,6 +21,8 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 		ScreenRecorderListener recorderBoss = new ScreenRecordingModule();
 
 		System.out.println(System.getenv());
+		
+		Thread.sleep(3000);
 
 		File scratchDir = new File("scratch/");
 		if (!scratchDir.exists())
@@ -54,7 +52,7 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 		recorder.startRecording();
 		System.out.println("recording for 10 seconds");
 
-		for(int i = 1;i<=10;i++)
+		for(int i = 1;i<=60;i++)
 		{
 			System.out.println(i);
 			Thread.sleep(1000);

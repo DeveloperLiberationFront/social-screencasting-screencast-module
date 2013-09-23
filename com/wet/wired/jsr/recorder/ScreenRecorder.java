@@ -30,211 +30,213 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public abstract class ScreenRecorder implements Runnable {
 
-   private Rectangle recordArea;
+	//This is how many seconds to wait minimum for each frame
+	private static final int FRAME_RATE_LIMITER = 190;
 
-   private int frameSize;
-   private int[] rawData;
+	private Rectangle recordArea;
 
-   private OutputStream oStream;
+	private int frameSize;
+	private int[] rawData;
 
-   private boolean recording = false;
-   private boolean running = false;
+	private OutputStream oStream;
 
-   private long startTime;
-   private long frameTime;
-   private boolean reset;
+	private boolean recording = false;
+	private boolean running = false;
 
-   private ScreenRecorderListener listener;
+	private long startTime;
+	private long frameTime;
+	private boolean reset;
 
-   private class DataPack {
-      public DataPack(int[] newData, long frameTime) {
-         this.newData = newData;
-         this.frameTime = frameTime;
-      }
+	private ScreenRecorderListener listener;
 
-      public long frameTime;
-      public int[] newData;
-   }
+	private class DataPack {
+		public DataPack(int[] newData, long frameTime) {
+			this.newData = newData;
+			this.frameTime = frameTime;
+		}
 
-   private class StreamPacker implements Runnable {
-      Queue<DataPack> queue = new LinkedList<DataPack>();
-      private FrameCompressor compressor;
+		public long frameTime;
+		public int[] newData;
+	}
 
-      public StreamPacker(OutputStream oStream, int frameSize) {
-         compressor = new FrameCompressor(oStream, frameSize);
+	private class StreamPacker implements Runnable {
+		BlockingQueue<DataPack> queue = new LinkedBlockingQueue<DataPack>();
+		private FrameCompressor compressor;
 
-         new Thread(this, "Stream Packer").start();
-      }
+		public StreamPacker(OutputStream oStream, int frameSize) {
+			compressor = new FrameCompressor(oStream, frameSize);
 
-      public void packToStream(DataPack pack) {
-         while (queue.size() > 2) {
-            try {
-               Thread.sleep(10);
-            } catch (Exception e) {
-            }
-         }
-         queue.add(pack);
-      }
+			new Thread(this, "Stream Packer").start();
+		}
 
-      public void run() {
-         while (recording) {
-            while (queue.isEmpty() == false) {
-               DataPack pack = queue.poll();
+		public void packToStream(DataPack pack) {
+			while (queue.size() > 2) {
+				try {
+					Thread.sleep(10);
+				} catch (Exception e) {
+				}
+			}
+			queue.add(pack);
+		}
 
-               try {
-                  // long t1 = System.currentTimeMillis();
-                  compressor.pack(pack.newData, pack.frameTime, reset);
-                  // long t2 = System.currentTimeMillis();
-                  // System.out.println("  pack time:"+(t2-t1));
+		public void run() {
+			while (recording) {
+				
+					DataPack pack;
+					try {
+						pack = queue.take();
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+						break;
+					}
 
-                  if (reset == true) {
-                     reset = false;
-                  }
-               } catch (Exception e) {
-                  e.printStackTrace();
-                  try {
-                     oStream.close();
-                  } catch (Exception e2) {
-                  }
-                  return;
-               }
-            }
-            while (queue.isEmpty() == true) {
-               try {
-                  Thread.sleep(50);
-               } catch (Exception e) {
-               }
-            }
-         }
-      }
-   }
+					try {
+						// long t1 = System.currentTimeMillis();
+						compressor.pack(pack.newData, pack.frameTime, reset);
+						// long t2 = System.currentTimeMillis();
+						// System.out.println("  pack time:"+(t2-t1));
 
-   private StreamPacker streamPacker;
+						if (reset == true) {
+							reset = false;
+						}
+					} catch (Exception e) {
+						e.printStackTrace();
+						try {
+							oStream.close();
+						} catch (Exception e2) {
+						}
+						return;
+					}
+				
+			}
+		}
+	}
 
-   public ScreenRecorder(OutputStream oStream, ScreenRecorderListener listener) {
+	private StreamPacker streamPacker;
 
-      this.listener = listener;
-      this.oStream = oStream;
-   }
+	public ScreenRecorder(OutputStream oStream, ScreenRecorderListener listener) {
 
-   public void triggerRecordingStop() {
-      recording = false;
-   }
+		this.listener = listener;
+		this.oStream = oStream;
+	}
 
-   public synchronized void run() {
-      startTime = System.currentTimeMillis();
+	public void triggerRecordingStop() {
+		recording = false;
+	}
 
-      recording = true;
-      running = true;
-      long lastFrameTime = 0;
-      long time = 0;
+	public synchronized void run() {
+		startTime = System.currentTimeMillis();
 
-      frameSize = recordArea.width * recordArea.height;
-      streamPacker = new StreamPacker(oStream, frameSize);
+		recording = true;
+		running = true;
+		long lastFrameTime = 0;
+		long time = 0;
 
-      while (recording) {
-         time = System.currentTimeMillis();
-         while (time - lastFrameTime < 190) {
-            try {
-               Thread.sleep(10);
-            } catch (Exception e) {
-            }
-            time = System.currentTimeMillis();
-         }
-         lastFrameTime = time;
+		frameSize = recordArea.width * recordArea.height;
+		streamPacker = new StreamPacker(oStream, frameSize);
 
-         try {
-            recordFrame();
-         } catch (Exception e) {
-            e.printStackTrace();
-            try {
-               oStream.close();
-            } catch (Exception e2) {
-            }
-            break;
-         }
-      }
+		while (recording) {
+			time = System.currentTimeMillis();
+			while (time - lastFrameTime < FRAME_RATE_LIMITER) {
+				try {
+					Thread.sleep(FRAME_RATE_LIMITER - (time - lastFrameTime) - 10);
+				} catch (Exception e) {
+				}
+				time = System.currentTimeMillis();
+			}
+			lastFrameTime = time;
 
-      running = false;
-      recording = false;
+			try {
+				recordFrame();
+			} catch (Exception e) {
+				e.printStackTrace();
+				try {
+					oStream.close();
+				} catch (Exception e2) {
+				}
+				break;
+			}
+		}
 
-      listener.recordingStopped();
-   }
+		running = false;
+		recording = false;
 
-   public abstract Rectangle initialiseScreenCapture();
+		listener.recordingStopped();
+	}
 
-   public abstract BufferedImage captureScreen(Rectangle recordArea);
+	public abstract Rectangle initialiseScreenCapture();
 
-   public void recordFrame() throws IOException {
-      // long t1 = System.currentTimeMillis();
-      BufferedImage bImage = captureScreen(recordArea);
-      frameTime = System.currentTimeMillis() - startTime;
-      // long t2 = System.currentTimeMillis();
+	public abstract BufferedImage captureScreen(Rectangle recordArea);
 
-      rawData = new int[frameSize];
+	public void recordFrame() throws IOException {
+		// long t1 = System.currentTimeMillis();
+		BufferedImage bImage = captureScreen(recordArea);
+		frameTime = System.currentTimeMillis() - startTime;
+		// long t2 = System.currentTimeMillis();
 
-      bImage.getRGB(0, 0, recordArea.width, recordArea.height, rawData, 0,
-            recordArea.width);
-      // long t3 = System.currentTimeMillis();
+		rawData = new int[frameSize];
 
-      streamPacker.packToStream(new DataPack(rawData, frameTime));
+		bImage.getRGB(0, 0, recordArea.width, recordArea.height, rawData, 0, recordArea.width);
+		// long t3 = System.currentTimeMillis();
 
-      // System.out.println("Times");
-      // System.out.println("  capture time:"+(t2-t1));
-      // System.out.println("  data grab time:"+(t3-t2));
+		streamPacker.packToStream(new DataPack(rawData, frameTime));
 
-      listener.frameRecorded(false);
-   }
+		// System.out.println("Times");
+		// System.out.println("  capture time:"+(t2-t1));
+		// System.out.println("  data grab time:"+(t3-t2));
 
-   public void startRecording() {
-      recordArea = initialiseScreenCapture();
+		listener.frameRecorded(false);
+	}
 
-      if (recordArea == null) {
-         return;
-      }
-      try {
-         oStream.write((recordArea.width & 0x0000FF00) >>> 8);
-         oStream.write((recordArea.width & 0x000000FF));
+	public void startRecording() {
+		recordArea = initialiseScreenCapture();
 
-         oStream.write((recordArea.height & 0x0000FF00) >>> 8);
-         oStream.write((recordArea.height & 0x000000FF));
-      } catch (Exception e) {
-         e.printStackTrace();
-      }
+		if (recordArea == null) {
+			return;
+		}
+		try {
+			oStream.write((recordArea.width & 0x0000FF00) >>> 8);
+			oStream.write((recordArea.width & 0x000000FF));
 
-      new Thread(this, "Screen Recorder").start();
-   }
+			oStream.write((recordArea.height & 0x0000FF00) >>> 8);
+			oStream.write((recordArea.height & 0x000000FF));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-   public void stopRecording() {
-      triggerRecordingStop();
+		new Thread(this, "Screen Recorder").start();
+	}
 
-      int count = 0;
-      while (running == true && count < 10) {
-         try {
-            Thread.sleep(100);
-         } catch (Exception e) {
-         }
-         count++;
-      }
+	public void stopRecording() {
+		triggerRecordingStop();
 
-      try {
-         oStream.flush();
-         oStream.close();
-      } catch (Exception e) {
-         e.printStackTrace();
-      }
-   }
+		int count = 0;
+		while (running == true && count < 10) {
+			try {
+				Thread.sleep(100);
+			} catch (Exception e) {
+			}
+			count++;
+		}
 
-   public boolean isRecording() {
-      return recording;
-   }
+		try {
+			oStream.flush();
+			oStream.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-   public int getFrameSize() {
-      return frameSize;
-   }
+	public boolean isRecording() {
+		return recording;
+	}
+
+	public int getFrameSize() {
+		return frameSize;
+	}
 }

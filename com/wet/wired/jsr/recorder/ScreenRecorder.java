@@ -33,6 +33,8 @@ import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import com.wet.wired.jsr.recorder.compression.FrameCompressor;
+
 public abstract class ScreenRecorder implements Runnable {
 
    private static final int FRAME_RATE_LIMITER = 190;
@@ -85,12 +87,12 @@ private Rectangle recordArea;
 
       public void run() {
          while (recording) {
-            while (queue.isEmpty() == false) {
+            while (!queue.isEmpty()) {
                DataPack pack = queue.poll();
 
                try {
                   // long t1 = System.currentTimeMillis();
-                  compressor.pack(pack.newData, pack.frameTime, reset);
+                  compressor.packFrame(pack.newData, pack.frameTime, reset);
                   // long t2 = System.currentTimeMillis();
                   // System.out.println("  pack time:"+(t2-t1));
 

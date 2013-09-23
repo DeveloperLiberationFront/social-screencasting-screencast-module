@@ -55,7 +55,7 @@ public class RecordingStream {
          height += iStream.read();
          area = new Rectangle(width, height);
          outputArea = area;
-         decompressor = new FrameDecompressor(iStream, width * height * 3);
+         decompressor = new FrameDecompressor(iStream, width * height);
       } catch (Exception e) {
          e.printStackTrace();
       }

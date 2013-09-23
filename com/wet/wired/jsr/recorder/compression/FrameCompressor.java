@@ -24,7 +24,7 @@
  * 
  */
 
-package com.wet.wired.jsr.recorder;
+package com.wet.wired.jsr.recorder.compression;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -37,45 +37,29 @@ public class FrameCompressor {
 
 	private FramePacket frame;
 	private OutputStream oStream;
+	private boolean currentFrameHasChanges;
 
-	public class FramePacket {
-
-
-		private long frameTime;
-
-		private int[] previousData;
-		private int[] newData;
-
-		private FramePacket(int frameSize) {
-			previousData = new int[frameSize];
-		}
-
-		private void nextFrame(int[] frameData, long frameTime, boolean reset) {
-			this.frameTime = frameTime;
-			previousData = newData;
-			newData = null;
-			if (previousData == null) {
-				previousData = new int[frameData.length];
-			}
-			if (reset) {
-				this.newData = new int[frameData.length];
-			} else {
-				this.newData = frameData;// new int[frameData.length];
-			}
-		}
-	}
 
 	public FrameCompressor(OutputStream oStream, int frameSize) {
 		frame = new FramePacket(frameSize);
 		this.oStream = oStream;
 	}
 
-	public void pack(int[] newData, long frameTimeStamp, boolean reset)
-			throws IOException {
-		frame.nextFrame(newData, frameTimeStamp, reset);
+	public void packFrame(int[] newData, long frameTimeStamp, boolean reset) throws IOException 
+	{
+		frame.updateFieldsForNextFrame(newData, frameTimeStamp, reset);
 
-		byte[] packed = new byte[newData.length * 4];
+		byte[] dataToWrite = new byte[newData.length * 4];
+		
+		int numBytesToWrite = extractData(newData, frame, dataToWrite);
 
+		writeData(dataToWrite, currentFrameHasChanges, numBytesToWrite, frame);
+
+	}
+
+
+	int extractData(int[] newData, FramePacket aFrame, byte[] packed) 
+	{
 		int inCursor = 0;
 		int outCursor = 0;
 		int blocks = 0;
@@ -95,7 +79,7 @@ public class FrameCompressor {
 		byte green;
 		byte blue;
 
-		boolean hasChanges = false;
+		currentFrameHasChanges = false;
 		boolean lastEntry = false;
 
 		while (inCursor < newData.length) {
@@ -103,7 +87,7 @@ public class FrameCompressor {
 				lastEntry = true;
 			}
 
-			if (newData[inCursor] == frame.previousData[inCursor]) {
+			if (newData[inCursor] == aFrame.previousData[inCursor]) {
 				red = 0;
 				green = 0;
 				blue = 0;
@@ -121,7 +105,7 @@ public class FrameCompressor {
 				if (inBlock == false) {
 					if (uncompressedCursor > -1) {
 						blocks++;
-						hasChanges = true;
+						currentFrameHasChanges = true;
 						packed[uncompressedCursor] = (byte) (blockSize + 0x80);
 					}
 					inBlock = true;
@@ -145,7 +129,7 @@ public class FrameCompressor {
 						}
 					} else {
 						blocks++;
-						hasChanges = true;
+						currentFrameHasChanges = true;
 						packed[outCursor] = (byte) blockSize;
 						outCursor++;
 						packed[outCursor] = blockRed;
@@ -164,7 +148,7 @@ public class FrameCompressor {
 				if (inBlock == true) {
 					if (blockSize > 0) {
 						blocks++;
-						hasChanges = true;
+						currentFrameHasChanges = true;
 						packed[outCursor] = (byte) blockSize;
 						outCursor++;
 						packed[outCursor] = blockRed;
@@ -183,7 +167,7 @@ public class FrameCompressor {
 				} else if (blockSize == 126 || lastEntry == true) {
 					if (uncompressedCursor > -1) {
 						blocks++;
-						hasChanges = true;
+						currentFrameHasChanges = true;
 						packed[uncompressedCursor] = (byte) (blockSize + 0x80);
 					}
 
@@ -214,15 +198,22 @@ public class FrameCompressor {
 			blockSize++;
 		}
 
-		oStream.write(((int) frame.frameTime & 0xFF000000) >>> 24);
-		oStream.write(((int) frame.frameTime & 0x00FF0000) >>> 16);
-		oStream.write(((int) frame.frameTime & 0x0000FF00) >>> 8);
-		oStream.write(((int) frame.frameTime & 0x000000FF));
+		return outCursor;
+	}
 
-		if (hasChanges == false) {
+	void writeData(byte[] dataToWrite, boolean hasChanges, int numBytesToWrite, FramePacket aFrame) throws IOException 
+	{
+		//Write out when this frame happened
+		oStream.write(((int) aFrame.frameTime & 0xFF000000) >>> 24);
+		oStream.write(((int) aFrame.frameTime & 0x00FF0000) >>> 16);
+		oStream.write(((int) aFrame.frameTime & 0x0000FF00) >>> 8);
+		oStream.write(((int) aFrame.frameTime & 0x000000FF));
+
+		//If the frame had new stuff
+		if (currentFrameHasChanges == false) {
 			oStream.write(0);
 			oStream.flush();
-			frame.newData = frame.previousData;
+			aFrame.newData = aFrame.previousData;
 
 			return;
 		} else {
@@ -238,7 +229,7 @@ public class FrameCompressor {
 
 			GZIPOutputStream zO = new GZIPOutputStream(bO);
 
-			zO.write(packed, 0, outCursor);
+			zO.write(dataToWrite, 0, numBytesToWrite);
 			zO.close();
 			bO.close();
 
@@ -254,12 +245,12 @@ public class FrameCompressor {
 		}
 		else 
 		{
-			oStream.write((packed.length & 0xFF000000) >>> 24);
-			oStream.write((packed.length & 0x00FF0000) >>> 16);
-			oStream.write((packed.length & 0x0000FF00) >>> 8);
-			oStream.write((packed.length & 0x000000FF));
+			oStream.write((dataToWrite.length & 0xFF000000) >>> 24);
+			oStream.write((dataToWrite.length & 0x00FF0000) >>> 16);
+			oStream.write((dataToWrite.length & 0x0000FF00) >>> 8);
+			oStream.write((dataToWrite.length & 0x000000FF));
 
-			oStream.write(packed);
+			oStream.write(dataToWrite);
 			oStream.flush();
 		}
 	}

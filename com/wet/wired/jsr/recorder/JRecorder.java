@@ -170,7 +170,7 @@ public class JRecorder extends JFrame implements ScreenRecorderListener,
             System.exit(0);
          }
       @SuppressWarnings("unused")
-      JRecorder jRecorder = new JRecorder();
+      JRecorder jRecorder = new JRecorder(); 
    }
 
    public void shutdown() {

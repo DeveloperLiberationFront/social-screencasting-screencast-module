@@ -54,7 +54,7 @@ public class FrameCompressor {
 		frame.updateFieldsForNextFrame(newData, frameTimeStamp, reset);
 
 		byte[] dataToWrite = new byte[newData.length * 4];
-		
+
 		int numBytesToWrite = extractData(newData, frame, dataToWrite);
 
 		writeData(dataToWrite, currentFrameHasChanges, numBytesToWrite, frame);
@@ -207,67 +207,71 @@ public class FrameCompressor {
 
 	void writeData(byte[] dataToWrite, boolean hasChanges, int numBytesToWrite, FramePacket aFrame) throws IOException 
 	{
-		//Write out when this frame happened
-		oStream.write(((int) aFrame.frameTime & 0xFF000000) >>> 24);
-		oStream.write(((int) aFrame.frameTime & 0x00FF0000) >>> 16);
-		oStream.write(((int) aFrame.frameTime & 0x0000FF00) >>> 8);
-		oStream.write(((int) aFrame.frameTime & 0x000000FF));
+		//We want to be the only ones writing this frame
+		synchronized (oStream) {
 
-		//If the frame had new stuff
-		if (currentFrameHasChanges == false) {
-			oStream.write(0);
-			oStream.flush();
-			aFrame.newData = aFrame.previousData;
+			//Write out when this frame happened
+			oStream.write(((int) aFrame.frameTime & 0xFF000000) >>> 24);
+			oStream.write(((int) aFrame.frameTime & 0x00FF0000) >>> 16);
+			oStream.write(((int) aFrame.frameTime & 0x0000FF00) >>> 8);
+			oStream.write(((int) aFrame.frameTime & 0x000000FF));
 
-			return;
-		} else {
-			oStream.write(1);
-			oStream.flush();
-		}
+			//If the frame had new stuff
+			if (hasChanges == false) {
+				oStream.write(0);
+				oStream.flush();
+				aFrame.newData = aFrame.previousData;
 
-		if (ScreenRecordingModule.useCompression)
-		{
-			
-			if (bO == null)
-			{
-				bO = new ByteArrayOutputStream();
+				return;
+			} else {
+				oStream.write(1);
+				oStream.flush();
 			}
-			
-			if (zO == null)
+
+			if (ScreenRecordingModule.useCompression)
 			{
-				//zO = new GZIPOutputStream(bO);
-				zO = new DeflaterOutputStream(bO, deflator, numBytesToWrite);
+
+				if (bO == null)
+				{
+					bO = new ByteArrayOutputStream();
+				}
+
+				if (zO == null)
+				{
+					//zO = new GZIPOutputStream(bO);
+					zO = new DeflaterOutputStream(bO, deflator, numBytesToWrite);
+				}
+
+				//Makes way for the next compressed bit (makes a new header...)
+				deflator.reset();
+				byte[] bA;
+
+				zO.write(dataToWrite, 0, numBytesToWrite);
+				zO.finish();
+
+				bA = bO.toByteArray();
+
+
+
+				oStream.write((bA.length & 0xFF000000) >>> 24);
+				oStream.write((bA.length & 0x00FF0000) >>> 16);
+				oStream.write((bA.length & 0x0000FF00) >>> 8);
+				oStream.write((bA.length & 0x000000FF));
+
+				oStream.write(bA);
+				oStream.flush();
+				bO.reset();
 			}
-			
-			//Makes way for the next compressed bit (makes a new header...)
-			deflator.reset();
-			byte[] bA;
-			
-			zO.write(dataToWrite, 0, numBytesToWrite);
-			zO.finish();
+			else 
+			{
+				oStream.write((dataToWrite.length & 0xFF000000) >>> 24);
+				oStream.write((dataToWrite.length & 0x00FF0000) >>> 16);
+				oStream.write((dataToWrite.length & 0x0000FF00) >>> 8);
+				oStream.write((dataToWrite.length & 0x000000FF));
 
-			bA = bO.toByteArray();
-			
-			
-
-			oStream.write((bA.length & 0xFF000000) >>> 24);
-			oStream.write((bA.length & 0x00FF0000) >>> 16);
-			oStream.write((bA.length & 0x0000FF00) >>> 8);
-			oStream.write((bA.length & 0x000000FF));
-
-			oStream.write(bA);
-			oStream.flush();
-			bO.reset();
-		}
-		else 
-		{
-			oStream.write((dataToWrite.length & 0xFF000000) >>> 24);
-			oStream.write((dataToWrite.length & 0x00FF0000) >>> 16);
-			oStream.write((dataToWrite.length & 0x0000FF00) >>> 8);
-			oStream.write((dataToWrite.length & 0x000000FF));
-
-			oStream.write(dataToWrite);
-			oStream.flush();
+				oStream.write(dataToWrite);
+				oStream.flush();
+			}
 		}
 	}
 

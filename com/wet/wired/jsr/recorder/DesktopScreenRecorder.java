@@ -45,8 +45,7 @@ public class DesktopScreenRecorder extends ScreenRecorder {
    private Robot robot;
    private BufferedImage mouseCursor;
 
-   public DesktopScreenRecorder(OutputStream oStream,
-         ScreenRecorderListener listener) {
+   public DesktopScreenRecorder(OutputStream oStream, ScreenRecorderListener listener) {
       super(oStream, listener);
 
       try {
@@ -58,8 +57,7 @@ public class DesktopScreenRecorder extends ScreenRecorder {
          else
             mouseCursorFile = "black_cursor.png";
 
-         URL cursorURL = getClass().getClassLoader().getResource(
-               "mouse_cursors/" + mouseCursorFile);
+         URL cursorURL = getClass().getClassLoader().getResource("mouse_cursors/" + mouseCursorFile);
 
          mouseCursor = ImageIO.read(cursorURL);
 

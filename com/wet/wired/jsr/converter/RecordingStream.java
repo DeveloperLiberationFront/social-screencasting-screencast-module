@@ -54,6 +54,7 @@ public class RecordingStream {
          height = height << 8;
          height += iStream.read();
          area = new Rectangle(width, height);
+         //System.out.println("The read in area was "+area);
          outputArea = area;
          decompressor = new FrameDecompressor(iStream, width * height);
       } catch (Exception e) {
@@ -73,8 +74,7 @@ public class RecordingStream {
          return null;
       }
 
-      BufferedImage bufferedImage = new BufferedImage(area.width, area.height,
-            BufferedImage.TYPE_INT_RGB);
+      BufferedImage bufferedImage = new BufferedImage(area.width, area.height, BufferedImage.TYPE_INT_RGB);
       bufferedImage.setRGB(0, 0, area.width, area.height, frame.getData(), 0,
             area.width);
 

@@ -54,6 +54,8 @@ public class RecordingConverter implements ControllerListener, DataSinkListener 
 	private boolean stateTransitionOK = true;
 
 	public static void main(String[] args) {
+		
+		args = new String[]{"scratch/temp0002.cap"};
 
 		if ((args.length != 1) || !args[0].endsWith("cap")) {
 			System.out
@@ -75,8 +77,7 @@ public class RecordingConverter implements ControllerListener, DataSinkListener 
 
 	public void process(String recordingFile, String movieFile) throws Exception {
 
-		MediaLocator mediaLocator = new MediaLocator(new File(movieFile).toURI()
-				.toURL());
+		MediaLocator mediaLocator = new MediaLocator(new File(movieFile).toURI().toURL());
 		PlayerDataSource playerDataSource = new PlayerDataSource(recordingFile);
 		Processor processor = Manager.createProcessor(playerDataSource);
 		processor.addControllerListener(this);
@@ -87,8 +88,7 @@ public class RecordingConverter implements ControllerListener, DataSinkListener 
 			return;
 		}
 
-		processor.setContentDescriptor(new ContentDescriptor(
-				FileTypeDescriptor.QUICKTIME));
+		processor.setContentDescriptor(new ContentDescriptor(FileTypeDescriptor.QUICKTIME));
 
 		TrackControl trackControl[] = processor.getTrackControls();
 		Format format[] = trackControl[0].getSupportedFormats();

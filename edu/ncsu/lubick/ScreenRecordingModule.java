@@ -1,8 +1,8 @@
 package edu.ncsu.lubick;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 
 import com.wet.wired.jsr.converter.RecordingConverter;
 import com.wet.wired.jsr.recorder.DesktopScreenRecorder;
@@ -36,7 +36,7 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 				throw new RuntimeException("Could not create scratch folder");
 			}
 		}
-		String fileName = "scratch/temp.cap";
+
 
 		File movFile = new File(scratchDir,"temp.mov");
 		if (movFile.exists())
@@ -47,28 +47,13 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 			}
 		}
 
+		/*OutputStream oStream = new RotatingFileManager(scratchDir, "temp","cap");
 
-
-		File temp = new File(fileName);
-		if (temp.exists())
-		{
-			if (!temp.delete())
-			{
-				throw new RuntimeException("Could not clear out old cap file");
-			}
-
-		}
-		if (!temp.createNewFile())
-		{
-			throw new RuntimeException("Could not create new cap file");
-		}
-
-		FileOutputStream oStream = new FileOutputStream(fileName);
 		recorder = new DesktopScreenRecorder(oStream, recorderBoss);
 		recorder.startRecording();
-		System.out.println("recording for 10 seconds" + (useCompression?" with compression":" without compression"));
+		System.out.println("recording for 30 seconds" + (useCompression?" with compression":" without compression"));
 
-		for(int i = 1;i<=10;i++)
+		for(int i = 1;i<=60;i++)
 		{
 			System.out.println(i);
 			Thread.sleep(1000);
@@ -76,46 +61,27 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 
 
 		recorder.stopRecording();
+		 */
 
-		String[] newArgs = new String[]{"scratch/temp.cap"}; 
+
+		for(File file:scratchDir.listFiles())
+		{
+			if (file.getName().endsWith(".cap"))
+			{
+				System.out.println("Parsing "+file.toString());
+				String[] newArgs = new String[]{"scratch/"+file.getName()}; 
+				RecordingConverter.main(newArgs);
+			}
+		}
 
 
-		System.out.println("Rendering");
 
-		RecordingConverter.main(newArgs);
-
-		//ProcessBuilder pb = new ProcessBuilder("java", "-jar", "screen_converter.jar", "temp.cap");
-
-		//pb.directory(new File("scratch/"));
-		//Process p = pb.start();
-		//System.out.println(new Date());
-		//inheritIO(p.getInputStream(), System.out);
-		//inheritIO(p.getErrorStream(), System.err);
-		//System.out.println("Rendering");
-		//System.out.println(p.waitFor());
-
-		//System.out.println("Has Rendered");
 	}
 
-
-
-
-	/*private static void inheritIO(final InputStream src, final PrintStream dest) {
-		new Thread(new Runnable() {
-			public void run() {
-				Scanner sc = new Scanner(src);
-				while (sc.hasNextLine()) {
-					dest.println(new Date() + sc.nextLine());
-				}
-				sc.close();
-			}
-		}).start();
-	}*/
 
 	@Override
 	public void frameRecorded(boolean fullFrame) throws IOException
 	{
-
 
 	}
 
@@ -125,5 +91,7 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 		System.err.println("Recording Stopped");
 
 	}
+
+
 
 }

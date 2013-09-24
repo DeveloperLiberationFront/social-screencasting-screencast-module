@@ -81,9 +81,14 @@ class PlayerSourceStream implements PullBufferStream {
       }
 
       RenderedImage newImage = recordingStream.readFrame();
-      if (newImage != null) {
+      if (newImage != null ) {
          image = newImage;
       }
+     // if (image == null)
+     // {
+    //	  //If our first image was not really an image, then we punt
+    //	  return;
+     // }
 
       ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
       ImageOutputStream ios = ImageIO.createImageOutputStream(outputStream);

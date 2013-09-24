@@ -32,8 +32,16 @@ public class BufferedFrameCompressor extends FrameCompressor
 							bytesToWrite = byteBuffer.toByteArray();
 							byteBuffer.reset();
 						}
+						//Just to make sure that the isRecording isn't changed
+						//right before we write to disk
+						synchronized (outputToDisk) 
+						{
+							if (isRecording)
+							{
+								outputToDisk.write(bytesToWrite);
+							}
+						}
 
-						outputToDisk.write(bytesToWrite);
 						Thread.sleep(1000);
 
 					} catch (InterruptedException | IOException e) {
@@ -53,22 +61,24 @@ public class BufferedFrameCompressor extends FrameCompressor
 
 	@Override
 	void writeData(byte[] dataToWrite, boolean hasChanges, int numBytesToWrite, FramePacket aFrame) throws IOException {
-		synchronized (byteBuffer) {
-			super.writeData(dataToWrite, hasChanges, numBytesToWrite, aFrame);
+		synchronized (outputToDisk) {
+			synchronized (byteBuffer) {
+				super.writeData(dataToWrite, hasChanges, numBytesToWrite, aFrame);
+			}
 		}
 
 	}
 
 	@Override
-	public void stop() {
-		super.stop();
-		isRecording=false;
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) 
+	public void stop() 
+	{
+		//Make sure that the last outputToDisk write finishes
+		synchronized (outputToDisk) 
 		{
-			e.printStackTrace();
+			super.stop();
+			isRecording=false;
 		}
+		
 	}
 
 }

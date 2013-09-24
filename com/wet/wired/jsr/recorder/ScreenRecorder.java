@@ -140,7 +140,7 @@ public abstract class ScreenRecorder implements Runnable {
 
 	public void triggerRecordingStop() {
 		recording = false;
-		
+
 	}
 
 	public void run() {
@@ -172,6 +172,7 @@ public abstract class ScreenRecorder implements Runnable {
 				try {
 					oStream.close();
 				} catch (Exception e2) {
+					e2.printStackTrace();
 				}
 				break;
 			}
@@ -179,7 +180,7 @@ public abstract class ScreenRecorder implements Runnable {
 
 		running = false;
 		recording = false;
-		
+
 
 		listener.recordingStopped();
 	}

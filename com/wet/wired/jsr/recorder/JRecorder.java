@@ -128,7 +128,6 @@ public class JRecorder extends JFrame implements ScreenRecorderListener,
          JFileChooser fileChooser = new JFileChooser();
          FileExtensionFilter filter = new FileExtensionFilter(); 
 
-         filter = new FileExtensionFilter();
          filter.addExtension("cap");
          filter.setDescription("Screen Capture File");
 

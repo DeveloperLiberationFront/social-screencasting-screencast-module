@@ -562,8 +562,7 @@ public class FileHelper {
       MessageDigest md5Algorithm = MessageDigest.getInstance("MD5");
 
       byte[] byteArray = new byte[1000];
-      FileInputStream iStream = new FileInputStream(
-            new File(fileName).getAbsolutePath());
+      FileInputStream iStream = new FileInputStream(new File(fileName).getAbsolutePath());
       int size = iStream.read(byteArray);
 
       while (size != -1) {
@@ -571,6 +570,8 @@ public class FileHelper {
          size = iStream.read(byteArray);
       }
 
+
+      
       byte[] digest = md5Algorithm.digest();
       StringBuffer hexString = new StringBuffer();
 

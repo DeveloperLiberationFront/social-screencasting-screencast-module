@@ -154,7 +154,11 @@ public class RecordingConverter implements ControllerListener, DataSinkListener 
 		} else if (evt instanceof EndOfMediaEvent) {
 			evt.getSourceController().stop();
 			evt.getSourceController().close();
-			finished = true;
+			markFinished();
 		}
+	}
+
+	private static void markFinished() {
+		finished = true;		
 	}
 }

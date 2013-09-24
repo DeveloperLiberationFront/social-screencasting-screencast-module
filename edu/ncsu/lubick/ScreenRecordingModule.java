@@ -31,14 +31,20 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 		File scratchDir = new File("scratch/");
 		if (!scratchDir.exists())
 		{
-			scratchDir.mkdir();
+			if (!scratchDir.mkdir())
+			{
+				throw new RuntimeException("Could not create scratch folder");
+			}
 		}
 		String fileName = "scratch/temp.cap";
 
 		File movFile = new File(scratchDir,"temp.mov");
 		if (movFile.exists())
 		{
-			movFile.delete();
+			if (!movFile.delete())
+			{
+				throw new RuntimeException("Could not create temporary video file");
+			}
 		}
 
 
@@ -46,17 +52,23 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 		File temp = new File(fileName);
 		if (temp.exists())
 		{
-			temp.delete();
+			if (!temp.delete())
+			{
+				throw new RuntimeException("Could not clear out old cap file");
+			}
 
 		}
-		temp.createNewFile();
+		if (!temp.createNewFile())
+		{
+			throw new RuntimeException("Could not create new cap file");
+		}
 
 		FileOutputStream oStream = new FileOutputStream(fileName);
 		recorder = new DesktopScreenRecorder(oStream, recorderBoss);
 		recorder.startRecording();
-		System.out.println("recording for 120 seconds" + (useCompression?" with compression":" without compression"));
+		System.out.println("recording for 10 seconds" + (useCompression?" with compression":" without compression"));
 
-		for(int i = 1;i<=120;i++)
+		for(int i = 1;i<=10;i++)
 		{
 			System.out.println(i);
 			Thread.sleep(1000);

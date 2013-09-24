@@ -26,7 +26,6 @@ public class BufferedFrameCompressor extends FrameCompressor
 				while(isRecording)
 				{
 					try {
-						Thread.sleep(1000);
 						byte[] bytesToWrite;
 						synchronized (byteBuffer) 
 						{	
@@ -35,6 +34,7 @@ public class BufferedFrameCompressor extends FrameCompressor
 						}
 
 						outputToDisk.write(bytesToWrite);
+						Thread.sleep(1000);
 
 					} catch (InterruptedException | IOException e) {
 						e.printStackTrace();

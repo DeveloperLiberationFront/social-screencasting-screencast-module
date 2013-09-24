@@ -26,10 +26,20 @@
 
 package com.wet.wired.jsr.recorder;
 
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Vector;
+
+import org.apache.log4j.Logger;
 
 /**
  * The FileHelper, as its name implies gives a number of helper methods that
@@ -42,6 +52,9 @@ import java.util.Vector;
  */
 
 public class FileHelper {
+	
+	private static Logger logger = Logger.getLogger(FileHelper.class.getName());
+	
 	public static boolean buildFile(String fileName, byte[] data,
 			boolean backup, String historyData) {
 
@@ -64,7 +77,7 @@ public class FileHelper {
 			out.flush();
 			out.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Problem making File",e);
 			return false;
 		}
 
@@ -81,7 +94,7 @@ public class FileHelper {
 			out.flush();
 			out.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Problem appending to file",e);
 			return false;
 		}
 
@@ -111,7 +124,7 @@ public class FileHelper {
 			out.flush();
 			out.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("problem building file", e);
 			return false;
 		}
 
@@ -145,7 +158,7 @@ public class FileHelper {
 			out.flush();
 			out.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Problem building file",e);
 			return false;
 		}
 
@@ -156,8 +169,7 @@ public class FileHelper {
 		return copy(fileSrc, fileDest, null);
 	}
 
-	public static long copy(File fileSrc, File fileDest,
-			ProgressListener listener) {
+	public static long copy(File fileSrc, File fileDest,ProgressListener listener) {
 		byte[] buffer = new byte[5000];
 		long count = 0;
 		int sizeRead;
@@ -189,7 +201,7 @@ public class FileHelper {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Problem copying file",e);
 		}
 
 		return count;
@@ -238,7 +250,7 @@ public class FileHelper {
 			iStreamB.close();
 			return same;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Problem comparing files",e);
 			return false;
 		}
 	}
@@ -300,8 +312,7 @@ public class FileHelper {
 			fI.read(data, 0, maxData);
 			fI.close();
 		} catch (Exception e) {
-			System.out.println("Failed to check File " + fileName);
-			e.printStackTrace();
+			logger.error("Failed to check File " + fileName, e);
 			return null;
 		}
 
@@ -314,7 +325,7 @@ public class FileHelper {
 			out.flush();
 			out.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.fatal(e);
 			return false;
 		}
 
@@ -362,7 +373,7 @@ public class FileHelper {
 				listener.finished();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Problem copying",e);
 		}
 
 		return count;
@@ -400,7 +411,7 @@ public class FileHelper {
 				listener.finished();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Problem copying",e);
 		}
 
 		return count;
@@ -438,7 +449,7 @@ public class FileHelper {
 			iStream.close();
 			// oStream.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Problem copying",e);
 		}
 
 		return count;
@@ -502,7 +513,7 @@ public class FileHelper {
 			oStream.write((backupFileName + ":" + historyData + "\n").getBytes());
 			oStream.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Problem appending history");
 		}
 	}
 
@@ -532,7 +543,7 @@ public class FileHelper {
 
 			return history;
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.fatal("Problem getting history");
 			return null;
 		}
 	}

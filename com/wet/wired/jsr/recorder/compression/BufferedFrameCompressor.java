@@ -4,8 +4,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.apache.log4j.Logger;
+
 public class BufferedFrameCompressor extends FrameCompressor
 {
+	private static Logger logger = Logger.getLogger(BufferedFrameCompressor.class.getName());
+	
 	private ByteArrayOutputStream byteBuffer = null;
 
 	private OutputStream outputToDisk;
@@ -45,7 +49,7 @@ public class BufferedFrameCompressor extends FrameCompressor
 						Thread.sleep(1000);
 
 					} catch (InterruptedException | IOException e) {
-						e.printStackTrace();
+						logger.error("Problem in writing loop",e);
 					}
 				}
 

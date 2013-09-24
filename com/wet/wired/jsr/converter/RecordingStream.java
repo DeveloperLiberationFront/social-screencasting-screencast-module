@@ -31,7 +31,11 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.apache.log4j.Logger;
+
 public class RecordingStream {
+	
+	private static Logger logger = Logger.getLogger(RecordingStream.class.getName());
 
 	private Rectangle area;
 	private Rectangle outputArea;
@@ -57,7 +61,7 @@ public class RecordingStream {
 			outputArea = area;
 			decompressor = new FrameDecompressor(iStream, width * height);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 	}
 

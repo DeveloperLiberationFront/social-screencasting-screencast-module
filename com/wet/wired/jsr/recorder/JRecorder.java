@@ -41,10 +41,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
 
-@SuppressWarnings("serial")
-public class JRecorder extends JFrame implements ScreenRecorderListener,
-ActionListener {
+import org.apache.log4j.Logger;
 
+@SuppressWarnings("serial")
+public class JRecorder extends JFrame implements ScreenRecorderListener,ActionListener 
+{
+	private static Logger logger = Logger.getLogger(JRecorder.class.getName());
+	
 	private ScreenRecorder recorder;
 	private File temp;
 
@@ -91,7 +94,7 @@ ActionListener {
 			recorder = new DesktopScreenRecorder(oStream, this);
 			recorder.startRecording();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("problem starting up",e);
 		}
 	}
 
@@ -104,7 +107,7 @@ ActionListener {
 				control.setActionCommand("stop");
 				control.setText("Stop Recording");
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error("Problem starting up", e);
 			}
 		} else if (ev.getActionCommand().equals("stop") && recorder != null) {
 			text.setText("Stopping");
@@ -161,11 +164,10 @@ ActionListener {
 			if (args[0].equals("-white_cursor"))
 				DesktopScreenRecorder.useWhiteCursor = true;
 			else {
-				System.out
-				.println("Usage: java -jar screen_recorder.jar [OPTION]...");
-				System.out.println("Start the screen recorder.");
-				System.out.println("Options:   ");
-				System.out.println("   -white_cursor   record with white cursor");
+				logger.info("Usage: java -jar screen_recorder.jar [OPTION]...");
+				logger.info("Start the screen recorder.");
+				logger.info("Options:   ");
+				logger.info("   -white_cursor   record with white cursor");
 				System.exit(0);
 			}
 		JRecorder jRecorder = new JRecorder(); 

@@ -5,12 +5,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 import com.wet.wired.jsr.recorder.DesktopScreenRecorder;
 import com.wet.wired.jsr.recorder.ScreenRecorderListener;
 
 public class ScreenRecordingModule implements ScreenRecorderListener
 {
-
+	private static final String LOGGING_FILE_PATH = "./log4j.settings";
+	
 	public static boolean useCompression = true;
 
 	public static boolean useBufferedFrameCompressor = true;
@@ -19,9 +23,13 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 	
 	private static DesktopScreenRecorder recorder;
 
-	
+	private static Logger logger;
 
-
+	//Static initializer to get the logging path set up and create the hub
+	static {
+		PropertyConfigurator.configure(ScreenRecordingModule.LOGGING_FILE_PATH);
+		logger = Logger.getLogger(ScreenRecordingModule.class.getName());
+	}
 
 	/**
 	 * @param args
@@ -30,7 +38,7 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 	{
 		ScreenRecorderListener recorderBoss = new ScreenRecordingModule();
 
-		//System.out.println(System.getenv());
+		logger.trace(System.getenv());
 
 		File scratchDir = new File("scratch/");
 		if (!scratchDir.exists())
@@ -82,11 +90,11 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 		
 		recorder = new DesktopScreenRecorder(oStream, recorderBoss);
 		recorder.startRecording();
-		System.out.println("recording for 1 hour" + (useCompression?" with compression":" without compression"));
+		logger.info("recording for 1 hour" + (useCompression?" with compression":" without compression"));
 
 		for(int i = 1;i<=60*60;i++)
 		{
-			System.out.println(i);
+			logger.debug(i);
 			Thread.sleep(1000);
 		}
 
@@ -99,10 +107,11 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 		{
 			if (file.getName().endsWith(".cap"))
 			{
-				System.out.println("Parsing "+file.toString());
+				logger.info("Converting to video "+file.toString());
 				String[] newArgs = new String[]{"scratch/"+file.getName()}; 
 				RecordingConverter.main(newArgs);
 				Thread.sleep(1000);
+				logger.info("Finished converting");
 			}
 		}*/
 
@@ -120,7 +129,7 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 	@Override
 	public void recordingStopped()
 	{
-		System.err.println("Recording Stopped");
+		logger.info("Recording Stopped");
 
 	}
 

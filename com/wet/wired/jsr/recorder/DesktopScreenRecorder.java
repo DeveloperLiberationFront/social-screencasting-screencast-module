@@ -39,58 +39,60 @@ import java.net.URL;
 
 import javax.imageio.ImageIO;
 
+import org.apache.log4j.Logger;
+
 public class DesktopScreenRecorder extends ScreenRecorder {
+	private static Logger logger = Logger.getLogger(DesktopScreenRecorder.class.getName());
+	public static boolean useWhiteCursor;
+	private Robot robot;
+	private BufferedImage mouseCursor;
 
-   public static boolean useWhiteCursor;
-   private Robot robot;
-   private BufferedImage mouseCursor;
+	public DesktopScreenRecorder(OutputStream oStream, ScreenRecorderListener listener) {
+		super(oStream, listener);
 
-   public DesktopScreenRecorder(OutputStream oStream, ScreenRecorderListener listener) {
-      super(oStream, listener);
+		try {
 
-      try {
+			String mouseCursorFile;
 
-         String mouseCursorFile;
+			if (useWhiteCursor)
+				mouseCursorFile = "white_cursor.png";
+			else
+				mouseCursorFile = "black_cursor.png";
 
-         if (useWhiteCursor)
-            mouseCursorFile = "white_cursor.png";
-         else
-            mouseCursorFile = "black_cursor.png";
+			URL cursorURL = getClass().getClassLoader().getResource("mouse_cursors/" + mouseCursorFile);
 
-         URL cursorURL = getClass().getClassLoader().getResource("mouse_cursors/" + mouseCursorFile);
+			mouseCursor = ImageIO.read(cursorURL);
 
-         mouseCursor = ImageIO.read(cursorURL);
+		} catch (Exception e) {
+			logger.error("Problem in Loading Mouse Cursor Files",e);
+		}
+	}
 
-      } catch (Exception e) {
-         e.printStackTrace();
-      }
-   }
+	public Rectangle initialiseScreenCapture() {
+		try {
+			robot = new Robot();
+		} catch (AWTException awe) {
+			logger.fatal("Could not initialize Robot",awe);
+			return null;
+		}
+		return new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
+	}
 
-   public Rectangle initialiseScreenCapture() {
-      try {
-         robot = new Robot();
-      } catch (AWTException awe) {
-         awe.printStackTrace();
-         return null;
-      }
-      return new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
-   }
+	public Robot getRobot() {
+		return robot;
+	}
 
-   public Robot getRobot() {
-      return robot;
-   }
+	public BufferedImage captureScreen(Rectangle recordArea) {
+		Point mousePosition = MouseInfo.getPointerInfo().getLocation();
+		BufferedImage image = robot.createScreenCapture(recordArea);
 
-   public BufferedImage captureScreen(Rectangle recordArea) {
-      Point mousePosition = MouseInfo.getPointerInfo().getLocation();
-      BufferedImage image = robot.createScreenCapture(recordArea);
+		Graphics2D grfx = image.createGraphics();
 
-      Graphics2D grfx = image.createGraphics();
+		grfx.drawImage(mouseCursor, mousePosition.x - 8, mousePosition.y - 5,
+				null);
 
-      grfx.drawImage(mouseCursor, mousePosition.x - 8, mousePosition.y - 5,
-            null);
+		grfx.dispose();
 
-      grfx.dispose();
-
-      return image;
-   }
+		return image;
+	}
 }

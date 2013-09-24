@@ -47,8 +47,11 @@ import javax.media.protocol.ContentDescriptor;
 import javax.media.protocol.DataSource;
 import javax.media.protocol.FileTypeDescriptor;
 
+import org.apache.log4j.Logger;
+
 public class RecordingConverter implements ControllerListener, DataSinkListener {
 
+	private static Logger logger = Logger.getLogger(RecordingConverter.class.getName());
 	private static boolean finished = false;
 	private Object waitSync = new Object();
 	private boolean stateTransitionOK = true;
@@ -56,8 +59,8 @@ public class RecordingConverter implements ControllerListener, DataSinkListener 
 	public static void main(String[] args) {
 
 		if ((args.length != 1) || !args[0].endsWith("cap")) {
-			System.out
-			.println("Usage: java -jar screen_cap_to_video.jar <screen_cap_file.cap>");
+			//System.out.println("Usage: java -jar screen_cap_to_video.jar <screen_cap_file.cap>");
+			logger.info("Usage: java -jar screen_cap_to_video.jar <screen_cap_file.cap>");
 			return;
 		}
 
@@ -69,7 +72,7 @@ public class RecordingConverter implements ControllerListener, DataSinkListener 
 			recordingConverter = new RecordingConverter();
 			recordingConverter.process(args[0], movieFile);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.fatal(e);
 		}
 	}
 
@@ -83,7 +86,7 @@ public class RecordingConverter implements ControllerListener, DataSinkListener 
 		processor.configure();
 
 		if (!waitForState(processor, Processor.Configured)) {
-			System.err.println("Failed to configure the processor.");
+			logger.fatal("Failed to configure the processor.");
 			return;
 		}
 
@@ -95,7 +98,7 @@ public class RecordingConverter implements ControllerListener, DataSinkListener 
 		trackControl[0].setFormat(format[0]);
 		processor.realize();
 		if (!waitForState(processor, Processor.Realized)) {
-			System.err.println("Failed to realize the processor.");
+			logger.fatal("Failed to realize the processor.");
 			return;
 		}
 
@@ -117,7 +120,7 @@ public class RecordingConverter implements ControllerListener, DataSinkListener 
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				logger.error(e);
 			}
 		}
 

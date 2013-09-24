@@ -7,6 +7,8 @@ import java.io.OutputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.apache.log4j.Logger;
+
 /**
  * A RotatingFileManger acts like an OutputStream, but takes any writes and puts
  * them to a file.  After a fixed amount of time, the Manager switches to the next file
@@ -18,6 +20,8 @@ import java.util.TimerTask;
 public class RotatingFileManager extends OutputStream {
 
 	private static final long DELAY_FOR_NEW_FILE_MS = 10*1000;
+	
+	private static Logger logger = Logger.getLogger(RotatingFileManager.class.getName());
 	
 	private FileOutputStream currentFileStream = null;
 
@@ -68,11 +72,11 @@ public class RotatingFileManager extends OutputStream {
 			@Override
 			public void run() {
 				try {
-					System.out.println("ping");
+					logger.debug("ping");
 					makeNextFile();
 				} catch (IOException e) 
 				{
-					e.printStackTrace();
+					logger.error("There was a problem rotating files", e);
 				}
 			}
 		}, 0, DELAY_FOR_NEW_FILE_MS);
@@ -96,7 +100,7 @@ public class RotatingFileManager extends OutputStream {
 		{
 			throw new RuntimeException("Could not create new file file "+newFile);
 		}
-		System.out.println("Changing to file "+newFile);
+		logger.debug("Changing to file "+newFile);
 		synchronized (this) {
 			if (this.currentFileStream!=null)
 			{
@@ -153,6 +157,13 @@ public class RotatingFileManager extends OutputStream {
 		}
 	}
 	
+	@Override
+	public void flush() throws IOException {
+		synchronized (this) {
+			super.flush();
+		}
+	}
+	
 	public static class DefaultListener implements RotatingFileManagerListener
 	{
 
@@ -160,6 +171,7 @@ public class RotatingFileManager extends OutputStream {
 		{
 			if (i<0)
 			{
+				logger.error("Who put a negative here? "+i);
 				return "I cant deal with negatives";
 			}
 			if (i<10)

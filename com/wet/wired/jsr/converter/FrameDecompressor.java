@@ -32,11 +32,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.zip.InflaterInputStream;
 
+import org.apache.log4j.Logger;
+
 import edu.ncsu.lubick.ScreenRecordingModule;
 
 public class FrameDecompressor {
 
 	private static final int ALPHA = 0xFF000000;
+	private static Logger logger = Logger.getLogger(FrameDecompressor.class.getName());
 
 	public class FramePacket {
 
@@ -95,10 +98,10 @@ public class FrameDecompressor {
 		time += i;
 
 		frame.frameTimeStamp = (long) time;
-		// System.out.println("ft:"+frameTime);
+		logger.trace("ft:"+time);
 
 		byte type = (byte) frame.iStream.read();
-		// System.out.println("Packed Code:"+type);
+		logger.trace("Packed Code:"+type);
 
 		if (type <= 0) {
 			frame.result = type;
@@ -119,7 +122,7 @@ public class FrameDecompressor {
 			i = frame.iStream.read();
 			zSize += i;
 
-			// System.out.println("Zipped Frame size:"+zSize);
+			logger.trace("Zipped Frame size:"+zSize);
 
 			byte[] zData = new byte[zSize];
 			int readCursor = 0;
@@ -173,7 +176,7 @@ public class FrameDecompressor {
 		} 
 		catch (Exception e) 
 		{
-			e.printStackTrace();
+			logger.error(e);
 			frame.result = 0;
 			return frame;
 		}

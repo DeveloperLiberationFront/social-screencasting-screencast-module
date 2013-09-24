@@ -31,6 +31,7 @@ import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+
 import javax.imageio.IIOImage;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageWriteParam;
@@ -42,15 +43,19 @@ import javax.media.format.VideoFormat;
 import javax.media.protocol.ContentDescriptor;
 import javax.media.protocol.PullBufferStream;
 
+import org.apache.log4j.Logger;
+
 class PlayerSourceStream implements PullBufferStream {
 
-	FileInputStream inStream;
-	RecordingStream recordingStream;
-	int width, height, frameRate;
-	VideoFormat format;
-	RenderedImage image;
-	int nextImage = 0;
-	boolean ended = false;
+	private static Logger logger = Logger.getLogger(PlayerSourceStream.class.getName());
+	
+	private FileInputStream inStream;
+	private RecordingStream recordingStream;
+	private int width, height, frameRate;
+	private VideoFormat format;
+	private RenderedImage image;
+	private int nextImage = 0;
+	private boolean ended = false;
 
 	public PlayerSourceStream(String screenRecordingFileName) throws IOException {
 
@@ -72,7 +77,7 @@ class PlayerSourceStream implements PullBufferStream {
 
 		if (recordingStream.isFinished()) {
 
-			System.out.println("Done reading all images.");
+			logger.info("Done reading all images.");
 			buffer.setEOM(true);
 			buffer.setOffset(0);
 			buffer.setLength(0);
@@ -84,7 +89,7 @@ class PlayerSourceStream implements PullBufferStream {
 		//do
 		//{
 			newImage = recordingStream.readFrame();
-			System.out.println(newImage);
+			logger.debug(newImage);
 		//}
 		//while (newImage == null && image == null && !recordingStream.isFinished());
 		
@@ -108,7 +113,7 @@ class PlayerSourceStream implements PullBufferStream {
 
 		byte[] data = outputStream.toByteArray();
 		nextImage++;
-		System.out.println("Processing frame: " + nextImage);
+		logger.info("Processing frame: " + nextImage);
 		buffer.setData(data);
 		buffer.setOffset(0);
 		buffer.setLength(data.length);

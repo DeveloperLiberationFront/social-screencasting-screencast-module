@@ -33,6 +33,8 @@ import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import org.apache.log4j.Logger;
+
 import com.wet.wired.jsr.recorder.compression.BufferedFrameCompressor;
 import com.wet.wired.jsr.recorder.compression.FrameCompressor;
 
@@ -41,6 +43,7 @@ import edu.ncsu.lubick.ScreenRecordingModule;
 public abstract class ScreenRecorder implements Runnable {
 
 	private static final int FRAME_RATE_LIMITER = 190;
+	private static Logger logger = Logger.getLogger(ScreenRecorder.class.getName());
 
 	private Rectangle recordArea;
 
@@ -102,19 +105,20 @@ public abstract class ScreenRecorder implements Runnable {
 					DataPack pack = queue.poll();
 
 					try {
-						// long t1 = System.currentTimeMillis();
+						long t1 = System.currentTimeMillis();
 						compressor.packFrame(pack.newData, pack.frameTime, reset);
-						// long t2 = System.currentTimeMillis();
-						// System.out.println("  pack time:"+(t2-t1));
+						long t2 = System.currentTimeMillis();
+						if (logger.isTraceEnabled()) logger.trace("  pack time:"+(t2-t1));
 
 						if (reset == true) {
 							reset = false;
 						}
 					} catch (Exception e) {
-						e.printStackTrace();
+						logger.error("Problem packing frame",e);
 						try {
 							oStream.close();
 						} catch (Exception e2) {
+							logger.fatal("OMG!  SECOND EXCEPTION", e2);
 						}
 						return;
 					}
@@ -168,11 +172,11 @@ public abstract class ScreenRecorder implements Runnable {
 			try {
 				recordFrame();
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error("Problem in main loop",e);
 				try {
 					oStream.close();
 				} catch (Exception e2) {
-					e2.printStackTrace();
+					logger.fatal("Super error while closing",e2);
 				}
 				break;
 			}
@@ -190,22 +194,23 @@ public abstract class ScreenRecorder implements Runnable {
 	public abstract BufferedImage captureScreen(Rectangle recordArea);
 
 	public void recordFrame() throws IOException {
-		// long t1 = System.currentTimeMillis();
+		long t1 = System.currentTimeMillis();
 		BufferedImage bImage = captureScreen(recordArea);
-		frameTime = System.currentTimeMillis() - startTime;
-		// long t2 = System.currentTimeMillis();
+		long t2 = System.currentTimeMillis();
+		frameTime = t2 - startTime;
+		
 
 		rawData = new int[frameSize];
 
 		bImage.getRGB(0, 0, recordArea.width, recordArea.height, rawData, 0,
 				recordArea.width);
-		// long t3 = System.currentTimeMillis();
+		long t3 = System.currentTimeMillis();
 
 		streamPacker.packToStream(new DataPack(rawData, frameTime));
 
-		// System.out.println("Times");
-		// System.out.println("  capture time:"+(t2-t1));
-		// System.out.println("  data grab time:"+(t3-t2));
+		if (logger.isTraceEnabled()) logger.trace("Times");
+		if (logger.isTraceEnabled()) logger.trace("  capture time:"+(t2-t1));
+		if (logger.isTraceEnabled()) logger.trace("  data grab time:"+(t3-t2));
 
 		listener.frameRecorded(false);
 	}
@@ -223,7 +228,7 @@ public abstract class ScreenRecorder implements Runnable {
 			oStream.write((recordArea.height & 0x0000FF00) >>> 8);
 			oStream.write((recordArea.height & 0x000000FF));
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Problem writing initialized area");
 		}
 
 		new Thread(this, "Screen Recorder").start();
@@ -245,7 +250,7 @@ public abstract class ScreenRecorder implements Runnable {
 			oStream.flush();
 			oStream.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Problem while quitting");
 		}
 	}
 

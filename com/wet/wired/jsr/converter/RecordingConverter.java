@@ -72,7 +72,7 @@ public class RecordingConverter implements ControllerListener, DataSinkListener 
 			recordingConverter = new RecordingConverter();
 			recordingConverter.process(args[0], movieFile);
 		} catch (Exception e) {
-			logger.fatal(e);
+			logger.fatal("There was a problem processing that file",e);
 		}
 	}
 
@@ -120,7 +120,7 @@ public class RecordingConverter implements ControllerListener, DataSinkListener 
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
-				logger.error(e);
+				logger.error("Minor problem with thread",e);
 			}
 		}
 

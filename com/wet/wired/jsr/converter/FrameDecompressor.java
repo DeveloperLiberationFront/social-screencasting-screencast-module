@@ -176,7 +176,7 @@ public class FrameDecompressor {
 		} 
 		catch (Exception e) 
 		{
-			logger.error(e);
+			logger.error("Problem unpacking ",e);
 			frame.result = 0;
 			return frame;
 		}

@@ -325,7 +325,7 @@ public class FileHelper {
 			out.flush();
 			out.close();
 		} catch (Exception e) {
-			logger.fatal(e);
+			logger.fatal("Problem building file",e);
 			return false;
 		}
 
@@ -513,16 +513,15 @@ public class FileHelper {
 			oStream.write((backupFileName + ":" + historyData + "\n").getBytes());
 			oStream.close();
 		} catch (Exception e) {
-			logger.error("Problem appending history");
+			logger.error("Problem appending history",e);
 		}
 	}
 
-	public static File[] getHistory(String fileName) {
+	public static File[] getHistory(String fileName)  {
 		String historyFileName = fileName + ".history";
 
 		try {
-			BufferedReader reader = new BufferedReader(new FileReader(
-					historyFileName));
+			BufferedReader reader = new BufferedReader(new FileReader(historyFileName));
 
 			Vector<String> entries = new Vector<String>();
 			String entry = reader.readLine();
@@ -542,8 +541,8 @@ public class FileHelper {
 			reader.close();
 
 			return history;
-		} catch (Exception e) {
-			logger.fatal("Problem getting history");
+		} catch (IOException e) {
+			logger.fatal("Problem getting history",e);
 			return null;
 		}
 	}

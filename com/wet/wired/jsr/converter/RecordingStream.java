@@ -61,7 +61,7 @@ public class RecordingStream {
 			outputArea = area;
 			decompressor = new FrameDecompressor(iStream, width * height);
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error("Problem initializing stream", e);
 		}
 	}
 

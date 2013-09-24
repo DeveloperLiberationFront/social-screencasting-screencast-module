@@ -143,7 +143,7 @@ public abstract class ScreenRecorder implements Runnable {
 		
 	}
 
-	public synchronized void run() {
+	public void run() {
 		startTime = System.currentTimeMillis();
 
 		recording = true;

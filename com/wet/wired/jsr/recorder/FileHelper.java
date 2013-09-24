@@ -570,7 +570,7 @@ public class FileHelper {
          size = iStream.read(byteArray);
       }
 
-
+      iStream.close();
       
       byte[] digest = md5Algorithm.digest();
       StringBuffer hexString = new StringBuffer();

@@ -1,6 +1,7 @@
 package edu.ncsu.lubick;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -15,7 +16,11 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 
 	public static boolean useBufferedFrameCompressor = true;
 
+	public static boolean useRotatingFileManager = true;
+	
 	private static DesktopScreenRecorder recorder;
+
+	
 
 
 
@@ -38,20 +43,47 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 		}
 
 
-		File movFile = new File(scratchDir,"temp.mov");
-		if (movFile.exists())
+		for(File file:scratchDir.listFiles())
 		{
-			if (!movFile.delete())
+			if (file.getName().startsWith("temp"))
 			{
-				throw new RuntimeException("Could not create temporary video file");
+				if (!file.delete())
+				{
+					throw new RuntimeException("Could not clear out old mov files");
+				}
 			}
 		}
 
-		/*OutputStream oStream = new RotatingFileManager(scratchDir, "temp","cap");
+		OutputStream oStream;
+		if (useRotatingFileManager )
+		{
+			oStream = new RotatingFileManager(scratchDir, "temp","cap");
+		}
+		else
+		{
+			String fileName = "scratch/temp.cap";
 
+            File temp = new File(fileName);
+            if (temp.exists())
+            {
+                    if (!temp.delete())
+                    {
+                            throw new RuntimeException("Could not clear out old cap file");
+                    }
+
+            }
+            if (!temp.createNewFile())
+            {
+                    throw new RuntimeException("Could not create new cap file");
+            }
+
+            oStream = new FileOutputStream(fileName);
+		}
+		
+		
 		recorder = new DesktopScreenRecorder(oStream, recorderBoss);
 		recorder.startRecording();
-		System.out.println("recording for 30 seconds" + (useCompression?" with compression":" without compression"));
+		System.out.println("recording for 60 seconds" + (useCompression?" with compression":" without compression"));
 
 		for(int i = 1;i<=60;i++)
 		{
@@ -61,7 +93,7 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 
 
 		recorder.stopRecording();
-		 */
+		 
 
 
 		for(File file:scratchDir.listFiles())

@@ -126,7 +126,7 @@ public class JRecorder extends JFrame implements ScreenRecorderListener,
 
          UIManager.put("FileChooser.readOnly", true);
          JFileChooser fileChooser = new JFileChooser();
-         FileExtensionFilter filter = new FileExtensionFilter();
+         FileExtensionFilter filter = new FileExtensionFilter(); 
 
          filter = new FileExtensionFilter();
          filter.addExtension("cap");

@@ -80,7 +80,14 @@ class PlayerSourceStream implements PullBufferStream {
 			return;
 		}
 
-		RenderedImage newImage = recordingStream.readFrame();
+		RenderedImage newImage = null;
+		//do
+		//{
+			newImage = recordingStream.readFrame();
+			System.out.println(newImage);
+		//}
+		//while (newImage == null && image == null && !recordingStream.isFinished());
+		
 		if (newImage != null) {
 			image = newImage;
 		}
@@ -94,7 +101,7 @@ class PlayerSourceStream implements PullBufferStream {
 		ImageWriteParam iwp = writer.getDefaultWriteParam();
 		iwp.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
 		iwp.setCompressionType("JPEG");
-		iwp.setCompressionQuality(1);
+		iwp.setCompressionQuality(1);		//image quality maxed when this is 1
 
 		writer.write(null, new IIOImage(image, null, null), iwp);
 		writer.dispose();

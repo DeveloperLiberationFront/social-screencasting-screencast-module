@@ -17,7 +17,7 @@ import java.util.TimerTask;
  */
 public class RotatingFileManager extends OutputStream {
 
-	private static final long DELAY_FOR_NEW_FILE_MS = 20*1000;
+	private static final long DELAY_FOR_NEW_FILE_MS = 10*1000;
 	
 	private FileOutputStream currentFileStream = null;
 

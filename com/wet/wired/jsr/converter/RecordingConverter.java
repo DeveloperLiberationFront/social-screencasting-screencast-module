@@ -107,6 +107,8 @@ public class RecordingConverter implements ControllerListener, DataSinkListener 
 		waitForFileDone();
 		dataSink.close();
 		processor.removeControllerListener(this);
+		processor.close();
+		Thread.sleep(1000);
 	}
 
 	void waitForFileDone() {

@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import com.wet.wired.jsr.converter.RecordingConverter;
 import com.wet.wired.jsr.recorder.DesktopScreenRecorder;
 import com.wet.wired.jsr.recorder.ScreenRecorderListener;
 
@@ -16,7 +15,7 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 
 	public static boolean useBufferedFrameCompressor = true;
 
-	public static boolean useRotatingFileManager = true;
+	public static boolean useRotatingFileManager = false;
 	
 	private static DesktopScreenRecorder recorder;
 
@@ -83,9 +82,9 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 		
 		recorder = new DesktopScreenRecorder(oStream, recorderBoss);
 		recorder.startRecording();
-		System.out.println("recording for 60 seconds" + (useCompression?" with compression":" without compression"));
+		System.out.println("recording for 1 hour" + (useCompression?" with compression":" without compression"));
 
-		for(int i = 1;i<=60;i++)
+		for(int i = 1;i<=60*60;i++)
 		{
 			System.out.println(i);
 			Thread.sleep(1000);
@@ -94,17 +93,18 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 
 		recorder.stopRecording();
 		 
+	
 
-
-		for(File file:scratchDir.listFiles())
+		/*for(File file:scratchDir.listFiles())
 		{
 			if (file.getName().endsWith(".cap"))
 			{
 				System.out.println("Parsing "+file.toString());
 				String[] newArgs = new String[]{"scratch/"+file.getName()}; 
 				RecordingConverter.main(newArgs);
+				Thread.sleep(1000);
 			}
-		}
+		}*/
 
 
 

@@ -71,7 +71,6 @@ public class JRecorder extends JFrame implements ScreenRecorderListener,
       this.getContentPane().add(text, BorderLayout.SOUTH);
 
       this.pack();
-      this.setVisible(true);
    }
 
    public void startRecording(String fileName) {
@@ -169,8 +168,8 @@ public class JRecorder extends JFrame implements ScreenRecorderListener,
             System.out.println("   -white_cursor   record with white cursor");
             System.exit(0);
          }
-      @SuppressWarnings("unused")
       JRecorder jRecorder = new JRecorder(); 
+      jRecorder.setVisible(true);
    }
 
    public void shutdown() {

@@ -26,6 +26,7 @@
 
 package com.wet.wired.jsr.recorder.compression;
 
+import java.awt.datatransfer.StringSelection;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -339,7 +340,7 @@ public class FrameCompressor {
 		}
 		
 		
-		if (logger.isTraceEnabled()) logger.trace("Finished conversion with "+blocks+" blocks");
+		if (logger.isTraceEnabled()) logger.trace("Finished conversion with "+blocks+" blocks making up "+outputCursor +" bytes");
 		//if (logger.isTraceEnabled()) logger.trace('\n'+Arrays.toString(packedBytes)+'\n');
 		return outputCursor;
 	}
@@ -391,6 +392,7 @@ public class FrameCompressor {
 
 				bA = bO.toByteArray();
 
+				if (logger.isTraceEnabled()) logger.trace(String.format("Compressed %d bytes to %d bytes",numBytesToWrite, bA.length));
 
 
 				oStream.write((bA.length & 0xFF000000) >>> 24);

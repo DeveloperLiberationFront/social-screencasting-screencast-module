@@ -54,7 +54,7 @@ public class BufferedFrameCompressor extends FrameCompressor
 				}
 
 			}
-		});
+		},"Buffered To Disk Thread");
 		backThread.start();
 	}
 
@@ -65,6 +65,9 @@ public class BufferedFrameCompressor extends FrameCompressor
 
 	@Override
 	void writeData(byte[] dataToWrite, boolean hasChanges, int numBytesToWrite, FramePacket aFrame) throws IOException {
+		
+		//we have to make sure that the byte buffer isn't getting unloaded (write to disk)
+		//or that our outputToDisk is in use elsewhere
 		synchronized (outputToDisk) {
 			synchronized (byteBuffer) {
 				super.writeData(dataToWrite, hasChanges, numBytesToWrite, aFrame);

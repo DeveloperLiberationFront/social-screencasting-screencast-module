@@ -89,7 +89,7 @@ class PlayerSourceStream implements PullBufferStream {
 		//do
 		//{
 			newImage = recordingStream.readFrame();
-			logger.debug(newImage);
+			logger.trace(newImage);
 		//}
 		//while (newImage == null && image == null && !recordingStream.isFinished());
 		

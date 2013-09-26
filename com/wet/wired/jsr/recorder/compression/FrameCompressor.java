@@ -26,7 +26,6 @@
 
 package com.wet.wired.jsr.recorder.compression;
 
-import java.awt.datatransfer.StringSelection;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -56,17 +55,64 @@ public class FrameCompressor {
 		this.oStream = oStream;
 	}
 
+	
+	private long t1,t2,t3,t4;
+	
+	private long sumI1 = 0,sumI2 = 0,sumI3 = 0, sumSum = 0;
+	
+	private int timingCounter = 0;
+	
+	private int reps = 100;
+	
+	byte[] dataToWriteBuffer = new byte[1];
+	
 	public void packFrame(int[] newData, long frameTimeStamp, boolean reset) throws IOException 
 	{
+		t1 = System.nanoTime();
+		//For performance reasons, we reuse the frame
 		frame.updateFieldsForNextFrame(newData, frameTimeStamp, reset);
 
 		//Worst case scenario, we'll need 4 times as many bytes as ints that come in
-		byte[] dataToWrite = new byte[newData.length * 4];
+		if (dataToWriteBuffer.length != (newData.length * 4))
+		{
+			dataToWriteBuffer = new byte[newData.length * 4];
+		}
+		
+		t2 = System.nanoTime();
+		
+		int numBytesToWrite = compressDataUsingRunLengthEncoding(newData, frame, dataToWriteBuffer, false);
+		
+		t3 = System.nanoTime();
+		
+		writeData(dataToWriteBuffer, currentFrameHasChanges, numBytesToWrite, frame);
 
-		int numBytesToWrite = extractData(newData, frame, dataToWrite, false);
-
-		writeData(dataToWrite, currentFrameHasChanges, numBytesToWrite, frame);
-
+		t4 = System.nanoTime();
+		if (logger.isTraceEnabled()) 
+		{
+			sumI1 += (t2-t1);
+			sumI2 += (t3-t2);
+			sumI3 += (t4-t3);
+			sumSum += (t4-t1);
+			if (timingCounter % reps == 0 && timingCounter > 0)
+			{
+				logger.trace("===================Summary======================");
+				logger.trace(String.format("AVERAGE: First Interval ,%1.3fms, Second Interval ,%1.3fms, Third Interval ,%1.3fms,"
+						,((sumI1)/1000000.0)/reps,(sumI2)/(1000000.0)/reps,((sumI3)/1000000.0)/reps));
+				logger.trace(String.format("By percents: First Interval %f%%, Second Interval %f%%, Third Interval %f%%",
+						(sumI1)*100.0/sumSum, (sumI2)*100.0/sumSum, (sumI3)*100.0/sumSum));
+				logger.trace("raw: ," + sumI1 +','+ sumI2 +','+ sumI3 +','+ sumSum +',');
+			}
+			else
+			{
+				//logger.trace(String.format("First Interval ,%1.3fms, Second Interval ,%1.3fms, Third Interval ,%1.3fms,"
+				//		,(t2-t1)/1000000.0,(t3-t2)/1000000.0,(t4-t3)/1000000.0));
+				//long total = t4-t1;
+				//logger.trace(String.format("By percents: First Interval %f%%, Second Interval %f%%, Third Interval %f%%",
+				//		(t2-t1)*100.0/total, (t3-t2)*100.0/total, (t4-t3)*100.0/total));
+			}
+			
+			timingCounter++;
+		}
 	}
 
 
@@ -74,7 +120,7 @@ public class FrameCompressor {
 	 * Takes the the inputData and fills packedBytes with a compressed version
 	 * of the RGB values represented by the ints in inputData.
 	 * 
-	 * If forceFullFrame is true, 
+	 * If forceFullFrame is true, this should use an entire frame instead of a diff from the previous frame
 	 * 
 	 * Returns 
 	 * @param inputData
@@ -83,7 +129,7 @@ public class FrameCompressor {
 	 * @param forceFullFrame
 	 * @return How many bytes were put into packedBytes
 	 */
-	int extractData(int[] inputData, FramePacket aFrame, byte[] packedBytes, boolean forceFullFrame) 
+	int compressDataUsingRunLengthEncoding(int[] inputData, FramePacket aFrame, byte[] packedBytes, boolean forceFullFrame) 
 	{
 		if (logger.isTraceEnabled()) logger.trace("Extracting data from inputData of size "+inputData.length);
 		//if (logger.isTraceEnabled()) logger.trace('\n'+Arrays.toString(inputData)+'\n');

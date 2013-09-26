@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import com.wet.wired.jsr.converter.RecordingConverter;
 import com.wet.wired.jsr.recorder.DesktopScreenRecorder;
 import com.wet.wired.jsr.recorder.ScreenRecorderListener;
 
@@ -90,9 +91,9 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 		
 		recorder = new DesktopScreenRecorder(oStream, recorderBoss);
 		recorder.startRecording();
-		logger.info("recording for 1 hour" + (useCompression?" with compression":" without compression"));
+		logger.info("recording for 60 seconds" + (useCompression?" with compression":" without compression"));
 
-		for(int i = 1;i<=60*60;i++)
+		for(int i = 1;i<=60;i++)
 		{
 			logger.debug(i);
 			Thread.sleep(1000);
@@ -103,7 +104,7 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 		 
 	
 
-		/*for(File file:scratchDir.listFiles())
+		for(File file:scratchDir.listFiles())
 		{
 			if (file.getName().endsWith(".cap"))
 			{
@@ -113,7 +114,7 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 				Thread.sleep(1000);
 				logger.info("Finished converting");
 			}
-		}*/
+		}
 
 
 

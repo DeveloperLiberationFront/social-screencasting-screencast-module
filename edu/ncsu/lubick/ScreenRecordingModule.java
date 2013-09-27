@@ -1,14 +1,13 @@
 package edu.ncsu.lubick;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import com.wet.wired.jsr.converter.RecordingConverter;
+import com.wet.wired.jsr.recorder.CapFileManager;
 import com.wet.wired.jsr.recorder.DesktopScreenRecorder;
 import com.wet.wired.jsr.recorder.ScreenRecorderListener;
 
@@ -62,10 +61,10 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 			}
 		}
 
-		OutputStream oStream;
+		CapFileManager fileManager;
 		if (useRotatingFileManager )
 		{
-			oStream = new RotatingFileManager(scratchDir, "temp","cap");
+			fileManager = RotatingBufferedCapFileManager.makeRotatingFileManager(scratchDir, "temp","cap");
 		}
 		else
 		{
@@ -85,11 +84,11 @@ public class ScreenRecordingModule implements ScreenRecorderListener
                     throw new RuntimeException("Could not create new cap file");
             }
 
-            oStream = new FileOutputStream(fileName);
+            fileManager = new BasicCapFileManager(temp);
 		}
 		
 		
-		recorder = new DesktopScreenRecorder(oStream, recorderBoss);
+		recorder = new DesktopScreenRecorder(fileManager, recorderBoss);
 		recorder.startRecording();
 		logger.info("recording for 60 seconds" + (useCompression?" with compression":" without compression"));
 

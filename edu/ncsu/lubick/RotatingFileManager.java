@@ -58,28 +58,10 @@ public class RotatingFileManager {
 		this.prefix = prefix;
 		this.fileExtension = fileExtension;
 		this.listener = listener;
-
-//		timer = new Timer(true);
-//		timer.schedule(new TimerTask() {
-//
-//			@Override
-//			public void run() {
-//				try {
-//					logger.debug("ping");
-//					makeNextFile();
-//				} catch (IOException e) 
-//				{
-//					logger.error("There was a problem rotating files", e);
-//				}
-//			}
-//		}, 0, DELAY_FOR_NEW_FILE_MS);
 	}
-
-	private int countOfFile = 0;
 
 	public void makeNextFile() throws IOException 
 	{
-		countOfFile++;
 		File newFile = new File(directory, this.prefix + listener.getNextSuffix()+"."+fileExtension);
 		if (newFile.exists())
 		{
@@ -95,22 +77,11 @@ public class RotatingFileManager {
 		}
 		logger.debug("Changing to file "+newFile);
 
-			if (this.currentFileStream!=null)
-			{
-				this.currentFileStream.close();
-			}
-			this.currentFileStream = new FileOutputStream(newFile);
-			if (countOfFile !=1)
-			{
-				currentFileStream.write((1600 & 0x0000FF00) >>> 8);	//width
-				currentFileStream.write((1600 & 0x000000FF));
-
-				currentFileStream.write((900 & 0x0000FF00) >>> 8);	//height
-				currentFileStream.write((900 & 0x000000FF));
-			}
-
-		
-
+		if (this.currentFileStream!=null)
+		{
+			this.currentFileStream.close();
+		}
+		this.currentFileStream = new FileOutputStream(newFile);
 	}
 
 	public FileOutputStream getCurrentFileStream() {

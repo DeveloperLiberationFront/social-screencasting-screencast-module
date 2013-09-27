@@ -14,14 +14,14 @@ import com.wet.wired.jsr.recorder.compression.FrameCompressorSavingStrategy;
  */
 public interface CapFileManager {
 
-	public void close() throws IOException;
+	public void shutDown();
 	public void flush() throws IOException;
 	
 
 	public void setAndWriteFrameWidth(int width) throws IOException;
 	public void setAndWriteFrameHeight(int height) throws IOException;
 	
-	public void startWritingFrame(boolean isFullFrame);
+	public void startWritingFrame(boolean isFullFrame) throws IOException;
 	public void endWritingFrame();
 	
 	public void write(int i) throws IOException;
@@ -39,6 +39,9 @@ public interface CapFileManager {
 	 * @return
 	 */
 	public FrameCompressorSavingStrategy getSavingStrategy();
+
+
+	
 	
 	
 

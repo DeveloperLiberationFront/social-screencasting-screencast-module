@@ -121,6 +121,7 @@ public class JRecorder extends JFrame implements ScreenRecorderListener,ActionLi
 		} else if (ev.getActionCommand().equals("stop") && recorder != null) {
 			text.setText("Stopping");
 			recorder.stopRecording();
+			
 		}
 	}
 

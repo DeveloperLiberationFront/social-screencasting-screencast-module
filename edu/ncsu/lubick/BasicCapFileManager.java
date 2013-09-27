@@ -6,13 +6,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import org.apache.log4j.Logger;
+
 import com.wet.wired.jsr.recorder.CapFileManager;
 import com.wet.wired.jsr.recorder.compression.FrameCompressorCodecStrategy;
 import com.wet.wired.jsr.recorder.compression.FrameCompressorSavingStrategy;
 
 public class BasicCapFileManager implements CapFileManager 
 {
-
+	private static Logger logger = Logger.getLogger(CapFileManager.class.getName());
+	
 	private OutputStream oStream;
 
 	public BasicCapFileManager(File locationOfCapFile) throws FileNotFoundException {
@@ -24,8 +27,14 @@ public class BasicCapFileManager implements CapFileManager
 	}
 
 	@Override
-	public void close() throws IOException {
-		oStream.close();
+	public void shutDown(){
+		try 
+		{
+			oStream.close();
+		} 
+		catch (IOException e) {
+			logger.error("Problem shutting down file",e);
+		}
 
 	}
 
@@ -52,9 +61,8 @@ public class BasicCapFileManager implements CapFileManager
 	}
 
 	@Override
-	public void startWritingFrame(boolean isFullFrame) {
-		// TODO Auto-generated method stub
-
+	public void startWritingFrame(boolean isFullFrame) throws IOException {
+		//I don't need to know
 	}
 
 	@Override

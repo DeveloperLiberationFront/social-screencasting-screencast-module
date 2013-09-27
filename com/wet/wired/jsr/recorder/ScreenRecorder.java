@@ -57,7 +57,7 @@ public abstract class ScreenRecorder implements Runnable {
 
 	private ScreenRecorderListener listener;
 
-	
+
 
 	private StreamPacker streamPacker;
 
@@ -98,11 +98,9 @@ public abstract class ScreenRecorder implements Runnable {
 				recordFrame();
 			} catch (Exception e) {
 				logger.error("Problem in main loop",e);
-				try {
-					capFileManager.close();
-				} catch (Exception e2) {
-					logger.fatal("Super error while closing",e2);
-				}
+
+				capFileManager.shutDown();
+
 				break;
 			}
 		}
@@ -123,7 +121,7 @@ public abstract class ScreenRecorder implements Runnable {
 		BufferedImage bImage = captureScreen(recordArea);
 		long t2 = System.currentTimeMillis();
 		frameTime = t2 - startTime;
-		
+
 
 		rawData = new int[frameSize];
 
@@ -150,7 +148,7 @@ public abstract class ScreenRecorder implements Runnable {
 		{
 			capFileManager.setAndWriteFrameWidth(recordArea.width);
 			capFileManager.setAndWriteFrameHeight(recordArea.height);
-			
+
 		} catch (Exception e) {
 			logger.error("Problem writing initialized area");
 		}
@@ -172,7 +170,7 @@ public abstract class ScreenRecorder implements Runnable {
 
 		try {
 			capFileManager.flush();
-			capFileManager.close();
+			capFileManager.shutDown();
 		} catch (Exception e) {
 			logger.error("Problem while quitting");
 		}
@@ -185,7 +183,7 @@ public abstract class ScreenRecorder implements Runnable {
 	public int getFrameSize() {
 		return frameSize;
 	}
-	
+
 	private class DataPack {
 		public DataPack(int[] newData, long frameTime) {
 			this.newData = newData;
@@ -233,11 +231,9 @@ public abstract class ScreenRecorder implements Runnable {
 						}
 					} catch (Exception e) {
 						logger.error("Problem packing frame",e);
-						try {
-							capFileManager.close();
-						} catch (Exception e2) {
-							logger.fatal("OMG!  SECOND EXCEPTION", e2);
-						}
+
+						capFileManager.shutDown();
+
 						return;
 					}
 				}

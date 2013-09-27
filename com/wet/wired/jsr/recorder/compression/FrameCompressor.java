@@ -28,47 +28,63 @@ package com.wet.wired.jsr.recorder.compression;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
 
 import org.apache.log4j.Logger;
 
+import com.wet.wired.jsr.recorder.CapFileManager;
+
 import edu.ncsu.lubick.ScreenRecordingModule;
 
-public class FrameCompressor {
+public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompressorSavingStrategy {
 
 	private static final int MAX_BLOCK_LENGTH = 126;
+
+	private static final byte STREAK_OF_SAME_AS_LAST_TIME_BLOCKS_CONSTANT = (byte) 0xFF; //this is -1.  See explanatory comments below
 
 	private static Logger logger = Logger.getLogger(FrameCompressor.class.getName());
 	
 	private FramePacket frame;
-	private OutputStream oStream;
+	private CapFileManager capFileManager;
 	private boolean currentFrameHasChanges;
 	private Deflater deflator = new Deflater(Deflater.BEST_SPEED);
 	private DeflaterOutputStream zO;
 	private ByteArrayOutputStream bO;
 
+	private FrameCompressorCodecStrategy codecStrategy;
+	private FrameCompressorSavingStrategy saveToDiskStrategy;
 
-	public FrameCompressor(OutputStream oStream, int frameSize) {
+
+	public FrameCompressor(CapFileManager capFileManager, int frameSize, FrameCompressorCodecStrategy fccs, FrameCompressorSavingStrategy fcss) 
+	{
 		frame = new FramePacket(frameSize);
-		this.oStream = oStream;
+		this.capFileManager = capFileManager;
+		
+		if (fccs == null)
+		{
+			this.codecStrategy = this;
+		}
+		if (fcss == null)
+		{
+			this.saveToDiskStrategy = this;
+		}
 	}
 
+	//for timing
+	//private long t1,t2,t3,t4;
 	
-	private long t1,t2,t3,t4;
+	//private long sumI1 = 0,sumI2 = 0,sumI3 = 0, sumSum = 0;
 	
-	private long sumI1 = 0,sumI2 = 0,sumI3 = 0, sumSum = 0;
+	//private int timingCounter = 0;
 	
-	private int timingCounter = 0;
-	
-	private int reps = 100;
+	//private int reps = 100;
 	
 	byte[] dataToWriteBuffer = new byte[1];
 	
 	public void packFrame(int[] newData, long frameTimeStamp, boolean reset) throws IOException 
 	{
-		t1 = System.nanoTime();
+		//t1 = System.nanoTime();
 		//For performance reasons, we reuse the frame
 		frame.updateFieldsForNextFrame(newData, frameTimeStamp, reset);
 
@@ -78,41 +94,41 @@ public class FrameCompressor {
 			dataToWriteBuffer = new byte[newData.length * 4];
 		}
 		
-		t2 = System.nanoTime();
+		//t2 = System.nanoTime();
 		
-		int numBytesToWrite = compressDataUsingRunLengthEncoding(newData, frame, dataToWriteBuffer, false);
+		int numBytesToWrite = codecStrategy.compressDataUsingRunLengthEncoding(newData, frame, dataToWriteBuffer, false);
 		
-		t3 = System.nanoTime();
+		//t3 = System.nanoTime();
 		
-		writeData(dataToWriteBuffer, currentFrameHasChanges, numBytesToWrite, frame);
+		saveToDiskStrategy.writeData(dataToWriteBuffer, currentFrameHasChanges, numBytesToWrite, frame, false);
 
-		t4 = System.nanoTime();
-		if (logger.isTraceEnabled()) 
-		{
-			sumI1 += (t2-t1);
-			sumI2 += (t3-t2);
-			sumI3 += (t4-t3);
-			sumSum += (t4-t1);
-			if (timingCounter % reps == 0 && timingCounter > 0)
-			{
-				logger.trace("===================Summary======================");
-				logger.trace(String.format("AVERAGE: First Interval ,%1.3fms, Second Interval ,%1.3fms, Third Interval ,%1.3fms,"
-						,((sumI1)/1000000.0)/reps,(sumI2)/(1000000.0)/reps,((sumI3)/1000000.0)/reps));
-				logger.trace(String.format("By percents: First Interval %f%%, Second Interval %f%%, Third Interval %f%%",
-						(sumI1)*100.0/sumSum, (sumI2)*100.0/sumSum, (sumI3)*100.0/sumSum));
-				logger.trace("raw: ," + sumI1 +','+ sumI2 +','+ sumI3 +','+ sumSum +',');
-			}
-			else
-			{
+		//t4 = System.nanoTime();
+		//if (logger.isTraceEnabled()) 
+		//{
+		//	sumI1 += (t2-t1);
+		//	sumI2 += (t3-t2);
+		//	sumI3 += (t4-t3);
+		//	sumSum += (t4-t1);
+		//	if (timingCounter % reps == 0 && timingCounter > 0)
+		//	{
+		//		logger.trace("===================Summary======================");
+		//		logger.trace(String.format("AVERAGE: First Interval ,%1.3fms, Second Interval ,%1.3fms, Third Interval ,%1.3fms,"
+		//				,((sumI1)/1000000.0)/reps,(sumI2)/(1000000.0)/reps,((sumI3)/1000000.0)/reps));
+		//		logger.trace(String.format("By percents: First Interval %f%%, Second Interval %f%%, Third Interval %f%%",
+		//				(sumI1)*100.0/sumSum, (sumI2)*100.0/sumSum, (sumI3)*100.0/sumSum));
+		//		logger.trace("raw: ," + sumI1 +','+ sumI2 +','+ sumI3 +','+ sumSum +',');
+		//	}
+		//	else
+		//	{
 				//logger.trace(String.format("First Interval ,%1.3fms, Second Interval ,%1.3fms, Third Interval ,%1.3fms,"
 				//		,(t2-t1)/1000000.0,(t3-t2)/1000000.0,(t4-t3)/1000000.0));
 				//long total = t4-t1;
 				//logger.trace(String.format("By percents: First Interval %f%%, Second Interval %f%%, Third Interval %f%%",
 				//		(t2-t1)*100.0/total, (t3-t2)*100.0/total, (t4-t3)*100.0/total));
-			}
+		//	}
 			
-			timingCounter++;
-		}
+		//	timingCounter++;
+		//}
 	}
 
 
@@ -129,7 +145,7 @@ public class FrameCompressor {
 	 * @param forceFullFrame
 	 * @return How many bytes were put into packedBytes
 	 */
-	int compressDataUsingRunLengthEncoding(int[] inputData, FramePacket aFrame, byte[] packedBytes, boolean forceFullFrame) 
+	public int compressDataUsingRunLengthEncoding(int[] inputData, FramePacket aFrame, byte[] packedBytes, boolean forceFullFrame) 
 	{
 		if (logger.isTraceEnabled()) logger.trace("Extracting data from inputData of size "+inputData.length);
 		//if (logger.isTraceEnabled()) logger.trace('\n'+Arrays.toString(inputData)+'\n');
@@ -184,11 +200,17 @@ public class FrameCompressor {
 				//Then, we add a tiny value to the blue, just to keep our signal (the signal that nothing changed)
 				//in tune
 			{
-				red = (byte) ((inputData[inputCursor] & 0x00FF0000) >>> 16);
-				green = (byte) ((inputData[inputCursor] & 0x0000FF00) >>> 8);
-				blue = (byte) ((inputData[inputCursor] & 0x000000FF));
-
-				if (red == 0 && green == 0 && blue == 0) {
+				
+				if ((inputData[inputCursor] & 0x00FFFFFF) != 0)
+				{				
+					red = (byte) ((inputData[inputCursor] & 0x00FF0000) >>> 16);
+					green = (byte) ((inputData[inputCursor] & 0x0000FF00) >>> 8);
+					blue = (byte) ((inputData[inputCursor] & 0x000000FF));
+				}
+				else //this is black, rgb = 000, so we flub it to 001 to avoid thinking that it is the same as last time
+				{
+					red = 0;
+					green = 0;
 					blue = 1;
 				}
 			}
@@ -273,7 +295,7 @@ public class FrameCompressor {
 						{
 							blocks++;
 							currentStreakOfSameAsLastTimeBlocks++;
-							packedBytes[outputCursor] = (byte) 0xFF;
+							packedBytes[outputCursor] = STREAK_OF_SAME_AS_LAST_TIME_BLOCKS_CONSTANT;
 							outputCursor++;
 							packedBytes[outputCursor] = (byte) currentStreakOfSameAsLastTimeBlocks;
 							outputCursor++;
@@ -391,28 +413,26 @@ public class FrameCompressor {
 		return outputCursor;
 	}
 
-	void writeData(byte[] dataToWrite, boolean hasChanges, int numBytesToWrite, FramePacket aFrame) throws IOException 
+	public void writeData(byte[] dataToWrite, boolean hasChanges, int numBytesToWrite, FramePacket aFrame, boolean isFullFrame) throws IOException 
 	{
-		//We want to be the only ones writing this frame
-		synchronized (oStream) {
-
+			capFileManager.startWritingFrame(isFullFrame);
 			//Write out when this frame happened
-			oStream.write(((int) aFrame.frameTime & 0xFF000000) >>> 24);
-			oStream.write(((int) aFrame.frameTime & 0x00FF0000) >>> 16);
-			oStream.write(((int) aFrame.frameTime & 0x0000FF00) >>> 8);
-			oStream.write(((int) aFrame.frameTime & 0x000000FF));
+			capFileManager.write(((int) aFrame.frameTime & 0xFF000000) >>> 24);
+			capFileManager.write(((int) aFrame.frameTime & 0x00FF0000) >>> 16);
+			capFileManager.write(((int) aFrame.frameTime & 0x0000FF00) >>> 8);
+			capFileManager.write(((int) aFrame.frameTime & 0x000000FF));
 
 			//If the frame had new stuff
 			if (hasChanges == false) {
-				oStream.write(0);
-				oStream.flush();
+				capFileManager.write(0);
+				capFileManager.flush();
 				//I'm not sure why this needs to get updated
 				aFrame.newData = aFrame.previousData;
-
+				capFileManager.endWritingFrame();
 				return;
 			} else {
-				oStream.write(1);
-				oStream.flush();
+				capFileManager.write(1);
+				capFileManager.flush();
 			}
 
 			if (ScreenRecordingModule.useCompression)
@@ -441,26 +461,27 @@ public class FrameCompressor {
 				if (logger.isTraceEnabled()) logger.trace(String.format("Compressed %d bytes to %d bytes",numBytesToWrite, bA.length));
 
 
-				oStream.write((bA.length & 0xFF000000) >>> 24);
-				oStream.write((bA.length & 0x00FF0000) >>> 16);
-				oStream.write((bA.length & 0x0000FF00) >>> 8);
-				oStream.write((bA.length & 0x000000FF));
+				capFileManager.write((bA.length & 0xFF000000) >>> 24);
+				capFileManager.write((bA.length & 0x00FF0000) >>> 16);
+				capFileManager.write((bA.length & 0x0000FF00) >>> 8);
+				capFileManager.write((bA.length & 0x000000FF));
 
-				oStream.write(bA);
-				oStream.flush();
+				capFileManager.write(bA);
+				capFileManager.flush();
 				bO.reset();
 			}
 			else 
 			{
-				oStream.write((dataToWrite.length & 0xFF000000) >>> 24);
-				oStream.write((dataToWrite.length & 0x00FF0000) >>> 16);
-				oStream.write((dataToWrite.length & 0x0000FF00) >>> 8);
-				oStream.write((dataToWrite.length & 0x000000FF));
+				capFileManager.write((numBytesToWrite & 0xFF000000) >>> 24);
+				capFileManager.write((numBytesToWrite & 0x00FF0000) >>> 16);
+				capFileManager.write((numBytesToWrite & 0x0000FF00) >>> 8);
+				capFileManager.write((numBytesToWrite & 0x000000FF));
 
-				oStream.write(dataToWrite);
-				oStream.flush();
+				capFileManager.write(dataToWrite, 0, numBytesToWrite);
+				capFileManager.flush();
 			}
-		}
+			
+			capFileManager.endWritingFrame();
 	}
 
 	public void stop() {

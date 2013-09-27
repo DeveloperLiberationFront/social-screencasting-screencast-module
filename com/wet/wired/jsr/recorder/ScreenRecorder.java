@@ -29,16 +29,12 @@ package com.wet.wired.jsr.recorder;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.Queue;
 
 import org.apache.log4j.Logger;
 
-import com.wet.wired.jsr.recorder.compression.BufferedFrameCompressor;
 import com.wet.wired.jsr.recorder.compression.FrameCompressor;
-
-import edu.ncsu.lubick.ScreenRecordingModule;
 
 public abstract class ScreenRecorder implements Runnable {
 
@@ -50,7 +46,7 @@ public abstract class ScreenRecorder implements Runnable {
 	private int frameSize;
 	private int[] rawData;
 
-	private OutputStream oStream;
+	private CapFileManager capFileManager;
 
 	private boolean recording = false;
 	private boolean running = false;
@@ -61,85 +57,14 @@ public abstract class ScreenRecorder implements Runnable {
 
 	private ScreenRecorderListener listener;
 
-	private class DataPack {
-		public DataPack(int[] newData, long frameTime) {
-			this.newData = newData;
-			this.frameTime = frameTime;
-		}
-
-		public long frameTime;
-		public int[] newData;
-	}
-
-	private class StreamPacker implements Runnable {
-		Queue<DataPack> queue = new LinkedList<DataPack>();
-		private FrameCompressor compressor;
-
-		public StreamPacker(OutputStream oStream, int frameSize) 
-		{
-			if (ScreenRecordingModule.useBufferedFrameCompressor)
-			{
-				compressor = BufferedFrameCompressor.makeBufferedFrameCompressor(oStream, frameSize);
-			}
-			else
-			{
-				compressor = new FrameCompressor(oStream, frameSize);
-			}
-
-			new Thread(this, "Stream Packer").start();
-		}
-
-		public void packToStream(DataPack pack) {
-			while (queue.size() > 2) {
-				try {
-					Thread.sleep(10);
-				} catch (Exception e) {
-				}
-			}
-			queue.add(pack);
-		}
-
-		public void run() {
-			while (recording) {
-				while (!queue.isEmpty()) {
-					DataPack pack = queue.poll();
-
-					try {
-						long t1 = System.currentTimeMillis();
-						compressor.packFrame(pack.newData, pack.frameTime, reset);
-						long t2 = System.currentTimeMillis();
-						if (logger.isTraceEnabled()) logger.trace("  pack time:"+(t2-t1));
-
-						if (reset == true) {
-							reset = false;
-						}
-					} catch (Exception e) {
-						logger.error("Problem packing frame",e);
-						try {
-							oStream.close();
-						} catch (Exception e2) {
-							logger.fatal("OMG!  SECOND EXCEPTION", e2);
-						}
-						return;
-					}
-				}
-				while (queue.isEmpty() == true) {
-					try {
-						Thread.sleep(50);
-					} catch (Exception e) {
-					}
-				}
-			}
-			compressor.stop();
-		}
-	}
+	
 
 	private StreamPacker streamPacker;
 
-	public ScreenRecorder(OutputStream oStream, ScreenRecorderListener listener) {
+	public ScreenRecorder(CapFileManager capFileManager, ScreenRecorderListener listener) {
 
 		this.listener = listener;
-		this.oStream = oStream;
+		this.capFileManager = capFileManager;
 	}
 
 	public void triggerRecordingStop() {
@@ -156,7 +81,7 @@ public abstract class ScreenRecorder implements Runnable {
 		long time = 0;
 
 		frameSize = recordArea.width * recordArea.height;
-		streamPacker = new StreamPacker(oStream, frameSize);
+		streamPacker = new StreamPacker(capFileManager, frameSize);
 
 		while (recording) {
 			time = System.currentTimeMillis();
@@ -174,7 +99,7 @@ public abstract class ScreenRecorder implements Runnable {
 			} catch (Exception e) {
 				logger.error("Problem in main loop",e);
 				try {
-					oStream.close();
+					capFileManager.close();
 				} catch (Exception e2) {
 					logger.fatal("Super error while closing",e2);
 				}
@@ -221,12 +146,11 @@ public abstract class ScreenRecorder implements Runnable {
 		if (recordArea == null) {
 			return;
 		}
-		try {
-			oStream.write((recordArea.width & 0x0000FF00) >>> 8);
-			oStream.write((recordArea.width & 0x000000FF));
-
-			oStream.write((recordArea.height & 0x0000FF00) >>> 8);
-			oStream.write((recordArea.height & 0x000000FF));
+		try 
+		{
+			capFileManager.setAndWriteFrameWidth(recordArea.width);
+			capFileManager.setAndWriteFrameHeight(recordArea.height);
+			
 		} catch (Exception e) {
 			logger.error("Problem writing initialized area");
 		}
@@ -247,8 +171,8 @@ public abstract class ScreenRecorder implements Runnable {
 		}
 
 		try {
-			oStream.flush();
-			oStream.close();
+			capFileManager.flush();
+			capFileManager.close();
 		} catch (Exception e) {
 			logger.error("Problem while quitting");
 		}
@@ -260,5 +184,71 @@ public abstract class ScreenRecorder implements Runnable {
 
 	public int getFrameSize() {
 		return frameSize;
+	}
+	
+	private class DataPack {
+		public DataPack(int[] newData, long frameTime) {
+			this.newData = newData;
+			this.frameTime = frameTime;
+		}
+
+		public long frameTime;
+		public int[] newData;
+	}
+
+	private class StreamPacker implements Runnable {
+		Queue<DataPack> queue = new LinkedList<DataPack>();
+		private FrameCompressor compressor;
+
+		public StreamPacker(CapFileManager capFileManager, int frameSize) 
+		{
+			compressor = new FrameCompressor(capFileManager, frameSize, capFileManager.getCodecStrategy(), capFileManager.getSavingStrategy());
+
+			new Thread(this, "Stream Packer").start();
+		}
+
+		public void packToStream(DataPack pack) {
+			while (queue.size() > 2) {
+				try {
+					Thread.sleep(10);
+				} catch (Exception e) {
+				}
+			}
+			queue.add(pack);
+		}
+
+		public void run() {
+			while (recording) {
+				while (!queue.isEmpty()) {
+					DataPack pack = queue.poll();
+
+					try {
+						long t1 = System.currentTimeMillis();
+						compressor.packFrame(pack.newData, pack.frameTime, reset);
+						long t2 = System.currentTimeMillis();
+						if (logger.isTraceEnabled()) logger.trace("  pack time:"+(t2-t1));
+
+						if (reset == true) {
+							reset = false;
+						}
+					} catch (Exception e) {
+						logger.error("Problem packing frame",e);
+						try {
+							capFileManager.close();
+						} catch (Exception e2) {
+							logger.fatal("OMG!  SECOND EXCEPTION", e2);
+						}
+						return;
+					}
+				}
+				while (queue.isEmpty() == true) {
+					try {
+						Thread.sleep(50);
+					} catch (Exception e) {
+					}
+				}
+			}
+			compressor.stop();
+		}
 	}
 }

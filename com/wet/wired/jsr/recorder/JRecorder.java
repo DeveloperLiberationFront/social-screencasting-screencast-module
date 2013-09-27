@@ -33,7 +33,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.io.FileOutputStream;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -42,6 +41,8 @@ import javax.swing.JLabel;
 import javax.swing.UIManager;
 
 import org.apache.log4j.Logger;
+
+import edu.ncsu.lubick.BasicCapFileManager;
 
 @SuppressWarnings("serial")
 public class JRecorder extends JFrame implements ScreenRecorderListener,ActionListener 
@@ -89,9 +90,17 @@ public class JRecorder extends JFrame implements ScreenRecorderListener,ActionLi
 		}
 
 		try {
-			FileOutputStream oStream = new FileOutputStream(fileName);
+			
 			temp = new File(fileName);
-			recorder = new DesktopScreenRecorder(oStream, this);
+			if (!temp.exists())
+			{
+				if (!temp.createNewFile())
+				{
+					logger.error("Could not create file");
+				}
+			}
+			CapFileManager manager = new BasicCapFileManager(temp);
+			recorder = new DesktopScreenRecorder(manager, this);
 			recorder.startRecording();
 		} catch (Exception e) {
 			logger.error("problem starting up",e);

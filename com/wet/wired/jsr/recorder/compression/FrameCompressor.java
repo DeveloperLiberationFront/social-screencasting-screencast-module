@@ -37,8 +37,11 @@ import com.wet.wired.jsr.recorder.CapFileManager;
 
 import edu.ncsu.lubick.ScreenRecordingModule;
 
-public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompressorSavingStrategy {
+public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompressorSavingStrategy 
+{
 
+	private static final int PERIOD_FOR_FULL_FRAMES = 20;
+	
 	private static final int MAX_BLOCK_LENGTH = 126;
 
 	private static final byte STREAK_OF_SAME_AS_LAST_TIME_BLOCKS_CONSTANT = (byte) 0xFF; //this is -1.  See explanatory comments below
@@ -54,6 +57,10 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 
 	private FrameCompressorCodecStrategy codecStrategy;
 	private FrameCompressorSavingStrategy saveToDiskStrategy;
+	
+	private int frameCounter = 0;
+	
+	byte[] dataToWriteBuffer = new byte[1];	//It's not a local variable because then we'd have to reallocate it everytime
 
 
 	public FrameCompressor(CapFileManager capFileManager, int frameSize, FrameCompressorCodecStrategy fccs, FrameCompressorSavingStrategy fcss) 
@@ -80,8 +87,6 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 	
 	//private int reps = 100;
 	
-	byte[] dataToWriteBuffer = new byte[1];
-	
 	public void packFrame(int[] newData, long frameTimeStamp, boolean reset) throws IOException 
 	{
 		//t1 = System.nanoTime();
@@ -95,13 +100,22 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 		}
 		
 		//t2 = System.nanoTime();
+		boolean isFullFrame = false;
+		if (frameCounter % PERIOD_FOR_FULL_FRAMES == 0)
+		{
+			isFullFrame = true;
+			frameCounter = 0;
+		}
+		frameCounter++;
 		
-		int numBytesToWrite = codecStrategy.compressDataUsingRunLengthEncoding(newData, frame, dataToWriteBuffer, false);
+		int numBytesToWrite = codecStrategy.compressDataUsingRunLengthEncoding(newData, frame, dataToWriteBuffer, isFullFrame);
 		
 		//t3 = System.nanoTime();
 		
-		saveToDiskStrategy.writeData(dataToWriteBuffer, currentFrameHasChanges, numBytesToWrite, frame, false);
-
+		
+		capFileManager.startWritingFrame(isFullFrame);
+		saveToDiskStrategy.writeData(dataToWriteBuffer, currentFrameHasChanges, numBytesToWrite, frame);
+		capFileManager.endWritingFrame();
 		//t4 = System.nanoTime();
 		//if (logger.isTraceEnabled()) 
 		//{
@@ -145,6 +159,7 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 	 * @param forceFullFrame
 	 * @return How many bytes were put into packedBytes
 	 */
+	@Override
 	public int compressDataUsingRunLengthEncoding(int[] inputData, FramePacket aFrame, byte[] packedBytes, boolean forceFullFrame) 
 	{
 		if (logger.isTraceEnabled()) logger.trace("Extracting data from inputData of size "+inputData.length);
@@ -413,9 +428,9 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 		return outputCursor;
 	}
 
-	public void writeData(byte[] dataToWrite, boolean hasChanges, int numBytesToWrite, FramePacket aFrame, boolean isFullFrame) throws IOException 
+	@Override
+	public void writeData(byte[] dataToWrite, boolean hasChanges, int numBytesToWrite, FramePacket aFrame) throws IOException 
 	{
-			capFileManager.startWritingFrame(isFullFrame);
 			//Write out when this frame happened
 			capFileManager.write(((int) aFrame.frameTime & 0xFF000000) >>> 24);
 			capFileManager.write(((int) aFrame.frameTime & 0x00FF0000) >>> 16);
@@ -481,7 +496,6 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 				capFileManager.flush();
 			}
 			
-			capFileManager.endWritingFrame();
 	}
 
 	public void stop() {

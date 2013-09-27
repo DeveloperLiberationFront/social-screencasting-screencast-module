@@ -13,13 +13,14 @@ import com.wet.wired.jsr.recorder.ScreenRecorderListener;
 
 public class ScreenRecordingModule implements ScreenRecorderListener
 {
-	private static final String LOGGING_FILE_PATH = "./log4j.settings";
+	public static final String LOGGING_FILE_PATH = "./log4j.settings";
 	
 	public static boolean useCompression = true;
 
+	@Deprecated
 	public static boolean useBufferedFrameCompressor = true;
 
-	public static boolean useRotatingFileManager = false;
+	public static boolean useRotatingFileManager = true;
 	
 	private static DesktopScreenRecorder recorder;
 
@@ -49,7 +50,8 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 			}
 		}
 
-
+		
+		//clear out all the temp files
 		for(File file:scratchDir.listFiles())
 		{
 			if (file.getName().startsWith("temp"))
@@ -101,7 +103,7 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 
 		recorder.stopRecording();
 		 
-	
+		
 
 		for(File file:scratchDir.listFiles())
 		{

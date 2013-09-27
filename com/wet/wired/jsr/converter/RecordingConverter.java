@@ -27,6 +27,7 @@
 package com.wet.wired.jsr.converter;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.media.ConfigureCompleteEvent;
 import javax.media.ControllerEvent;
@@ -36,6 +37,8 @@ import javax.media.EndOfMediaEvent;
 import javax.media.Format;
 import javax.media.Manager;
 import javax.media.MediaLocator;
+import javax.media.NoDataSinkException;
+import javax.media.NoProcessorException;
 import javax.media.PrefetchCompleteEvent;
 import javax.media.Processor;
 import javax.media.RealizeCompleteEvent;
@@ -48,6 +51,9 @@ import javax.media.protocol.DataSource;
 import javax.media.protocol.FileTypeDescriptor;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
+import edu.ncsu.lubick.ScreenRecordingModule;
 
 public class RecordingConverter implements ControllerListener, DataSinkListener {
 
@@ -55,9 +61,16 @@ public class RecordingConverter implements ControllerListener, DataSinkListener 
 	private static boolean finished = false;
 	private Object waitSync = new Object();
 	private boolean stateTransitionOK = true;
+	
+	static {
+		PropertyConfigurator.configure(ScreenRecordingModule.LOGGING_FILE_PATH);
+		logger = Logger.getLogger(ScreenRecordingModule.class.getName());
+	}
 
-	public static void main(String[] args) {
-
+	public static void main(String[] args) 
+	{
+		//args = new String[]{"scratch/temp0002.cap"};
+		
 		if ((args.length != 1) || !args[0].endsWith("cap")) {
 			//System.out.println("Usage: java -jar screen_cap_to_video.jar <screen_cap_file.cap>");
 			logger.info("Usage: java -jar screen_cap_to_video.jar <screen_cap_file.cap>");
@@ -74,12 +87,13 @@ public class RecordingConverter implements ControllerListener, DataSinkListener 
 		} catch (Exception e) {
 			logger.fatal("There was a problem processing that file",e);
 		}
+		System.gc();
 	}
 
-	public void process(String recordingFile, String movieFile) throws Exception {
+	public void process(String recordingFile, String movieFile) throws IOException, NoProcessorException, NoDataSinkException, InterruptedException {
 
-		MediaLocator mediaLocator = new MediaLocator(new File(movieFile).toURI()
-				.toURL());
+		MediaLocator mediaLocator = new MediaLocator(new File(movieFile).toURI().toURL());
+		
 		PlayerDataSource playerDataSource = new PlayerDataSource(recordingFile);
 		Processor processor = Manager.createProcessor(playerDataSource);
 		processor.addControllerListener(this);
@@ -108,10 +122,15 @@ public class RecordingConverter implements ControllerListener, DataSinkListener 
 		processor.start();
 		dataSink.start();
 		waitForFileDone();
-		dataSink.close();
+		dataSource.disconnect();
+		processor.stop();
+		dataSink.stop();
 		processor.removeControllerListener(this);
-		processor.close();
-		Thread.sleep(1000);
+		processor.deallocate();
+		dataSink.close();
+		
+		
+		Thread.sleep(2000);
 	}
 
 	void waitForFileDone() {

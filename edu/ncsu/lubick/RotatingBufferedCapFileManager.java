@@ -80,6 +80,7 @@ public class RotatingBufferedCapFileManager extends BasicCapFileManager
 	@Override
 	public void shutDown() {
 		super.shutDown();
+		timer.cancel();
 		isRecording = false;
 		try {
 			dumpByteBufferToDisk();

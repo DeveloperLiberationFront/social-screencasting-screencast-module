@@ -3,9 +3,6 @@ package edu.ncsu.lubick;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import org.apache.log4j.Logger;
 
@@ -17,12 +14,10 @@ import org.apache.log4j.Logger;
  * @author Kevin Lubick
  *
  */
-public class RotatingFileManager extends OutputStream {
+public class RotatingFileManager {
 
-	private static final long DELAY_FOR_NEW_FILE_MS = 10*1000;
-	
 	private static Logger logger = Logger.getLogger(RotatingFileManager.class.getName());
-	
+
 	private FileOutputStream currentFileStream = null;
 
 	private File directory;
@@ -33,8 +28,6 @@ public class RotatingFileManager extends OutputStream {
 
 	private String fileExtension;
 
-	private Timer timer;
-	
 	/**
 	 * Makes a new RotatingFileManger in a given directory.
 	 * 
@@ -47,7 +40,7 @@ public class RotatingFileManager extends OutputStream {
 	{
 		this(directory, prefix, fileExtension, new DefaultListener());
 	}
-	
+
 	public RotatingFileManager(File directory, String prefix, String fileExtension, RotatingFileManagerListener listener) 
 	{
 		if (directory.exists() && !directory.isDirectory())
@@ -65,26 +58,26 @@ public class RotatingFileManager extends OutputStream {
 		this.prefix = prefix;
 		this.fileExtension = fileExtension;
 		this.listener = listener;
-		
-		timer = new Timer(true);
-		timer.schedule(new TimerTask() {
-			
-			@Override
-			public void run() {
-				try {
-					logger.debug("ping");
-					makeNextFile();
-				} catch (IOException e) 
-				{
-					logger.error("There was a problem rotating files", e);
-				}
-			}
-		}, 0, DELAY_FOR_NEW_FILE_MS);
+
+//		timer = new Timer(true);
+//		timer.schedule(new TimerTask() {
+//
+//			@Override
+//			public void run() {
+//				try {
+//					logger.debug("ping");
+//					makeNextFile();
+//				} catch (IOException e) 
+//				{
+//					logger.error("There was a problem rotating files", e);
+//				}
+//			}
+//		}, 0, DELAY_FOR_NEW_FILE_MS);
 	}
-	
+
 	private int countOfFile = 0;
-	
-	private void makeNextFile() throws IOException 
+
+	public void makeNextFile() throws IOException 
 	{
 		countOfFile++;
 		File newFile = new File(directory, this.prefix + listener.getNextSuffix()+"."+fileExtension);
@@ -95,13 +88,13 @@ public class RotatingFileManager extends OutputStream {
 				throw new RuntimeException("Could not overwrite file "+newFile);
 			}
 		}
-		
+
 		if (!newFile.createNewFile())
 		{
 			throw new RuntimeException("Could not create new file file "+newFile);
 		}
 		logger.debug("Changing to file "+newFile);
-		synchronized (this) {
+
 			if (this.currentFileStream!=null)
 			{
 				this.currentFileStream.close();
@@ -115,55 +108,30 @@ public class RotatingFileManager extends OutputStream {
 				currentFileStream.write((900 & 0x0000FF00) >>> 8);	//height
 				currentFileStream.write((900 & 0x000000FF));
 			}
-			
-		}
-		
-	}
 
-	@Override
-	public void write(int b) throws IOException {
-		//This is synchronized to avoid changing the output stream mid-write
-		synchronized (this) 
-		{
-			currentFileStream.write(b);
-		}
+		
 
 	}
-	
-	@Override
-	public void write(byte[] b) throws IOException {
-		//This is synchronized to avoid changing the output stream mid-write
-		synchronized (this) 
+
+	public FileOutputStream getCurrentFileStream() {
+		return currentFileStream;
+	}
+
+	public void stop()
+	{
+		if (currentFileStream != null)
 		{
-			currentFileStream.write(b);
+			try {
+				this.currentFileStream.close();
+			} catch (IOException e) 
+			{
+				logger.error("Problem closing fileStream",e);
+			}
+			this.currentFileStream = null;
 		}
 	}
-	
-	@Override
-	public void write(byte[] b, int off, int len) throws IOException {
-		//This is synchronized to avoid changing the output stream mid-write
-		synchronized (this) {
-			currentFileStream.write(b, off, len);
-		}
-		
-	}
-	
-	@Override
-	public void close() throws IOException {
-		synchronized (this) {
-			super.close();
-			timer.cancel();
-			currentFileStream.close();
-		}
-	}
-	
-	@Override
-	public void flush() throws IOException {
-		synchronized (this) {
-			super.flush();
-		}
-	}
-	
+
+
 	public static class DefaultListener implements RotatingFileManagerListener
 	{
 
@@ -188,20 +156,15 @@ public class RotatingFileManager extends OutputStream {
 			}
 			return String.valueOf(i);
 		}
-		
+
 		private int index = -1;
-		
-		@Override
-		public boolean canSwitchFileHuh() {
-			return true;
-		}
 
 		@Override
 		public String getNextSuffix() {
 			index++;
 			return padIntTo4Digits(index);
 		}
-		
+
 	}
 
 }

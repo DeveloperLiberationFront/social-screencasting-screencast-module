@@ -12,22 +12,22 @@ class FramePacket {
 		previousData = new int[frameSize];
 	}
 
-	void updateFieldsForNextFrame(int[] frameData, long frameTime, boolean reset) 
+	void updateFieldsForNextFrame(int[] newFrameData, long newFrameTime, boolean reset) 
 	{
-		this.frameTime = frameTime;
+		this.frameTime = newFrameTime;
 		previousData = newData;
 		newData = null;
 		if (previousData == null) 
 		{
-			previousData = new int[frameData.length];
+			previousData = new int[newFrameData.length];
 		}
 		if (reset) 
 		{
-			this.newData = new int[frameData.length];
+			this.newData = new int[newFrameData.length];
 		} 
 		else 
 		{
-			this.newData = frameData;
+			this.newData = newFrameData;
 		}
 	}
 }

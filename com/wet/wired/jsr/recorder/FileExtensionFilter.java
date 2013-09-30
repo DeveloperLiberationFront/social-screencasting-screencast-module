@@ -156,7 +156,7 @@ public class FileExtensionFilter extends FileFilter {
          if (extension != null && filters.get(getExtension(f)) != null) {
             return true;
          }
-         ;
+         
       }
       return false;
    }
@@ -167,14 +167,14 @@ public class FileExtensionFilter extends FileFilter {
     * @see #getExtension
     * @see FileFilter#accept
     */
-   public String getExtension(File f) {
+   public static String getExtension(File f) {
       if (f != null) {
          String filename = f.getName();
          int i = filename.lastIndexOf('.');
          if (i > 0 && i < filename.length() - 1) {
             return filename.substring(i + 1).toLowerCase();
          }
-         ;
+         
       }
       return null;
    }

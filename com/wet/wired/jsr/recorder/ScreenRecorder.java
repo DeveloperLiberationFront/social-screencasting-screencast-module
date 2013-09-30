@@ -114,7 +114,7 @@ public abstract class ScreenRecorder implements Runnable {
 
 	public abstract Rectangle initialiseScreenCapture();
 
-	public abstract BufferedImage captureScreen(Rectangle recordArea);
+	public abstract BufferedImage captureScreen(Rectangle areaToRecord);
 
 	public void recordFrame() throws IOException {
 		long t1 = System.currentTimeMillis();

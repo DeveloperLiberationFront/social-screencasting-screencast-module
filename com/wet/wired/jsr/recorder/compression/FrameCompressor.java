@@ -445,10 +445,10 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 				aFrame.newData = aFrame.previousData;
 				capFileManager.endWritingFrame();
 				return;
-			} else {
-				capFileManager.write(1);
-				capFileManager.flush();
 			}
+			
+			capFileManager.write(1);
+			capFileManager.flush();
 
 			if (ScreenRecordingModule.useCompression)
 			{

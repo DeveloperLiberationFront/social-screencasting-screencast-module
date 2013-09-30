@@ -69,13 +69,11 @@ public class FileHelper {
 
 	public static boolean buildFile(String fileName, byte[] data) {
 
-		FileOutputStream out = null;
-
-		try {
-			out = new FileOutputStream(fileName);
+		try(FileOutputStream out = new FileOutputStream(fileName);) {
+			
 			out.write(data);
 			out.flush();
-			out.close();
+
 		} catch (Exception e) {
 			logger.error("Problem making File",e);
 			return false;
@@ -86,13 +84,11 @@ public class FileHelper {
 
 	public static boolean appendFile(String fileName, byte[] data) {
 
-		FileOutputStream out = null;
-
-		try {
-			out = new FileOutputStream(fileName, true);
+		try(FileOutputStream out = new FileOutputStream(fileName);) 
+		{
 			out.write(data);
 			out.flush();
-			out.close();
+			
 		} catch (Exception e) {
 			logger.error("Problem appending to file",e);
 			return false;
@@ -114,15 +110,11 @@ public class FileHelper {
 
 	public static boolean buildFile(String fileName, int[] data) {
 
-		FileOutputStream out = null;
-
-		try {
-			out = new FileOutputStream(fileName);
+		try(FileOutputStream out = new FileOutputStream(fileName);) {
 			for (int loop = 0; loop < data.length; loop++) {
 				out.write(data[loop]);
 			}
 			out.flush();
-			out.close();
 		} catch (Exception e) {
 			logger.error("problem building file", e);
 			return false;
@@ -143,20 +135,19 @@ public class FileHelper {
 	}
 
 	public static boolean buildFile(String fileName, String data) {
+		
+		File file = new File(new File(fileName).getAbsolutePath());
+		if (!file.getParentFile().mkdirs())
+		{
+			throw new RuntimeException("Could not create parent folder");
 
-		FileOutputStream out = null;
-
-		try {
-			File file = new File(new File(fileName).getAbsolutePath());
-			if (!file.getParentFile().mkdirs())
-			{
-				throw new RuntimeException("Could not create parent folder");
-
-			}
-			out = new FileOutputStream(file.getAbsolutePath());
+		}
+		
+		try(FileOutputStream out = new FileOutputStream(file.getAbsolutePath());) {
+		
 			out.write(data.getBytes());
 			out.flush();
-			out.close();
+
 		} catch (Exception e) {
 			logger.error("Problem building file",e);
 			return false;
@@ -221,18 +212,17 @@ public class FileHelper {
 	}
 
 	public static boolean isSame(File fileA, File fileB) {
-		try {
-			if (!fileA.exists() || !fileB.exists()) {
-				return false;
-			}
+		if (!fileA.exists() || !fileB.exists()) {
+			return false;
+		}
 
-			if (fileA.length() != fileB.length()) {
-				return false;
-			}
-
-			FileInputStream iStreamA = new FileInputStream(fileA);
-			FileInputStream iStreamB = new FileInputStream(fileB);
-
+		if (fileA.length() != fileB.length()) {
+			return false;
+		}
+		
+		try (FileInputStream iStreamA = new FileInputStream(fileA);
+			FileInputStream iStreamB = new FileInputStream(fileB);)
+			{
 			int inA = iStreamA.read();
 			int inB = iStreamB.read();
 			boolean same = true;
@@ -246,8 +236,6 @@ public class FileHelper {
 				inB = iStreamB.read();
 			}
 
-			iStreamA.close();
-			iStreamB.close();
 			return same;
 		} catch (Exception e) {
 			logger.error("Problem comparing files",e);
@@ -304,13 +292,13 @@ public class FileHelper {
 
 		byte[] data = new byte[maxData];
 
-		try {
-			FileInputStream fI = new FileInputStream(fileName);
+		try (FileInputStream fI = new FileInputStream(fileName);) {
+			
 			if (length > maxData) {
 				fI.skip(skip);
 			}
 			fI.read(data, 0, maxData);
-			fI.close();
+
 		} catch (Exception e) {
 			logger.error("Failed to check File " + fileName, e);
 			return null;
@@ -342,14 +330,13 @@ public class FileHelper {
 			length = Long.MAX_VALUE;
 		}
 
-		try {
-			if (!new File(getPath(fileOut)).mkdirs())
-			{
-				throw new RuntimeException("Could not create file out directories");
-			}
-
-			FileOutputStream oStream = new FileOutputStream(fileOut);
-
+		if (!new File(getPath(fileOut)).mkdirs())
+		{
+			throw new RuntimeException("Could not create file out directories");
+		}
+		
+		try (FileOutputStream oStream = new FileOutputStream(fileOut);) {
+	
 			sizeRead = iStream.read(buffer);
 			while (sizeRead > 0 && count < length) {
 				oStream.write(buffer, 0, sizeRead);
@@ -367,7 +354,6 @@ public class FileHelper {
 			}
 
 			oStream.flush();
-			oStream.close();
 
 			if (listener != null) {
 				listener.finished();
@@ -423,14 +409,15 @@ public class FileHelper {
 		long count = 0;
 		int sizeRead;
 		long length;
+		
+		if ((oStream instanceof BufferedOutputStream) == false) {
+			oStream = new BufferedOutputStream(oStream);
+		}
 
-		try {
-			if ((oStream instanceof BufferedOutputStream) == false) {
-				oStream = new BufferedOutputStream(oStream);
-			}
+		length = new File(fileIn).length();
 
-			length = new File(fileIn).length();
-			InputStream iStream = new FileInputStream(fileIn);
+		try (InputStream iStream = new FileInputStream(fileIn);){
+					
 			sizeRead = iStream.read(buffer);
 
 			while (sizeRead > 0) {
@@ -446,8 +433,6 @@ public class FileHelper {
 			}
 
 			oStream.flush();
-			iStream.close();
-			// oStream.close();
 		} catch (Exception e) {
 			logger.error("Problem copying",e);
 		}
@@ -508,10 +493,8 @@ public class FileHelper {
 
 		File historyFile = new File(historyFileName);
 
-		try {
-			FileOutputStream oStream = new FileOutputStream(historyFile, true);
+		try (FileOutputStream oStream = new FileOutputStream(historyFile, true);){
 			oStream.write((backupFileName + ":" + historyData + "\n").getBytes());
-			oStream.close();
 		} catch (Exception e) {
 			logger.error("Problem appending history",e);
 		}
@@ -520,9 +503,8 @@ public class FileHelper {
 	public static File[] getHistory(String fileName)  {
 		String historyFileName = fileName + ".history";
 
-		try {
-			BufferedReader reader = new BufferedReader(new FileReader(historyFileName));
-
+		try (BufferedReader reader = new BufferedReader(new FileReader(historyFileName));){
+	
 			Vector<String> entries = new Vector<String>();
 			String entry = reader.readLine();
 			while (entry != null) {
@@ -575,20 +557,24 @@ public class FileHelper {
 		return file.delete();
 	}
 
-	public static String createMD5(String fileName) throws IOException,
-	NoSuchAlgorithmException {
+	public static String createMD5(String fileName) throws NoSuchAlgorithmException {
 		MessageDigest md5Algorithm = MessageDigest.getInstance("MD5");
 
 		byte[] byteArray = new byte[1000];
-		FileInputStream iStream = new FileInputStream(new File(fileName).getAbsolutePath());
-		int size = iStream.read(byteArray);
-
-		while (size != -1) {
-			md5Algorithm.update(byteArray, 0, size);
+		
+		int size;
+		try (FileInputStream iStream = new FileInputStream(new File(fileName).getAbsolutePath());) {
 			size = iStream.read(byteArray);
+			
+			while (size != -1) {
+				md5Algorithm.update(byteArray, 0, size);
+				size = iStream.read(byteArray);
+			}
+		} catch (IOException e) {
+			logger.error("There was a problem Hashing MD5",e);
 		}
 
-		iStream.close();
+
 
 		byte[] digest = md5Algorithm.digest();
 		StringBuffer hexString = new StringBuffer();

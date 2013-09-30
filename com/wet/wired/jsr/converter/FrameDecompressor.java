@@ -108,8 +108,8 @@ public class FrameDecompressor {
 			return frame;
 		}
 
-		ByteArrayOutputStream bO = new ByteArrayOutputStream();
-		try {
+		
+		try (ByteArrayOutputStream bO = new ByteArrayOutputStream();) {
 			i = frame.iStream.read();
 			int zSize = i;
 			zSize = zSize << 8;
@@ -154,7 +154,6 @@ public class FrameDecompressor {
 					sizeRead = zI.read(buffer);
 				}
 				bO.flush();
-				bO.close();
 			}
 			else 
 			{
@@ -170,9 +169,8 @@ public class FrameDecompressor {
 					sizeRead = bI.read(buffer);
 				}
 				bO.flush();
-				bO.close();	
 			}
-
+			frame.packed = bO.toByteArray();
 		} 
 		catch (Exception e) 
 		{
@@ -182,7 +180,7 @@ public class FrameDecompressor {
 		}
 
 
-		frame.packed = bO.toByteArray();
+		
 
 		runLengthDecode();
 

@@ -133,7 +133,7 @@ public class RecordingConverter implements ControllerListener, DataSinkListener 
 		Thread.sleep(2000);
 	}
 
-	void waitForFileDone() {
+	static void waitForFileDone() {
 
 		while (!finished) {
 			try {

@@ -172,7 +172,7 @@ public class FrameDecompressor {
 			}
 			frame.packed = bO.toByteArray();
 		} 
-		catch (Exception e) 
+		catch (IOException e) 
 		{
 			logger.error("Problem unpacking ",e);
 			frame.result = 0;

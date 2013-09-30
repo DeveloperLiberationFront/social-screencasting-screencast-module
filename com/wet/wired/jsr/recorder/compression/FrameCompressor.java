@@ -35,8 +35,6 @@ import org.apache.log4j.Logger;
 
 import com.wet.wired.jsr.recorder.CapFileManager;
 
-import edu.ncsu.lubick.ScreenRecordingModule;
-
 public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompressorSavingStrategy 
 {
 
@@ -449,8 +447,8 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 			capFileManager.write(1);
 			capFileManager.flush();
 
-			if (ScreenRecordingModule.useCompression)
-			{
+//			if (ScreenRecordingModule.useCompression)
+//			{
 
 				if (bO == null)
 				{
@@ -483,17 +481,17 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 				capFileManager.write(bA);
 				capFileManager.flush();
 				bO.reset();
-			}
-			else 
-			{
-				capFileManager.write((numBytesToWrite & 0xFF000000) >>> 24);
-				capFileManager.write((numBytesToWrite & 0x00FF0000) >>> 16);
-				capFileManager.write((numBytesToWrite & 0x0000FF00) >>> 8);
-				capFileManager.write((numBytesToWrite & 0x000000FF));
-
-				capFileManager.write(dataToWrite, 0, numBytesToWrite);
-				capFileManager.flush();
-			}
+//			}
+//			else 
+//			{
+//				capFileManager.write((numBytesToWrite & 0xFF000000) >>> 24);
+//				capFileManager.write((numBytesToWrite & 0x00FF0000) >>> 16);
+//				capFileManager.write((numBytesToWrite & 0x0000FF00) >>> 8);
+//				capFileManager.write((numBytesToWrite & 0x000000FF));
+//
+//				capFileManager.write(dataToWrite, 0, numBytesToWrite);
+//				capFileManager.flush();
+//			}
 			
 	}
 

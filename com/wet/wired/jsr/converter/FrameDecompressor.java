@@ -34,8 +34,6 @@ import java.util.zip.InflaterInputStream;
 
 import org.apache.log4j.Logger;
 
-import edu.ncsu.lubick.ScreenRecordingModule;
-
 public class FrameDecompressor {
 
 	private static final int ALPHA = 0xFF000000;
@@ -137,8 +135,8 @@ public class FrameDecompressor {
 				sizeRead = frame.iStream.read(zData, readCursor, zSize - readCursor);
 			}
 
-			if (ScreenRecordingModule.useCompression)
-			{
+//			if (ScreenRecordingModule.useCompression)
+//			{
 				ByteArrayInputStream bI = new ByteArrayInputStream(zData);
 				
 				//GZIPInputStream zI = new GZIPInputStream(bI);
@@ -154,22 +152,22 @@ public class FrameDecompressor {
 					sizeRead = zI.read(buffer);
 				}
 				bO.flush();
-			}
-			else 
-			{
-				ByteArrayInputStream bI = new ByteArrayInputStream(zData);
-
-				byte[] buffer = new byte[1000];
-				sizeRead = bI.read(buffer);
-
-				while (sizeRead > -1) {
-					bO.write(buffer, 0, sizeRead);
-					bO.flush();
-
-					sizeRead = bI.read(buffer);
-				}
-				bO.flush();
-			}
+//			}
+//			else 
+//			{
+//				ByteArrayInputStream bI = new ByteArrayInputStream(zData);
+//
+//				byte[] buffer = new byte[1000];
+//				sizeRead = bI.read(buffer);
+//
+//				while (sizeRead > -1) {
+//					bO.write(buffer, 0, sizeRead);
+//					bO.flush();
+//
+//					sizeRead = bI.read(buffer);
+//				}
+//				bO.flush();
+//			}
 			frame.packed = bO.toByteArray();
 		} 
 		catch (IOException e) 

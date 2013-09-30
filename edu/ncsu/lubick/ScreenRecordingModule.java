@@ -14,13 +14,8 @@ import com.wet.wired.jsr.recorder.ScreenRecorderListener;
 public class ScreenRecordingModule implements ScreenRecorderListener
 {
 	public static final String LOGGING_FILE_PATH = "./log4j.settings";
-	
-	public static boolean useCompression = true;
 
-	@Deprecated
-	public static boolean useBufferedFrameCompressor = true;
-
-	public static boolean useRotatingFileManager = true;
+	private static boolean useRotatingFileManager = true;
 	
 	private static DesktopScreenRecorder recorder;
 
@@ -92,7 +87,7 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 		
 		recorder = new DesktopScreenRecorder(fileManager, recorderBoss);
 		recorder.startRecording();
-		logger.info("recording for 60 seconds" + (useCompression?" with compression":" without compression"));
+		logger.info("recording for 60 seconds" );
 
 		for(int i = 1;i<=60;i++)
 		{

@@ -443,7 +443,6 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 				capFileManager.flush();
 				//I'm not sure why this needs to get updated
 				aFrame.newData = aFrame.previousData;
-				capFileManager.endWritingFrame();
 				return;
 			}
 			

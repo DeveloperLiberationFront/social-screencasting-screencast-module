@@ -29,8 +29,8 @@ package com.wet.wired.jsr.recorder;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 import org.apache.log4j.Logger;
 
@@ -195,7 +195,7 @@ public abstract class ScreenRecorder implements Runnable {
 	}
 
 	private class StreamPacker implements Runnable {
-		Queue<DataPack> queue = new LinkedList<DataPack>();
+		BlockingQueue<DataPack> queue = new ArrayBlockingQueue<>(2);
 		private FrameCompressor compressor;
 
 		public StreamPacker(CapFileManager capFileManager, int frameSize) 
@@ -205,22 +205,25 @@ public abstract class ScreenRecorder implements Runnable {
 			new Thread(this, "Stream Packer").start();
 		}
 
-		public void packToStream(DataPack pack) {
-			while (queue.size() > 2) {
-				try {
-					Thread.sleep(10);
-				} catch (Exception e) {
-				}
+		public void packToStream(DataPack pack) {	
+			try {
+				queue.put(pack);
+			} catch (InterruptedException e) {
+				logger.error("Blocking queue was interrupted",e);
 			}
-			queue.add(pack);
 		}
 
 		public void run() {
 			while (recording) {
-				while (!queue.isEmpty()) {
-					DataPack pack = queue.poll();
-
 					try {
+						DataPack pack = queue.take();
+						
+						//Sometimes, recording will have stopped while the queue was blocking
+						if (pack == null || !recording)
+						{
+							continue;
+						}
+						
 						long t1 = System.currentTimeMillis();
 						compressor.packFrame(pack.newData, pack.frameTime, reset);
 						long t2 = System.currentTimeMillis();
@@ -229,20 +232,14 @@ public abstract class ScreenRecorder implements Runnable {
 						if (reset == true) {
 							reset = false;
 						}
-					} catch (Exception e) {
+					} catch (IOException | InterruptedException e) {
 						logger.error("Problem packing frame",e);
 
 						capFileManager.shutDown();
 
 						return;
 					}
-				}
-				while (queue.isEmpty() == true) {
-					try {
-						Thread.sleep(50);
-					} catch (Exception e) {
-					}
-				}
+	
 			}
 			compressor.stop();
 		}

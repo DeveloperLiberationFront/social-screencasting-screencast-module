@@ -37,6 +37,9 @@ import com.wet.wired.jsr.recorder.CapFileManager;
 
 public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompressorSavingStrategy 
 {
+	private static final int NO_CHANGES_THIS_FRAME = 0;
+	private static final int CHANGES_THIS_FRAME = 1;
+	
 
 	private static final int PERIOD_FOR_FULL_FRAMES = 20;
 	
@@ -437,14 +440,14 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 
 			//If the frame had new stuff
 			if (hasChanges == false) {
-				capFileManager.write(0);
+				capFileManager.write(NO_CHANGES_THIS_FRAME);
 				capFileManager.flush();
 				//I'm not sure why this needs to get updated
 				aFrame.newData = aFrame.previousData;
 				return;
 			}
 			
-			capFileManager.write(1);
+			capFileManager.write(CHANGES_THIS_FRAME);
 			capFileManager.flush();
 
 //			if (ScreenRecordingModule.useCompression)

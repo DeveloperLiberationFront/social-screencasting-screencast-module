@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
 
 public class RotatingBufferedCapFileManager extends BasicCapFileManager 
 {
-	private static final long DELAY_FOR_NEW_FILE_MS = 20*1000;
+	private static final long DELAY_FOR_NEW_FILE_MS = 60*1000;
 	
 	private static Logger logger = Logger.getLogger(RotatingBufferedCapFileManager.class.getName());
 

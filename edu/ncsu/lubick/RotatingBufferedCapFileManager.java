@@ -12,6 +12,8 @@ public class RotatingBufferedCapFileManager extends BasicCapFileManager
 {
 	private static final long DELAY_FOR_NEW_FILE_MS = 60*1000;
 	
+	private static final int EOF_SIGNAL = -1;
+	
 	private static Logger logger = Logger.getLogger(RotatingBufferedCapFileManager.class.getName());
 
 	private ByteArrayOutputStream byteBuffer;
@@ -84,6 +86,7 @@ public class RotatingBufferedCapFileManager extends BasicCapFileManager
 		isRecording = false;
 		try {
 			dumpByteBufferToDisk();
+			closeOffFile();
 		} catch (IOException e) {
 			logger.error("Problem when shutting down",e);
 		}
@@ -125,13 +128,28 @@ public class RotatingBufferedCapFileManager extends BasicCapFileManager
 	{
 		if (shouldGoToNextFile && isFullFrame)
 		{
+			
 			//clear out what is in the disk so far
 			dumpByteBufferToDisk();
+			closeOffFile();
 			this.rotatingFileManager.makeNextFile();
 			writeFileHeader();
 			shouldGoToNextFile = false;
 		}
 		super.startWritingFrame(isFullFrame);
+	}
+
+
+	private void closeOffFile() 
+	{
+		logger.debug("Closing old file");
+		try {
+			rotatingFileManager.getCurrentFileStream().write(EOF_SIGNAL);
+		} catch (IOException e) {
+			logger.error("There was a problem closing the old file");
+			return;
+		}
+		logger.debug("Succesfully closed");
 	}
 
 

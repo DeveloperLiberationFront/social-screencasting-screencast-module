@@ -41,7 +41,7 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 	private static final int CHANGES_THIS_FRAME = 1;
 	
 
-	private static final int PERIOD_FOR_FULL_FRAMES = 20;
+	private static final int PERIOD_BETWEEN_FULL_FRAMES = 20;
 	
 	private static final int MAX_BLOCK_LENGTH = 126;
 
@@ -102,7 +102,7 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 		
 		//t2 = System.nanoTime();
 		boolean isFullFrame = false;
-		if (frameCounter % PERIOD_FOR_FULL_FRAMES == 0)
+		if (frameCounter % PERIOD_BETWEEN_FULL_FRAMES == 0)
 		{
 			isFullFrame = true;
 			frameCounter = 0;

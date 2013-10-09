@@ -2,6 +2,8 @@ package edu.ncsu.lubick;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -11,7 +13,7 @@ import com.wet.wired.jsr.recorder.DesktopScreenRecorder;
 import com.wet.wired.jsr.recorder.ScreenRecorder;
 import com.wet.wired.jsr.recorder.ScreenRecorderListener;
 
-public class ScreenRecordingModule implements ScreenRecorderListener
+public class ScreenRecordingModule implements ScreenRecorderListener, RotatingFileManagerListener
 {
 	public static final String LOGGING_FILE_PATH = "./log4j.settings";
 
@@ -19,11 +21,12 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 	
 	private File outputFolder;
 
-	private CapFileManager fileManager;
+	private CapFileManager capManager;
 
 	private ScreenRecorder recorder;
 
 	private boolean isRecording;
+	private SimpleDateFormat dateInSecondsToNumber = new SimpleDateFormat("DDDyykkmmss");
 
 	//Static initializer to get the logging path set up and create the hub
 	static {
@@ -34,14 +37,18 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 	public ScreenRecordingModule(File folderToOutput) {
 		setOutputDirectory(folderToOutput);
 		
-		try {
-			fileManager = RotatingBufferedCapFileManager.makeRotatingFileManager(outputFolder, "temp","cap");
-		} catch (IOException e) {
+		try 
+		{
+			RotatingFileManager fileManager = new RotatingFileManager(outputFolder, "screencasts.","cap", this);
+			capManager = RotatingBufferedCapFileManager.makeBufferedRotatingFileManager(fileManager);
+		} 
+		catch (IOException e) 
+		{
 			logger.fatal("Could not set up recording", e);
 			throw new RuntimeException("Problem setting up rotatingFileManager", e);
 		}
 
-		recorder = new DesktopScreenRecorder(fileManager, this);
+		recorder = new DesktopScreenRecorder(capManager, this);
 	}
 
 
@@ -142,6 +149,12 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 	{
 		logger.info("Recording Stopped");
 
+	}
+
+
+	@Override
+	public String getNextSuffix() {
+		return this.dateInSecondsToNumber.format(new Date());
 	}
 
 

@@ -62,12 +62,12 @@ public class BasicCapFileManager implements CapFileManager
 
 	@Override
 	public void startWritingFrame(boolean isFullFrame) throws IOException {
-		//I don't need to know
+		//This callback can safely be ignored
 	}
 
 	@Override
 	public void endWritingFrame() {
-		// TODO Auto-generated method stub
+		//This callback can safely be ignored
 
 	}
 

@@ -1,6 +1,6 @@
 package com.wet.wired.jsr.recorder.compression;
 
-class FramePacket {
+public class FramePacket {
 
 
 	long frameTime;

@@ -78,6 +78,12 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 			this.saveToDiskStrategy = this;
 		}
 	}
+	
+	public FrameCompressor(CapFileManager capFileManager, int frameSize)
+	{
+		this(capFileManager, frameSize, capFileManager.getCodecStrategy(), capFileManager.getSavingStrategy());
+	}
+	
 
 	//for timing
 	//private long t1,t2,t3,t4;
@@ -187,7 +193,7 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 		//						data will folow.
 		int inputCursor = 0;
 		int outputCursor = 0;
-		int uncompressedCursor = -1;  // Initialize with a Sentinel value of -1
+		int uncompressedCursor = -1;  // Initialize with a Sentinel value of -1 (which gets translated as -127 when this is a byte)
 
 		byte red;
 		byte green;
@@ -500,5 +506,9 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 
 	public void stop() {
 		//Do nothing
+	}
+
+	public static FramePacket makeTestFramePacket(int frameSize) {
+		return new FramePacket(frameSize);
 	}
 }

@@ -200,7 +200,7 @@ public abstract class ScreenRecorder implements Runnable {
 
 		public StreamPacker(CapFileManager capFileManager, int frameSize) 
 		{
-			compressor = new FrameCompressor(capFileManager, frameSize, capFileManager.getCodecStrategy(), capFileManager.getSavingStrategy());
+			compressor = new FrameCompressor(capFileManager, frameSize);
 
 			new Thread(this, "Stream Packer").start();
 		}

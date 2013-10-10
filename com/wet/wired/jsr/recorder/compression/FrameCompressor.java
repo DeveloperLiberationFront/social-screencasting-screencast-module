@@ -39,16 +39,14 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 {
 	private static final int NO_CHANGES_THIS_FRAME = 0;
 	private static final int CHANGES_THIS_FRAME = 1;
-	
+	public static final int MAX_BLOCK_LENGTH = 126;
 
 	private static final int PERIOD_BETWEEN_FULL_FRAMES = 20;
-	
-	private static final int MAX_BLOCK_LENGTH = 126;
 
 	private static final byte STREAK_OF_SAME_AS_LAST_TIME_BLOCKS_CONSTANT = (byte) 0xFF; //this is -1.  See explanatory comments below
 
 	private static Logger logger = Logger.getLogger(FrameCompressor.class.getName());
-	
+
 	private FramePacket frame;
 	private CapFileManager capFileManager;
 	private boolean currentFrameHasChanges;
@@ -58,9 +56,9 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 
 	private FrameCompressorCodecStrategy codecStrategy;
 	private FrameCompressorSavingStrategy saveToDiskStrategy;
-	
+
 	private int frameCounter = 0;
-	
+
 	byte[] dataToWriteBuffer = new byte[1];	//It's not a local variable because then we'd have to reallocate it everytime
 
 
@@ -68,7 +66,7 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 	{
 		frame = new FramePacket(frameSize);
 		this.capFileManager = capFileManager;
-		
+
 		if (fccs == null)
 		{
 			this.codecStrategy = this;
@@ -78,22 +76,22 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 			this.saveToDiskStrategy = this;
 		}
 	}
-	
+
 	public FrameCompressor(CapFileManager capFileManager, int frameSize)
 	{
 		this(capFileManager, frameSize, capFileManager.getCodecStrategy(), capFileManager.getSavingStrategy());
 	}
-	
+
 
 	//for timing
 	//private long t1,t2,t3,t4;
-	
+
 	//private long sumI1 = 0,sumI2 = 0,sumI3 = 0, sumSum = 0;
-	
+
 	//private int timingCounter = 0;
-	
+
 	//private int reps = 100;
-	
+
 	public void packFrame(int[] newData, long frameTimeStamp, boolean reset) throws IOException 
 	{
 		//t1 = System.nanoTime();
@@ -105,7 +103,7 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 		{
 			dataToWriteBuffer = new byte[newData.length * 4];
 		}
-		
+
 		//t2 = System.nanoTime();
 		boolean isFullFrame = false;
 		if (frameCounter % PERIOD_BETWEEN_FULL_FRAMES == 0)
@@ -114,12 +112,12 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 			frameCounter = 0;
 		}
 		frameCounter++;
-		
+
 		int numBytesToWrite = codecStrategy.compressDataUsingRunLengthEncoding(newData, frame, dataToWriteBuffer, isFullFrame);
-		
+
 		//t3 = System.nanoTime();
-		
-		
+
+
 		capFileManager.startWritingFrame(isFullFrame);
 		saveToDiskStrategy.writeData(dataToWriteBuffer, currentFrameHasChanges, numBytesToWrite, frame);
 		capFileManager.endWritingFrame();
@@ -141,13 +139,13 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 		//	}
 		//	else
 		//	{
-				//logger.trace(String.format("First Interval ,%1.3fms, Second Interval ,%1.3fms, Third Interval ,%1.3fms,"
-				//		,(t2-t1)/1000000.0,(t3-t2)/1000000.0,(t4-t3)/1000000.0));
-				//long total = t4-t1;
-				//logger.trace(String.format("By percents: First Interval %f%%, Second Interval %f%%, Third Interval %f%%",
-				//		(t2-t1)*100.0/total, (t3-t2)*100.0/total, (t4-t3)*100.0/total));
+		//logger.trace(String.format("First Interval ,%1.3fms, Second Interval ,%1.3fms, Third Interval ,%1.3fms,"
+		//		,(t2-t1)/1000000.0,(t3-t2)/1000000.0,(t4-t3)/1000000.0));
+		//long total = t4-t1;
+		//logger.trace(String.format("By percents: First Interval %f%%, Second Interval %f%%, Third Interval %f%%",
+		//		(t2-t1)*100.0/total, (t3-t2)*100.0/total, (t4-t3)*100.0/total));
 		//	}
-			
+
 		//	timingCounter++;
 		//}
 	}
@@ -171,14 +169,14 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 	{
 		if (logger.isTraceEnabled()) logger.trace("Extracting data from inputData of size "+inputData.length);
 		//if (logger.isTraceEnabled()) logger.trace('\n'+Arrays.toString(inputData)+'\n');
-		
-		
+
+
 		//How many total blocks.  This is mainly used for debugging and tracing efficiency
 		int blocks = 0;
 
 		boolean currentlyInCompressedBlock = true;
 		int sizeOfCurrentBlock = 0;
-		
+
 		byte thisBlocksRedValue = 0;
 		byte thisBlocksGreenValue = 0;
 		byte thisBlocksBlueValue = 0;
@@ -193,14 +191,14 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 		//						data will folow.
 		int inputCursor = 0;
 		int outputCursor = 0;
-		int uncompressedCursor = -1;  // Initialize with a Sentinel value of -1 (which gets translated as -127 when this is a byte)
+		int uncompressedCursor = -1;  // Initialize with a Sentinel value of -1 
 
 		byte red;
 		byte green;
 		byte blue;
 
 		currentFrameHasChanges = false;
-		
+
 		//Keeps track if this will be the last byte from newData
 		boolean lastEntry = false; 
 
@@ -222,7 +220,7 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 				//Then, we add a tiny value to the blue, just to keep our signal (the signal that nothing changed)
 				//in tune
 			{
-				
+
 				if ((inputData[inputCursor] & 0x00FFFFFF) != 0)
 				{				
 					red = (byte) ((inputData[inputCursor] & 0x00FF0000) >>> 16);
@@ -236,7 +234,7 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 					blue = 1;
 				}
 			}
-			
+
 			//I know, really I shouldn't comment out logger statements, but I'd rather not take the (microscopic) 
 			//performance hit in a loop that executes millions of times per second.
 			//if (logger.isTraceEnabled()) logger.trace(String.format("R:%d G:%d B:%d", red,green,blue));
@@ -244,7 +242,7 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 			//The following comment can be sung to the tune of "Peanut Butter Jelly time"
 			//It's SINGLE PARSE ENCODING TIME, SINGLE PARSE ENCODING TIME, way yo, way yo, now der you go, der you go
 			//SINGLE PARSE ENCODING,SINGLE PARSE ENCODING,SINGLE PARSE ENCODING WITH FIXED BLOCK SIZE.
-			
+
 			//Seriously, the following algorithm is just a single-parse, run-length encoding algorithm
 			//http://en.wikipedia.org/wiki/Run-length_encoding
 			//The main difference here is that instead of compressing the following 
@@ -287,7 +285,7 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 			//Now, why can't a block be 127?  Imagine that we had a block size of uncompressed data of length 127
 			//We would be encoding that as a negative offset, 127 + 0x80 = 255 == -1 and the decompressor would
 			//most likely interpret -1 as a full set of blocks of "same as last time" pixels
-			
+
 			//Does this color match the color we are tracking in this compression block?
 			if (thisBlocksRedValue == red && thisBlocksGreenValue == green && thisBlocksBlueValue == blue) {
 				//Are we in a block presently, or do we have to start a new one?
@@ -339,9 +337,38 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 						//Write out the block of size MAX_BLOCK_LENGTH and the current color
 						blocks++;
 						currentFrameHasChanges = true;
-						//This feelslike this should be sizeOfCurrentBlock +1 (to make it 127), but because a new block is 
+						//This feels like this should be sizeOfCurrentBlock +1 (to make it 127), but because a new block is 
 						//made and the block size is 1 at the end of the loop, the pixel we are looking at now is rolled
 						//into that new block and not the old one that we filled
+
+						if (lastEntry)
+						{
+							if (sizeOfCurrentBlock < MAX_BLOCK_LENGTH)
+							{
+								sizeOfCurrentBlock++;
+								packedBytes[outputCursor] = (byte) sizeOfCurrentBlock;	
+								outputCursor++;
+								packedBytes[outputCursor] = thisBlocksRedValue;
+								outputCursor++;
+								packedBytes[outputCursor] = thisBlocksGreenValue;
+								outputCursor++;
+								packedBytes[outputCursor] = thisBlocksBlueValue;
+								outputCursor++;
+								break;
+							}
+							//A rare edge case where we just exceeded the max block length, but we don't have space to move 
+							packedBytes[outputCursor] = (byte) sizeOfCurrentBlock;	//this is the MAX_BLOCK_LENGTH
+							outputCursor++;
+							packedBytes[outputCursor] = thisBlocksRedValue;
+							outputCursor++;
+							packedBytes[outputCursor] = thisBlocksGreenValue;
+							outputCursor++;
+							packedBytes[outputCursor] = thisBlocksBlueValue;
+							outputCursor++;
+							
+							sizeOfCurrentBlock = -1;	//we'll write one more block.  -1 means uncompressed
+						}
+
 						packedBytes[outputCursor] = (byte) sizeOfCurrentBlock;	
 						outputCursor++;
 						packedBytes[outputCursor] = thisBlocksRedValue;
@@ -420,16 +447,16 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 				thisBlocksGreenValue = green;
 				thisBlocksBlueValue = blue;
 			}
-			
+
 			//FINALLY
 			//This code gets run every time
-			
+
 			inputCursor++;
 			sizeOfCurrentBlock++;
 			//if (logger.isTraceEnabled()) logger.trace(String.format("Input Cursor: %d, blockSize: %d, OutputCursor: %d, UncompressedCursor: %d, Blocks: %d", inputCursor,sizeOfCurrentBlock,outputCursor,uncompressedCursor,blocks));
 		}
-		
-		
+
+
 		if (logger.isTraceEnabled()) logger.trace("Finished conversion with "+blocks+" blocks making up "+outputCursor +" bytes");
 		//if (logger.isTraceEnabled()) logger.trace('\n'+Arrays.toString(packedBytes)+'\n');
 		return outputCursor;
@@ -438,70 +465,70 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 	@Override
 	public void writeData(byte[] dataToWrite, boolean hasChanges, int numBytesToWrite, FramePacket aFrame) throws IOException 
 	{
-			//Write out when this frame happened
-			capFileManager.write(((int) aFrame.frameTime & 0xFF000000) >>> 24);
-			capFileManager.write(((int) aFrame.frameTime & 0x00FF0000) >>> 16);
-			capFileManager.write(((int) aFrame.frameTime & 0x0000FF00) >>> 8);
-			capFileManager.write(((int) aFrame.frameTime & 0x000000FF));
+		//Write out when this frame happened
+		capFileManager.write(((int) aFrame.frameTime & 0xFF000000) >>> 24);
+		capFileManager.write(((int) aFrame.frameTime & 0x00FF0000) >>> 16);
+		capFileManager.write(((int) aFrame.frameTime & 0x0000FF00) >>> 8);
+		capFileManager.write(((int) aFrame.frameTime & 0x000000FF));
 
-			//If the frame had new stuff
-			if (hasChanges == false) {
-				capFileManager.write(NO_CHANGES_THIS_FRAME);
-				capFileManager.flush();
-				//I'm not sure why this needs to get updated
-				aFrame.newData = aFrame.previousData;
-				return;
-			}
-			
-			capFileManager.write(CHANGES_THIS_FRAME);
+		//If the frame had new stuff
+		if (hasChanges == false) {
+			capFileManager.write(NO_CHANGES_THIS_FRAME);
 			capFileManager.flush();
+			//I'm not sure why this needs to get updated
+			aFrame.newData = aFrame.previousData;
+			return;
+		}
 
-//			if (ScreenRecordingModule.useCompression)
-//			{
+		capFileManager.write(CHANGES_THIS_FRAME);
+		capFileManager.flush();
 
-				if (bO == null)
-				{
-					bO = new ByteArrayOutputStream();
-				}
+		//			if (ScreenRecordingModule.useCompression)
+		//			{
 
-				if (zO == null)
-				{
-					//zO = new GZIPOutputStream(bO);
-					zO = new DeflaterOutputStream(bO, deflator, numBytesToWrite);
-				}
+		if (bO == null)
+		{
+			bO = new ByteArrayOutputStream();
+		}
 
-				//Makes way for the next compressed bit (makes a new header...)
-				deflator.reset();
-				byte[] bA;
+		if (zO == null)
+		{
+			//zO = new GZIPOutputStream(bO);
+			zO = new DeflaterOutputStream(bO, deflator, numBytesToWrite);
+		}
 
-				zO.write(dataToWrite, 0, numBytesToWrite);
-				zO.finish();
+		//Makes way for the next compressed bit (makes a new header...)
+		deflator.reset();
+		byte[] bA;
 
-				bA = bO.toByteArray();
+		zO.write(dataToWrite, 0, numBytesToWrite);
+		zO.finish();
 
-				if (logger.isTraceEnabled()) logger.trace(String.format("Compressed %d bytes to %d bytes",numBytesToWrite, bA.length));
+		bA = bO.toByteArray();
+
+		if (logger.isTraceEnabled()) logger.trace(String.format("Compressed %d bytes to %d bytes",numBytesToWrite, bA.length));
 
 
-				capFileManager.write((bA.length & 0xFF000000) >>> 24);
-				capFileManager.write((bA.length & 0x00FF0000) >>> 16);
-				capFileManager.write((bA.length & 0x0000FF00) >>> 8);
-				capFileManager.write((bA.length & 0x000000FF));
+		capFileManager.write((bA.length & 0xFF000000) >>> 24);
+		capFileManager.write((bA.length & 0x00FF0000) >>> 16);
+		capFileManager.write((bA.length & 0x0000FF00) >>> 8);
+		capFileManager.write((bA.length & 0x000000FF));
 
-				capFileManager.write(bA);
-				capFileManager.flush();
-				bO.reset();
-//			}
-//			else 
-//			{
-//				capFileManager.write((numBytesToWrite & 0xFF000000) >>> 24);
-//				capFileManager.write((numBytesToWrite & 0x00FF0000) >>> 16);
-//				capFileManager.write((numBytesToWrite & 0x0000FF00) >>> 8);
-//				capFileManager.write((numBytesToWrite & 0x000000FF));
-//
-//				capFileManager.write(dataToWrite, 0, numBytesToWrite);
-//				capFileManager.flush();
-//			}
-			
+		capFileManager.write(bA);
+		capFileManager.flush();
+		bO.reset();
+		//			}
+		//			else 
+		//			{
+		//				capFileManager.write((numBytesToWrite & 0xFF000000) >>> 24);
+		//				capFileManager.write((numBytesToWrite & 0x00FF0000) >>> 16);
+		//				capFileManager.write((numBytesToWrite & 0x0000FF00) >>> 8);
+		//				capFileManager.write((numBytesToWrite & 0x000000FF));
+		//
+		//				capFileManager.write(dataToWrite, 0, numBytesToWrite);
+		//				capFileManager.flush();
+		//			}
+
 	}
 
 	public void stop() {

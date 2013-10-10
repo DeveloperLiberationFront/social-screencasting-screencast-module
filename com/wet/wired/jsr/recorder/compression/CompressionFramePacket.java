@@ -1,6 +1,6 @@
 package com.wet.wired.jsr.recorder.compression;
 
-public class FramePacket {
+public class CompressionFramePacket {
 
 
 	long frameTime;
@@ -8,11 +8,11 @@ public class FramePacket {
 	int[] previousData;
 	int[] newData;
 
-	FramePacket(int frameSize) {
+	CompressionFramePacket(int frameSize) {
 		previousData = new int[frameSize];
 	}
 
-	void updateFieldsForNextFrame(int[] newFrameData, long newFrameTime, boolean reset) 
+	public void updateFieldsForNextFrame(int[] newFrameData, long newFrameTime, boolean reset) 
 	{
 		this.frameTime = newFrameTime;
 		previousData = newData;

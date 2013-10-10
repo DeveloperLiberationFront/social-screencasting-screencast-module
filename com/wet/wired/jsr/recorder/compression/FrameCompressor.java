@@ -47,7 +47,7 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 
 	private static Logger logger = Logger.getLogger(FrameCompressor.class.getName());
 
-	private FramePacket frame;
+	private CompressionFramePacket frame;
 	private CapFileManager capFileManager;
 	private boolean currentFrameHasChanges;
 	private Deflater deflator = new Deflater(Deflater.BEST_SPEED);
@@ -64,7 +64,7 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 
 	public FrameCompressor(CapFileManager capFileManager, int frameSize, FrameCompressorCodecStrategy fccs, FrameCompressorSavingStrategy fcss) 
 	{
-		frame = new FramePacket(frameSize);
+		frame = new CompressionFramePacket(frameSize);
 		this.capFileManager = capFileManager;
 
 		if (fccs == null)
@@ -165,7 +165,7 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 	 * @return How many bytes were put into packedBytes
 	 */
 	@Override
-	public int compressDataUsingRunLengthEncoding(int[] inputData, FramePacket aFrame, byte[] packedBytes, boolean forceFullFrame) 
+	public int compressDataUsingRunLengthEncoding(int[] inputData, CompressionFramePacket aFrame, byte[] packedBytes, boolean forceFullFrame) 
 	{
 		if (logger.isTraceEnabled()) logger.trace("Extracting data from inputData of size "+inputData.length);
 		//if (logger.isTraceEnabled()) logger.trace('\n'+Arrays.toString(inputData)+'\n');
@@ -463,7 +463,7 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 	}
 
 	@Override
-	public void writeData(byte[] dataToWrite, boolean hasChanges, int numBytesToWrite, FramePacket aFrame) throws IOException 
+	public void writeData(byte[] dataToWrite, boolean hasChanges, int numBytesToWrite, CompressionFramePacket aFrame) throws IOException 
 	{
 		//Write out when this frame happened
 		capFileManager.write(((int) aFrame.frameTime & 0xFF000000) >>> 24);
@@ -535,7 +535,7 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 		//Do nothing
 	}
 
-	public static FramePacket makeTestFramePacket(int frameSize) {
-		return new FramePacket(frameSize);
+	public static CompressionFramePacket makeTestFramePacket(int frameSize) {
+		return new CompressionFramePacket(frameSize);
 	}
 }

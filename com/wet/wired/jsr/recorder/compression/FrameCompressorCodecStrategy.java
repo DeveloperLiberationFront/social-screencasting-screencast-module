@@ -16,6 +16,6 @@ public interface FrameCompressorCodecStrategy {
 	 * @param forceFullFrame
 	 * @return How many bytes were put into packedBytes
 	 */
-	int compressDataUsingRunLengthEncoding(int[] newData, FramePacket frame, byte[] dataToWriteBuffer, boolean forceFullFrame);
+	int compressDataUsingRunLengthEncoding(int[] newData, CompressionFramePacket frame, byte[] dataToWriteBuffer, boolean forceFullFrame);
 
 }

@@ -7,10 +7,8 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 
 /**
- * A RotatingFileManger acts like an OutputStream, but takes any writes and puts
- * them to a file.  After a fixed amount of time, the Manager switches to the next file
- * when writing.  This will be a seamless transition, although on the switch, write() might
- * block for a bit longer than usual.
+ * A RotatingFileManger manages an OutputStream.  On command, the Manager switches to the next file
+ * when writing.  
  * @author Kevin Lubick
  *
  */

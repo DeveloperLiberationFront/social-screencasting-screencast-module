@@ -8,7 +8,7 @@ public class CompressionFramePacket {
 	public int[] previousData;
 	public int[] newData;
 
-	public byte[] dataToWriteBuffer;
+	public byte[] dataToWriteBuffer = new byte[1];
 	public boolean isFullFrame;
 
 

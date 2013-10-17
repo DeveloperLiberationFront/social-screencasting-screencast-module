@@ -206,7 +206,7 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 
 			//Compare this byte to the previous one.  If it is the same, that is nothing changed,
 			//make it black.  This is the value that will be interpreted as "same as last time"
-			if (inputData[inputCursor] == this.workingFrame.previousData[inputCursor] && !forceFullFrame) {
+			if (inputData[inputCursor] == thisPacket.previousData[inputCursor] && !forceFullFrame) {
 				red = 0;
 				green = 0;
 				blue = 0;

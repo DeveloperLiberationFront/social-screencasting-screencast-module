@@ -5,29 +5,40 @@ public class CompressionFramePacket {
 
 	long frameTime;
 
-	int[] previousData;
-	int[] newData;
+	public int[] previousData;
+	public int[] newData;
 
-	CompressionFramePacket(int frameSize) {
+	public byte[] dataToWriteBuffer;
+	public boolean isFullFrame;
+
+
+
+	public CompressionFramePacket(int frameSize) 
+	{
 		previousData = new int[frameSize];
 	}
 
-	public void updateFieldsForNextFrame(int[] newFrameData, long newFrameTime, boolean reset) 
-	{
-		this.frameTime = newFrameTime;
+	public void updateFieldsForNextFrame(FrameDataPack pack) {
+		this.frameTime = pack.frameTimeStamp;
 		previousData = newData;
-		newData = null;
 		if (previousData == null) 
 		{
-			previousData = new int[newFrameData.length];
+			previousData = new int[pack.newData.length];
 		}
-		if (reset) 
+		this.newData = pack.newData;
+	}
+
+
+	public void resizeInternalBytesIfNeeded() {
+		//Worst case scenario, we'll need 4 times as many bytes as ints that come in
+		if (dataToWriteBuffer.length != (newData.length * 4))
 		{
-			this.newData = new int[newFrameData.length];
-		} 
-		else 
-		{
-			this.newData = newFrameData;
+			dataToWriteBuffer = new byte[newData.length * 4];
 		}
+
+	}
+
+	public boolean shouldForceFullFrameHuh() {
+		return this.isFullFrame;
 	}
 }

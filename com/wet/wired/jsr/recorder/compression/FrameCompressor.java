@@ -47,9 +47,10 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 
 	private static Logger logger = Logger.getLogger(FrameCompressor.class.getName());
 
-	private CompressionFramePacket frame;
+	private CompressionFramePacket workingFrame;
 	private CapFileManager capFileManager;
 	private boolean currentFrameHasChanges;
+
 	private Deflater deflator = new Deflater(Deflater.BEST_SPEED);
 	private DeflaterOutputStream zO;
 	private ByteArrayOutputStream bO;
@@ -59,12 +60,12 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 
 	private int frameCounter = 0;
 
-	byte[] dataToWriteBuffer = new byte[1];	//It's not a local variable because then we'd have to reallocate it everytime
+	//byte[] dataToWriteBuffer = new byte[1];	//It's not a local variable because then we'd have to reallocate it everytime
 
 
 	public FrameCompressor(CapFileManager capFileManager, int frameSize, FrameCompressorCodecStrategy fccs, FrameCompressorSavingStrategy fcss) 
 	{
-		frame = new CompressionFramePacket(frameSize);
+		workingFrame = new CompressionFramePacket(frameSize);
 		this.capFileManager = capFileManager;
 
 		if (fccs == null)
@@ -92,19 +93,14 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 
 	//private int reps = 100;
 
-	public void packFrame(int[] newData, long frameTimeStamp, boolean reset) throws IOException 
+	public void packFrame(FrameDataPack inputDataPack) throws IOException 
 	{
-		//t1 = System.nanoTime();
 		//For performance reasons, we reuse the frame
-		frame.updateFieldsForNextFrame(newData, frameTimeStamp, reset);
+		workingFrame.updateFieldsForNextFrame(inputDataPack);
+		
+		workingFrame.resizeInternalBytesIfNeeded();
 
-		//Worst case scenario, we'll need 4 times as many bytes as ints that come in
-		if (dataToWriteBuffer.length != (newData.length * 4))
-		{
-			dataToWriteBuffer = new byte[newData.length * 4];
-		}
 
-		//t2 = System.nanoTime();
 		boolean isFullFrame = false;
 		if (frameCounter % PERIOD_BETWEEN_FULL_FRAMES == 0)
 		{
@@ -112,44 +108,40 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 			frameCounter = 0;
 		}
 		frameCounter++;
+		
+		
+		workingFrame.isFullFrame = isFullFrame;
 
-		int numBytesToWrite = codecStrategy.compressDataUsingRunLengthEncoding(newData, frame, dataToWriteBuffer, isFullFrame);
-
-		//t3 = System.nanoTime();
+		int numBytesToWrite = codecStrategy.compressData(workingFrame);
 
 
 		capFileManager.startWritingFrame(isFullFrame);
-		saveToDiskStrategy.writeData(dataToWriteBuffer, currentFrameHasChanges, numBytesToWrite, frame);
-		capFileManager.endWritingFrame();
-		//t4 = System.nanoTime();
-		//if (logger.isTraceEnabled()) 
-		//{
-		//	sumI1 += (t2-t1);
-		//	sumI2 += (t3-t2);
-		//	sumI3 += (t4-t3);
-		//	sumSum += (t4-t1);
-		//	if (timingCounter % reps == 0 && timingCounter > 0)
-		//	{
-		//		logger.trace("===================Summary======================");
-		//		logger.trace(String.format("AVERAGE: First Interval ,%1.3fms, Second Interval ,%1.3fms, Third Interval ,%1.3fms,"
-		//				,((sumI1)/1000000.0)/reps,(sumI2)/(1000000.0)/reps,((sumI3)/1000000.0)/reps));
-		//		logger.trace(String.format("By percents: First Interval %f%%, Second Interval %f%%, Third Interval %f%%",
-		//				(sumI1)*100.0/sumSum, (sumI2)*100.0/sumSum, (sumI3)*100.0/sumSum));
-		//		logger.trace("raw: ," + sumI1 +','+ sumI2 +','+ sumI3 +','+ sumSum +',');
-		//	}
-		//	else
-		//	{
-		//logger.trace(String.format("First Interval ,%1.3fms, Second Interval ,%1.3fms, Third Interval ,%1.3fms,"
-		//		,(t2-t1)/1000000.0,(t3-t2)/1000000.0,(t4-t3)/1000000.0));
-		//long total = t4-t1;
-		//logger.trace(String.format("By percents: First Interval %f%%, Second Interval %f%%, Third Interval %f%%",
-		//		(t2-t1)*100.0/total, (t3-t2)*100.0/total, (t4-t3)*100.0/total));
-		//	}
+		if (currentFrameHasChanges)
+		{
 
-		//	timingCounter++;
-		//}
+			saveToDiskStrategy.writeDataToCapFile(workingFrame.dataToWriteBuffer, numBytesToWrite, workingFrame.frameTime);
+		}
+		else
+		{
+			saveToDiskStrategy.writeBlankFrameToCapFile();
+		}
+
+		if (!currentFrameHasChanges)
+		{
+			//I'm not sure why this needs to get updated
+			workingFrame.newData = workingFrame.previousData;
+		}
+
+		capFileManager.endWritingFrame();
+
 	}
 
+
+
+	@Override
+	public int compressData(CompressionFramePacket thisPacket) {
+		return compressDataUsingRunLengthEncoding(thisPacket);
+	}
 
 	/**
 	 * Takes the the inputData and fills packedBytes with a compressed version
@@ -164,9 +156,12 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 	 * @param forceFullFrame
 	 * @return How many bytes were put into packedBytes
 	 */
-	@Override
-	public int compressDataUsingRunLengthEncoding(int[] inputData, CompressionFramePacket aFrame, byte[] packedBytes, boolean forceFullFrame) 
+	public int compressDataUsingRunLengthEncoding(CompressionFramePacket thisPacket) 
 	{
+		int[] inputData = thisPacket.newData;
+		byte[] packedBytes = thisPacket.dataToWriteBuffer;
+		boolean forceFullFrame = thisPacket.isFullFrame;
+		
 		if (logger.isTraceEnabled()) logger.trace("Extracting data from inputData of size "+inputData.length);
 		//if (logger.isTraceEnabled()) logger.trace('\n'+Arrays.toString(inputData)+'\n');
 
@@ -211,7 +206,7 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 
 			//Compare this byte to the previous one.  If it is the same, that is nothing changed,
 			//make it black.  This is the value that will be interpreted as "same as last time"
-			if (inputData[inputCursor] == aFrame.previousData[inputCursor] && !forceFullFrame) {
+			if (inputData[inputCursor] == this.workingFrame.previousData[inputCursor] && !forceFullFrame) {
 				red = 0;
 				green = 0;
 				blue = 0;
@@ -365,7 +360,7 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 							outputCursor++;
 							packedBytes[outputCursor] = thisBlocksBlueValue;
 							outputCursor++;
-							
+
 							sizeOfCurrentBlock = -1;	//we'll write one more block.  -1 means uncompressed
 						}
 
@@ -463,28 +458,18 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 	}
 
 	@Override
-	public void writeData(byte[] dataToWrite, boolean hasChanges, int numBytesToWrite, CompressionFramePacket aFrame) throws IOException 
+	public void writeDataToCapFile(byte[] dataToWrite, int numBytesToWrite, long frameTime) throws IOException 
 	{
 		//Write out when this frame happened
-		capFileManager.write(((int) aFrame.frameTime & 0xFF000000) >>> 24);
-		capFileManager.write(((int) aFrame.frameTime & 0x00FF0000) >>> 16);
-		capFileManager.write(((int) aFrame.frameTime & 0x0000FF00) >>> 8);
-		capFileManager.write(((int) aFrame.frameTime & 0x000000FF));
+		capFileManager.write(((int) frameTime & 0xFF000000) >>> 24);
+		capFileManager.write(((int) frameTime & 0x00FF0000) >>> 16);
+		capFileManager.write(((int) frameTime & 0x0000FF00) >>> 8);
+		capFileManager.write(((int) frameTime & 0x000000FF));
 
-		//If the frame had new stuff
-		if (hasChanges == false) {
-			capFileManager.write(NO_CHANGES_THIS_FRAME);
-			capFileManager.flush();
-			//I'm not sure why this needs to get updated
-			aFrame.newData = aFrame.previousData;
-			return;
-		}
 
 		capFileManager.write(CHANGES_THIS_FRAME);
 		capFileManager.flush();
 
-		//			if (ScreenRecordingModule.useCompression)
-		//			{
 
 		if (bO == null)
 		{
@@ -517,25 +502,25 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 		capFileManager.write(bA);
 		capFileManager.flush();
 		bO.reset();
-		//			}
-		//			else 
-		//			{
-		//				capFileManager.write((numBytesToWrite & 0xFF000000) >>> 24);
-		//				capFileManager.write((numBytesToWrite & 0x00FF0000) >>> 16);
-		//				capFileManager.write((numBytesToWrite & 0x0000FF00) >>> 8);
-		//				capFileManager.write((numBytesToWrite & 0x000000FF));
-		//
-		//				capFileManager.write(dataToWrite, 0, numBytesToWrite);
-		//				capFileManager.flush();
-		//			}
+
 
 	}
+
+	@Override
+	public void writeBlankFrameToCapFile() throws IOException {
+		capFileManager.write(NO_CHANGES_THIS_FRAME);
+		capFileManager.flush();
+
+	}
+
 
 	public void stop() {
 		//Do nothing
 	}
 
+	@Deprecated
 	public static CompressionFramePacket makeTestFramePacket(int frameSize) {
 		return new CompressionFramePacket(frameSize);
 	}
+
 }

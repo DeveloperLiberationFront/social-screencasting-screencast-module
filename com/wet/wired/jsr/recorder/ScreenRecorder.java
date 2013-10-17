@@ -35,6 +35,7 @@ import java.util.concurrent.BlockingQueue;
 import org.apache.log4j.Logger;
 
 import com.wet.wired.jsr.recorder.compression.FrameCompressor;
+import com.wet.wired.jsr.recorder.compression.FrameDataPack;
 
 public abstract class ScreenRecorder implements Runnable {
 
@@ -53,7 +54,6 @@ public abstract class ScreenRecorder implements Runnable {
 
 	private long startTime;
 	private long frameTime;
-	private boolean reset;
 
 	private ScreenRecorderListener listener;
 
@@ -129,7 +129,7 @@ public abstract class ScreenRecorder implements Runnable {
 				recordArea.width);
 		long t3 = System.currentTimeMillis();
 
-		streamPacker.packToStream(new DataPack(rawData, frameTime));
+		streamPacker.packToStream(new FrameDataPack(rawData, frameTime));
 
 		if (logger.isTraceEnabled()) logger.trace("Times");
 		if (logger.isTraceEnabled()) logger.trace("  capture time:"+(t2-t1));
@@ -184,18 +184,8 @@ public abstract class ScreenRecorder implements Runnable {
 		return frameSize;
 	}
 
-	private class DataPack {
-		public DataPack(int[] newData, long frameTime) {
-			this.newData = newData;
-			this.frameTime = frameTime;
-		}
-
-		public long frameTime;
-		public int[] newData;
-	}
-
 	private class StreamPacker implements Runnable {
-		BlockingQueue<DataPack> queue = new ArrayBlockingQueue<>(2);
+		BlockingQueue<FrameDataPack> queue = new ArrayBlockingQueue<>(2);
 		private FrameCompressor compressor;
 
 		public StreamPacker(CapFileManager capFileManager, int frameSize) 
@@ -205,7 +195,7 @@ public abstract class ScreenRecorder implements Runnable {
 			new Thread(this, "Stream Packer").start();
 		}
 
-		public void packToStream(DataPack pack) {	
+		public void packToStream(FrameDataPack pack) {	
 			try {
 				queue.put(pack);
 			} catch (InterruptedException e) {
@@ -216,7 +206,7 @@ public abstract class ScreenRecorder implements Runnable {
 		public void run() {
 			while (recording) {
 					try {
-						DataPack pack = queue.take();
+						FrameDataPack pack = queue.take();
 						
 						//Sometimes, recording will have stopped while the queue was blocking
 						if (pack == null || !recording)
@@ -225,13 +215,10 @@ public abstract class ScreenRecorder implements Runnable {
 						}
 						
 						long t1 = System.currentTimeMillis();
-						compressor.packFrame(pack.newData, pack.frameTime, reset);
+						compressor.packFrame(pack);
 						long t2 = System.currentTimeMillis();
 						if (logger.isTraceEnabled()) logger.trace("  pack time:"+(t2-t1));
 
-						if (reset == true) {
-							reset = false;
-						}
 					} catch (IOException | InterruptedException e) {
 						logger.error("Problem packing frame",e);
 

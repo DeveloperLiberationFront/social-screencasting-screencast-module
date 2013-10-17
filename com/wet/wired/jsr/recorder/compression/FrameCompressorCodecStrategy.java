@@ -8,7 +8,7 @@ public interface FrameCompressorCodecStrategy {
 	 * 
 	 * If forceFullFrame is true, this should use an entire frame instead of a diff from the previous frame
 	 * 
-	 * Returns the number of bytes that are in dataToWriteBuffer (Don't use the length as that won't have changed from
+	 * Returns the number of bytes that are in dataToWriteBuffer (Don't use the dataToWriteBuffer.length as that won't have changed from
 	 * the input and is probably vastly overestimated
 	 * @param inputData
 	 * @param aFrame
@@ -16,6 +16,6 @@ public interface FrameCompressorCodecStrategy {
 	 * @param forceFullFrame
 	 * @return How many bytes were put into packedBytes
 	 */
-	int compressDataUsingRunLengthEncoding(int[] newData, CompressionFramePacket frame, byte[] dataToWriteBuffer, boolean forceFullFrame);
+	int compressData(CompressionFramePacket workingFrame);
 
 }

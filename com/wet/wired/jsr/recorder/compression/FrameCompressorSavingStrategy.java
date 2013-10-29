@@ -11,6 +11,6 @@ public interface FrameCompressorSavingStrategy {
 
 	void writeDataToCapFile(byte[] dataToWrite, int numBytesToWrite, long frameTime) throws IOException;
 
-	void writeBlankFrameToCapFile() throws IOException;
+	void writeBlankFrameToCapFile(long frameTime) throws IOException;
 
 }

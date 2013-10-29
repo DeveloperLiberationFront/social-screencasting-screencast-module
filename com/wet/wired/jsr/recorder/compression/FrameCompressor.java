@@ -84,14 +84,6 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 	}
 
 
-	//for timing
-	//private long t1,t2,t3,t4;
-
-	//private long sumI1 = 0,sumI2 = 0,sumI3 = 0, sumSum = 0;
-
-	//private int timingCounter = 0;
-
-	//private int reps = 100;
 
 	public void packFrame(FrameDataPack inputDataPack) throws IOException 
 	{
@@ -115,7 +107,8 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 		int numBytesToWrite = codecStrategy.compressData(workingFrame);
 
 
-		capFileManager.startWritingFrame(isFullFrame);
+		capFileManager.notifyStartWritingFrame(isFullFrame);
+
 		if (currentFrameHasChanges)
 		{
 
@@ -123,23 +116,20 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 		}
 		else
 		{
-			saveToDiskStrategy.writeBlankFrameToCapFile();
-		}
-
-		if (!currentFrameHasChanges)
-		{
+			saveToDiskStrategy.writeBlankFrameToCapFile(workingFrame.frameTime);
 			//I'm not sure why this needs to get updated
 			workingFrame.newData = workingFrame.previousData;
 		}
 
-		capFileManager.endWritingFrame();
+		capFileManager.notifyEndWritingFrame();
 
 	}
 
 
 
 	@Override
-	public int compressData(CompressionFramePacket thisPacket) {
+	public int compressData(CompressionFramePacket thisPacket) 
+	{
 		return compressDataUsingRunLengthEncoding(thisPacket);
 	}
 
@@ -461,12 +451,8 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 	public void writeDataToCapFile(byte[] dataToWrite, int numBytesToWrite, long frameTime) throws IOException 
 	{
 		//Write out when this frame happened
-		capFileManager.write(((int) frameTime & 0xFF000000) >>> 24);
-		capFileManager.write(((int) frameTime & 0x00FF0000) >>> 16);
-		capFileManager.write(((int) frameTime & 0x0000FF00) >>> 8);
-		capFileManager.write(((int) frameTime & 0x000000FF));
-
-
+		writeOutTimeStamp(frameTime);
+		
 		capFileManager.write(CHANGES_THIS_FRAME);
 		capFileManager.flush();
 
@@ -506,8 +492,19 @@ public class FrameCompressor implements FrameCompressorCodecStrategy, FrameCompr
 
 	}
 
+	private void writeOutTimeStamp(long frameTime) throws IOException {
+		capFileManager.write(((int) frameTime & 0xFF000000) >>> 24);
+		capFileManager.write(((int) frameTime & 0x00FF0000) >>> 16);
+		capFileManager.write(((int) frameTime & 0x0000FF00) >>> 8);
+		capFileManager.write(((int) frameTime & 0x000000FF));
+	}
+
 	@Override
-	public void writeBlankFrameToCapFile() throws IOException {
+	public void writeBlankFrameToCapFile(long timeStamp) throws IOException 
+	{
+		//Write out when this frame happened
+		writeOutTimeStamp(timeStamp);
+		
 		capFileManager.write(NO_CHANGES_THIS_FRAME);
 		capFileManager.flush();
 

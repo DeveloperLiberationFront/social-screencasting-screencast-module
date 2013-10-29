@@ -21,8 +21,8 @@ public interface CapFileManager {
 	public void setAndWriteFrameWidth(int width) throws IOException;
 	public void setAndWriteFrameHeight(int height) throws IOException;
 	
-	public void startWritingFrame(boolean isFullFrame) throws IOException;
-	public void endWritingFrame();
+	public void notifyStartWritingFrame(boolean isFullFrame) throws IOException;
+	public void notifyEndWritingFrame();
 	
 	public void write(int i) throws IOException;
 	public void write(byte[] bA) throws IOException;

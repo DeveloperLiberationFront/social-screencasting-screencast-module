@@ -61,12 +61,12 @@ public class BasicCapFileManager implements CapFileManager
 	}
 
 	@Override
-	public void startWritingFrame(boolean isFullFrame) throws IOException {
+	public void notifyStartWritingFrame(boolean isFullFrame) throws IOException {
 		//This callback can safely be ignored
 	}
 
 	@Override
-	public void endWritingFrame() {
+	public void notifyEndWritingFrame() {
 		//This callback can safely be ignored
 
 	}

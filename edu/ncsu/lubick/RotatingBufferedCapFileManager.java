@@ -136,7 +136,7 @@ public class RotatingBufferedCapFileManager extends BasicCapFileManager
 	}
 	
 	@Override
-	public void startWritingFrame(boolean isFullFrame) throws IOException 
+	public void notifyStartWritingFrame(boolean isFullFrame) throws IOException 
 	{
 		if (shouldGoToNextFile && isFullFrame)
 		{
@@ -148,7 +148,7 @@ public class RotatingBufferedCapFileManager extends BasicCapFileManager
 			writeFileHeader();
 			shouldGoToNextFile = false;
 		}
-		super.startWritingFrame(isFullFrame);
+		super.notifyStartWritingFrame(isFullFrame);
 	}
 
 

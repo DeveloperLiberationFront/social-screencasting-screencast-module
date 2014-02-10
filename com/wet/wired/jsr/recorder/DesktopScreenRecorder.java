@@ -67,6 +67,7 @@ public class DesktopScreenRecorder extends ScreenRecorder {
 		}
 	}
 
+	@Override
 	public Rectangle initialiseScreenCapture() {
 		try {
 			robot = new Robot();
@@ -81,6 +82,7 @@ public class DesktopScreenRecorder extends ScreenRecorder {
 		return robot;
 	}
 
+	@Override
 	public BufferedImage captureScreen(Rectangle recordArea) {
 		Point mousePosition = MouseInfo.getPointerInfo().getLocation();
 		BufferedImage image = robot.createScreenCapture(recordArea);

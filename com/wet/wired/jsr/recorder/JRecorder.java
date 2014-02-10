@@ -48,7 +48,7 @@ import edu.ncsu.lubick.BasicCapFileManager;
 public class JRecorder extends JFrame implements ScreenRecorderListener,ActionListener 
 {
 	private static Logger logger = Logger.getLogger(JRecorder.class.getName());
-	
+
 	private ScreenRecorder recorder;
 	private File temp;
 
@@ -61,6 +61,7 @@ public class JRecorder extends JFrame implements ScreenRecorderListener,ActionLi
 	public JRecorder() {
 
 		this.addWindowListener(new WindowAdapter() {
+			@Override
 			public void windowClosing(WindowEvent e) {
 				shutdown();
 			}
@@ -90,7 +91,7 @@ public class JRecorder extends JFrame implements ScreenRecorderListener,ActionLi
 		}
 
 		try {
-			
+
 			temp = new File(fileName);
 			if (!temp.exists())
 			{
@@ -107,6 +108,7 @@ public class JRecorder extends JFrame implements ScreenRecorderListener,ActionLi
 		}
 	}
 
+	@Override
 	public void actionPerformed(ActionEvent ev) {
 		if (ev.getActionCommand().equals("start") && recorder == null) {
 			try {
@@ -121,10 +123,11 @@ public class JRecorder extends JFrame implements ScreenRecorderListener,ActionLi
 		} else if (ev.getActionCommand().equals("stop") && recorder != null) {
 			text.setText("Stopping");
 			recorder.stopRecording();
-			
+
 		}
 	}
 
+	@Override
 	public void frameRecorded(boolean fullFrame) {
 		frameCount++;
 		if (text != null) {
@@ -132,6 +135,7 @@ public class JRecorder extends JFrame implements ScreenRecorderListener,ActionLi
 		}
 	}
 
+	@Override
 	public void recordingStopped() {
 
 		if (!shuttingDown) {

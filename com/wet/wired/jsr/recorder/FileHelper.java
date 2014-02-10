@@ -440,8 +440,7 @@ public class FileHelper {
 		return count;
 	}
 
-	public static StringBuffer readFileToBuffer(String fileName)
-			throws IOException {
+	public static StringBuffer readFileToBuffer(String fileName) throws IOException {
 
 		return new StringBuffer(new String(readFile(new FileInputStream(new File(
 				fileName).getAbsolutePath()))));
@@ -577,7 +576,7 @@ public class FileHelper {
 
 
 		byte[] digest = md5Algorithm.digest();
-		StringBuffer hexString = new StringBuffer();
+		StringBuilder hexString = new StringBuilder();
 
 		String hexDigit = null;
 		for (int i = 0; i < digest.length; i++) {

@@ -15,7 +15,7 @@ import com.wet.wired.jsr.recorder.ScreenRecorderListener;
 
 public class ScreenRecordingModule implements ScreenRecorderListener, RotatingFileManagerListener
 {
-	public static final String LOGGING_FILE_PATH = "./log4j.settings";
+	public static final String LOGGING_FILE_PATH = "/etc/log4j.settings";
 
 	private static Logger logger;
 	

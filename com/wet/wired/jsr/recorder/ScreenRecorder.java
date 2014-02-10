@@ -72,6 +72,7 @@ public abstract class ScreenRecorder implements Runnable {
 
 	}
 
+	@Override
 	public void run() {
 		startTime = System.currentTimeMillis();
 
@@ -203,6 +204,7 @@ public abstract class ScreenRecorder implements Runnable {
 			}
 		}
 
+		@Override
 		public void run() {
 			while (recording) {
 					try {

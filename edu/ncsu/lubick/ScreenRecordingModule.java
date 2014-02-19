@@ -3,20 +3,16 @@ package edu.ncsu.lubick;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
-import com.wet.wired.jsr.recorder.CapFileManager;
-import com.wet.wired.jsr.recorder.DesktopScreenRecorder;
 import com.wet.wired.jsr.recorder.ScreenRecorder;
 import com.wet.wired.jsr.recorder.ScreenRecorderListener;
 import com.wet.wired.jsr.recorder.ThreadedDesktopRecorder;
 
-public class ScreenRecordingModule implements ScreenRecorderListener, RotatingFileManagerListener
+public class ScreenRecordingModule implements ScreenRecorderListener
 {
 	public static final String LOGGING_FILE_PATH = "/etc/log4j.settings";
 
@@ -24,12 +20,9 @@ public class ScreenRecordingModule implements ScreenRecorderListener, RotatingFi
 	
 	private File outputFolder;
 
-	//private CapFileManager capManager;
-
 	private ScreenRecorder recorder;
 
 	private boolean isRecording;
-	private SimpleDateFormat dateInSecondsToNumber = new SimpleDateFormat("DDDyykkmmss");
 
 	//Static initializer to get the logging path set up and create the hub
 	static {
@@ -152,12 +145,6 @@ public class ScreenRecordingModule implements ScreenRecorderListener, RotatingFi
 	{
 		logger.info("Recording Stopped");
 
-	}
-
-
-	@Override
-	public String getNextSuffix() {
-		return this.dateInSecondsToNumber.format(new Date());
 	}
 
 

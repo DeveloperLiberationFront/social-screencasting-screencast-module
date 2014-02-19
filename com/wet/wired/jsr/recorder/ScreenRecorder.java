@@ -42,8 +42,7 @@ public abstract class ScreenRecorder implements Runnable {
 
 	private static final int FRAME_RATE_LIMITER = 190;
 	private static Logger logger = Logger.getLogger(ScreenRecorder.class.getName());
-	
-	
+	private DateFormat formatterForFrames = new SimpleDateFormat("DDDyykkmmssSSS");
 
 	private Rectangle recordArea;
 
@@ -56,45 +55,54 @@ public abstract class ScreenRecorder implements Runnable {
 
 	private ScreenRecorderListener listener;
 
-
 	private File outputFolder;
-	
-	public ScreenRecorder(File outputFolder, ScreenRecorderListener listener) {
+
+	public ScreenRecorder(File outputFolder, ScreenRecorderListener listener)
+	{
 
 		this.listener = listener;
 		this.outputFolder = outputFolder;
 	}
 
-	public void triggerRecordingStop() {
+	public void triggerRecordingStop()
+	{
 		recording = false;
 
 	}
 
 	@Override
-	public void run() {
+	public void run()
+	{
 		recording = true;
 		running = true;
 		long lastFrameTime = 0;
 		long time = 0;
 
 		frameSize = recordArea.width * recordArea.height;
-		//streamPacker = new StreamPacker(capFileManager, frameSize);
 
-		while (recording) {
+		while (recording)
+		{
 			time = System.currentTimeMillis();
-			while (time - lastFrameTime < FRAME_RATE_LIMITER) {
-				try {
+			while (time - lastFrameTime < FRAME_RATE_LIMITER)
+			{
+				try
+				{
 					Thread.sleep(10);
-				} catch (Exception e) {
+				}
+				catch (Exception e)
+				{
 				}
 				time = System.currentTimeMillis();
 			}
 			lastFrameTime = time;
 
-			try {
+			try
+			{
 				recordFrame();
-			} catch (Exception e) {
-				logger.error("Problem in main loop",e);
+			}
+			catch (Exception e)
+			{
+				logger.error("Problem in main loop", e);
 
 				capFileManager.shutDown();
 
@@ -105,21 +113,18 @@ public abstract class ScreenRecorder implements Runnable {
 		running = false;
 		recording = false;
 
-
 		listener.recordingStopped();
 	}
 
 	public abstract Rectangle initialiseScreenCapture();
 
 	public abstract BufferedImage captureScreen(Rectangle areaToRecord);
-	
-	
 
-	public void recordFrame() throws IOException {
+	public void recordFrame() throws IOException
+	{
 		BufferedImage bImage = captureScreen(recordArea);
-		
-		writeImageToDisk(bImage);
 
+		writeImageToDisk(bImage);
 
 		listener.frameRecorded(true);
 	}
@@ -128,61 +133,72 @@ public abstract class ScreenRecorder implements Runnable {
 	{
 		ImageIO.write(bImage, "jpg", makeFile(new Date()));
 	}
-	
-	DateFormat format = new SimpleDateFormat("DDDyykkmmssSSS");
 
 	protected File makeFile(Date date)
 	{
-		date.setTime((date.getTime()/100)*100);	//round to nearest 10th
-		
-		return new File(outputFolder, "frame."+format.format(date)+".jpg");
+		date.setTime((date.getTime() / 100) * 100); // round to nearest 10th
+
+		return new File(outputFolder, "frame." + formatterForFrames.format(date) + ".jpg");
 	}
 
-	public void startRecording() {
+	public void startRecording()
+	{
 		recordArea = initialiseScreenCapture();
 
-		if (recordArea == null) {
+		if (recordArea == null)
+		{
 			return;
 		}
-		try 
+		try
 		{
 			capFileManager.setAndWriteFrameWidth(recordArea.width);
 			capFileManager.setAndWriteFrameHeight(recordArea.height);
 
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			logger.error("Problem writing initialized area");
 		}
 
 		new Thread(this, "Screen Recorder").start();
 	}
 
-	public void stopRecording() {
+	public void stopRecording()
+	{
 		triggerRecordingStop();
 
 		int count = 0;
-		while (running == true && count < 10) {
-			try {
+		while (running == true && count < 10)
+		{
+			try
+			{
 				Thread.sleep(100);
-			} catch (Exception e) {
+			}
+			catch (Exception e)
+			{
 			}
 			count++;
 		}
 
-		try {
+		try
+		{
 			capFileManager.flush();
 			capFileManager.shutDown();
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			logger.error("Problem while quitting", e);
 		}
 	}
 
-	public boolean isRecording() {
+	public boolean isRecording()
+	{
 		return recording;
 	}
 
-	public int getFrameSize() {
+	public int getFrameSize()
+	{
 		return frameSize;
 	}
-
 
 }

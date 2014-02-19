@@ -79,10 +79,6 @@ public class DesktopScreenRecorder extends ScreenRecorder {
 		return new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
 	}
 
-	public Robot getRobot() {
-		return robot;
-	}
-
 	@Override
 	public BufferedImage captureScreen(Rectangle recordArea) {
 		Point mousePosition = MouseInfo.getPointerInfo().getLocation();

@@ -28,45 +28,41 @@ package com.wet.wired.jsr.recorder;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
 
-import com.wet.wired.jsr.recorder.compression.FrameCompressor;
-import com.wet.wired.jsr.recorder.compression.FrameDataPack;
-
 public abstract class ScreenRecorder implements Runnable {
 
 	private static final int FRAME_RATE_LIMITER = 190;
 	private static Logger logger = Logger.getLogger(ScreenRecorder.class.getName());
+	
+	
 
 	private Rectangle recordArea;
 
 	private int frameSize;
-	private int[] rawData;
 
 	private CapFileManager capFileManager;
 
 	private boolean recording = false;
 	private boolean running = false;
 
-	private long startTime;
-	private long frameTime;
-
 	private ScreenRecorderListener listener;
 
 
-
-	private StreamPacker streamPacker;
-
-	public ScreenRecorder(CapFileManager capFileManager, ScreenRecorderListener listener) {
+	private File outputFolder;
+	
+	public ScreenRecorder(File outputFolder, ScreenRecorderListener listener) {
 
 		this.listener = listener;
-		this.capFileManager = capFileManager;
+		this.outputFolder = outputFolder;
 	}
 
 	public void triggerRecordingStop() {
@@ -76,15 +72,13 @@ public abstract class ScreenRecorder implements Runnable {
 
 	@Override
 	public void run() {
-		startTime = System.currentTimeMillis();
-
 		recording = true;
 		running = true;
 		long lastFrameTime = 0;
 		long time = 0;
 
 		frameSize = recordArea.width * recordArea.height;
-		streamPacker = new StreamPacker(capFileManager, frameSize);
+		//streamPacker = new StreamPacker(capFileManager, frameSize);
 
 		while (recording) {
 			time = System.currentTimeMillis();
@@ -118,29 +112,30 @@ public abstract class ScreenRecorder implements Runnable {
 	public abstract Rectangle initialiseScreenCapture();
 
 	public abstract BufferedImage captureScreen(Rectangle areaToRecord);
+	
+	
 
 	public void recordFrame() throws IOException {
-		//long t1 = System.currentTimeMillis();
 		BufferedImage bImage = captureScreen(recordArea);
-		long t2 = System.currentTimeMillis();
-		frameTime = t2 - startTime;
-
 		
-		
-		//ImageIO.write
-		/*rawData = new int[frameSize];
+		writeImageToDisk(bImage);
 
-		bImage.getRGB(0, 0, recordArea.width, recordArea.height, rawData, 0,
-				recordArea.width);
-		//long t3 = System.currentTimeMillis();
-
-		streamPacker.packToStream(new FrameDataPack(rawData, frameTime));*/
-
-		//if (logger.isTraceEnabled()) logger.trace("Times");
-		//if (logger.isTraceEnabled()) logger.trace("  capture time:"+(t2-t1));
-		//if (logger.isTraceEnabled()) logger.trace("  data grab time:"+(t3-t2));
 
 		listener.frameRecorded(true);
+	}
+
+	protected void writeImageToDisk(BufferedImage bImage) throws IOException
+	{
+		ImageIO.write(bImage, "jpg", makeFile(new Date()));
+	}
+	
+	DateFormat format = new SimpleDateFormat("DDDyykkmmssSSS");
+
+	protected File makeFile(Date date)
+	{
+		date.setTime((date.getTime()/100)*100);	//round to nearest 10th
+		
+		return new File(outputFolder, "frame."+format.format(date)+".jpg");
 	}
 
 	public void startRecording() {
@@ -177,7 +172,7 @@ public abstract class ScreenRecorder implements Runnable {
 			capFileManager.flush();
 			capFileManager.shutDown();
 		} catch (Exception e) {
-			logger.error("Problem while quitting");
+			logger.error("Problem while quitting", e);
 		}
 	}
 
@@ -189,52 +184,5 @@ public abstract class ScreenRecorder implements Runnable {
 		return frameSize;
 	}
 
-	private class StreamPacker implements Runnable {
-		BlockingQueue<FrameDataPack> queue = new ArrayBlockingQueue<>(2);
-		private FrameCompressor compressor;
 
-		public StreamPacker(CapFileManager capFileManager, int frameSize) 
-		{
-			compressor = new FrameCompressor(capFileManager, frameSize);
-
-			new Thread(this, "Stream Packer").start();
-		}
-
-		public void packToStream(FrameDataPack pack) {	
-			try {
-				queue.put(pack);
-			} catch (InterruptedException e) {
-				logger.error("Blocking queue was interrupted",e);
-			}
-		}
-
-		@Override
-		public void run() {
-			while (recording) {
-					try {
-						FrameDataPack pack = queue.take();
-						
-						//Sometimes, recording will have stopped while the queue was blocking
-						if (pack == null || !recording)
-						{
-							continue;
-						}
-						
-						long t1 = System.currentTimeMillis();
-						compressor.packFrame(pack);
-						long t2 = System.currentTimeMillis();
-						if (logger.isTraceEnabled()) logger.trace("  pack time:"+(t2-t1));
-
-					} catch (IOException | InterruptedException e) {
-						logger.error("Problem packing frame",e);
-
-						capFileManager.shutDown();
-
-						return;
-					}
-	
-			}
-			compressor.stop();
-		}
-	}
 }

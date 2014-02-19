@@ -2,15 +2,19 @@ package edu.ncsu.lubick;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 
 import com.wet.wired.jsr.recorder.CapFileManager;
 import com.wet.wired.jsr.recorder.DesktopScreenRecorder;
 import com.wet.wired.jsr.recorder.ScreenRecorder;
 import com.wet.wired.jsr.recorder.ScreenRecorderListener;
+import com.wet.wired.jsr.recorder.ThreadedDesktopRecorder;
 
 public class ScreenRecordingModule implements ScreenRecorderListener, RotatingFileManagerListener
 {
@@ -20,7 +24,7 @@ public class ScreenRecordingModule implements ScreenRecorderListener, RotatingFi
 	
 	private File outputFolder;
 
-	private CapFileManager capManager;
+	//private CapFileManager capManager;
 
 	private ScreenRecorder recorder;
 
@@ -29,25 +33,25 @@ public class ScreenRecordingModule implements ScreenRecorderListener, RotatingFi
 
 	//Static initializer to get the logging path set up and create the hub
 	static {
-		//PropertyConfigurator.configure(ScreenRecordingModule.LOGGING_FILE_PATH);
+		try
+		{
+			URL url = ScreenRecordingModule.class.getResource(LOGGING_FILE_PATH);
+			PropertyConfigurator.configure(url);
+			Logger.getRootLogger().info("Logging initialized");
+		}
+		catch (Exception e)
+		{
+			//load safe defaults
+			BasicConfigurator.configure();
+			Logger.getRootLogger().info("Could not load property file, loading defaults", e);
+		}
 		logger = Logger.getLogger(ScreenRecordingModule.class.getName());
 	}
 
 	public ScreenRecordingModule(File folderToOutput) {
 		setOutputDirectory(folderToOutput);
-		
-		try 
-		{
-			RotatingFileManager fileManager = new RotatingFileManager(outputFolder, "screencasts.","cap", this);
-			capManager = RotatingBufferedCapFileManager.makeBufferedRotatingFileManager(fileManager);
-		} 
-		catch (IOException e) 
-		{
-			logger.fatal("Could not set up recording", e);
-			throw new RuntimeException("Problem setting up rotatingFileManager", e);
-		}
 
-		recorder = new DesktopScreenRecorder(capManager, this);
+		recorder = new ThreadedDesktopRecorder(folderToOutput, this);
 	}
 
 
@@ -69,7 +73,7 @@ public class ScreenRecordingModule implements ScreenRecorderListener, RotatingFi
 		logger.info("recording for 60 seconds" );
 		for(int i = 1;i<=60;i++)
 		{
-			logger.debug(i);
+			logger.info(i);
 			Thread.sleep(1000);
 		}
 

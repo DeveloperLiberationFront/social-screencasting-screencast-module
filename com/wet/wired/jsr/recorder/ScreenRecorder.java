@@ -32,6 +32,8 @@ import java.io.IOException;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+import javax.imageio.ImageIO;
+
 import org.apache.log4j.Logger;
 
 import com.wet.wired.jsr.recorder.compression.FrameCompressor;
@@ -118,25 +120,27 @@ public abstract class ScreenRecorder implements Runnable {
 	public abstract BufferedImage captureScreen(Rectangle areaToRecord);
 
 	public void recordFrame() throws IOException {
-		long t1 = System.currentTimeMillis();
+		//long t1 = System.currentTimeMillis();
 		BufferedImage bImage = captureScreen(recordArea);
 		long t2 = System.currentTimeMillis();
 		frameTime = t2 - startTime;
 
-
-		rawData = new int[frameSize];
+		
+		
+		//ImageIO.write
+		/*rawData = new int[frameSize];
 
 		bImage.getRGB(0, 0, recordArea.width, recordArea.height, rawData, 0,
 				recordArea.width);
-		long t3 = System.currentTimeMillis();
+		//long t3 = System.currentTimeMillis();
 
-		streamPacker.packToStream(new FrameDataPack(rawData, frameTime));
+		streamPacker.packToStream(new FrameDataPack(rawData, frameTime));*/
 
-		if (logger.isTraceEnabled()) logger.trace("Times");
-		if (logger.isTraceEnabled()) logger.trace("  capture time:"+(t2-t1));
-		if (logger.isTraceEnabled()) logger.trace("  data grab time:"+(t3-t2));
+		//if (logger.isTraceEnabled()) logger.trace("Times");
+		//if (logger.isTraceEnabled()) logger.trace("  capture time:"+(t2-t1));
+		//if (logger.isTraceEnabled()) logger.trace("  data grab time:"+(t3-t2));
 
-		listener.frameRecorded(false);
+		listener.frameRecorded(true);
 	}
 
 	public void startRecording() {

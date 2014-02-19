@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
 
 import com.wet.wired.jsr.recorder.CapFileManager;
 import com.wet.wired.jsr.recorder.DesktopScreenRecorder;
@@ -30,7 +29,7 @@ public class ScreenRecordingModule implements ScreenRecorderListener, RotatingFi
 
 	//Static initializer to get the logging path set up and create the hub
 	static {
-		PropertyConfigurator.configure(ScreenRecordingModule.LOGGING_FILE_PATH);
+		//PropertyConfigurator.configure(ScreenRecordingModule.LOGGING_FILE_PATH);
 		logger = Logger.getLogger(ScreenRecordingModule.class.getName());
 	}
 

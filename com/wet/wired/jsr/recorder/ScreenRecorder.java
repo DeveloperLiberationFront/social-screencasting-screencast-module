@@ -48,8 +48,6 @@ public abstract class ScreenRecorder implements Runnable {
 
 	private int frameSize;
 
-	private CapFileManager capFileManager;
-
 	private boolean recording = false;
 	private boolean running = false;
 
@@ -103,9 +101,6 @@ public abstract class ScreenRecorder implements Runnable {
 			catch (Exception e)
 			{
 				logger.error("Problem in main loop", e);
-
-				capFileManager.shutDown();
-
 				break;
 			}
 		}
@@ -149,16 +144,6 @@ public abstract class ScreenRecorder implements Runnable {
 		{
 			return;
 		}
-		try
-		{
-			capFileManager.setAndWriteFrameWidth(recordArea.width);
-			capFileManager.setAndWriteFrameHeight(recordArea.height);
-
-		}
-		catch (Exception e)
-		{
-			logger.error("Problem writing initialized area");
-		}
 
 		new Thread(this, "Screen Recorder").start();
 	}
@@ -178,16 +163,6 @@ public abstract class ScreenRecorder implements Runnable {
 			{
 			}
 			count++;
-		}
-
-		try
-		{
-			capFileManager.flush();
-			capFileManager.shutDown();
-		}
-		catch (Exception e)
-		{
-			logger.error("Problem while quitting", e);
 		}
 	}
 

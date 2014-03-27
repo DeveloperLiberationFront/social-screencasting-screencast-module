@@ -3,14 +3,15 @@ package edu.ncsu.lubick;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Date;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
+import com.wet.wired.jsr.recorder.DesktopScreenRecorder;
 import com.wet.wired.jsr.recorder.ScreenRecorder;
 import com.wet.wired.jsr.recorder.ScreenRecorderListener;
-import com.wet.wired.jsr.recorder.ThreadedDesktopRecorder;
 
 public class ScreenRecordingModule implements ScreenRecorderListener
 {
@@ -44,7 +45,7 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 	public ScreenRecordingModule(File folderToOutput) {
 		setOutputDirectory(folderToOutput);
 
-		recorder = new ThreadedDesktopRecorder(folderToOutput, this);
+		recorder = new DesktopScreenRecorder(folderToOutput, this);
 	}
 
 
@@ -63,8 +64,9 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 		
 		recordingModule.startRecording();
 		
-		logger.info("recording for 60 seconds" );
-		for(int i = 1;i<=60;i++)
+		logger.info("recording for 180 seconds" );
+		System.out.println(new Date());
+		for(int i = 1;i<=180;i++)
 		{
 			logger.info(i);
 			Thread.sleep(1000);

@@ -85,10 +85,11 @@ public abstract class ScreenRecorder implements Runnable {
 			{
 				try
 				{
-					Thread.sleep(10);
+					Thread.sleep(15);
 				}
 				catch (Exception e)
 				{
+					//don't really care here
 				}
 				time = System.currentTimeMillis();
 			}
@@ -126,12 +127,14 @@ public abstract class ScreenRecorder implements Runnable {
 
 	protected void writeImageToDisk(BufferedImage bImage) throws IOException
 	{
+		
 		ImageIO.write(bImage, "jpg", makeFile(new Date()));
 	}
 
 	protected File makeFile(Date date)
 	{
-		date.setTime((date.getTime() / 100) * 100); // round to nearest 10th
+		// round to nearest 10th of a second
+		date.setTime((date.getTime() / 100) * 100); 
 
 		return new File(outputFolder, "frame." + formatterForFrames.format(date) + ".jpg");
 	}
@@ -161,6 +164,7 @@ public abstract class ScreenRecorder implements Runnable {
 			}
 			catch (Exception e)
 			{
+				//don't care about interrupted
 			}
 			count++;
 		}

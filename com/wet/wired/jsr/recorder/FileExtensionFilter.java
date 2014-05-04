@@ -191,7 +191,7 @@ public class FileExtensionFilter extends FileFilter {
 	 * 
 	 * Note that the "." before the extension is not needed and will be ignored.
 	 */
-	public void addExtension(String extension) {
+	public final void addExtension(String extension) {
 		if (filters == null) {
 			filters = new Hashtable<Object, FileExtensionFilter>(5);
 		}
@@ -237,7 +237,7 @@ public class FileExtensionFilter extends FileFilter {
 	 * @see setExtensionListInDescription
 	 * @see isExtensionListInDescription
 	 */
-	public void setDescription(String description) {
+	public final void setDescription(String description) {
 		this.description = description;
 		fullDescription = null;
 	}

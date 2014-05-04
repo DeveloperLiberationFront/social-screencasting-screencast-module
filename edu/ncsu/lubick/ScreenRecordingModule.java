@@ -139,7 +139,7 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 	@Override
 	public void frameRecorded(boolean fullFrame) throws IOException
 	{
-
+		//we don't care about this
 	}
 
 	@Override

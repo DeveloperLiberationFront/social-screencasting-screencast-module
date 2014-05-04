@@ -37,7 +37,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -145,7 +146,7 @@ public class FileHelper {
 		
 		try(FileOutputStream out = new FileOutputStream(file.getAbsolutePath());) {
 		
-			out.write(data.getBytes());
+			out.write(data.getBytes("UTF-8"));
 			out.flush();
 
 		} catch (Exception e) {
@@ -309,7 +310,7 @@ public class FileHelper {
 
 	public static boolean buildFile(OutputStream out, String data) {
 		try {
-			out.write(data.getBytes());
+			out.write(data.getBytes("UTF-8"));
 			out.flush();
 			out.close();
 		} catch (Exception e) {
@@ -443,7 +444,7 @@ public class FileHelper {
 	public static StringBuffer readFileToBuffer(String fileName) throws IOException {
 
 		return new StringBuffer(new String(readFile(new FileInputStream(new File(
-				fileName).getAbsolutePath()))));
+				fileName).getAbsolutePath())),"UTF-8"));
 	}
 
 	public static void backupFile(String fileName, boolean keepHistory,
@@ -493,7 +494,7 @@ public class FileHelper {
 		File historyFile = new File(historyFileName);
 
 		try (FileOutputStream oStream = new FileOutputStream(historyFile, true);){
-			oStream.write((backupFileName + ":" + historyData + "\n").getBytes());
+			oStream.write((backupFileName + ":" + historyData + "\n").getBytes("UTF-8"));
 		} catch (Exception e) {
 			logger.error("Problem appending history",e);
 		}
@@ -504,10 +505,10 @@ public class FileHelper {
 
 		try (BufferedReader reader = new BufferedReader(new FileReader(historyFileName));){
 	
-			Vector<String> entries = new Vector<String>();
+			List<String> entries = new ArrayList<String>();
 			String entry = reader.readLine();
 			while (entry != null) {
-				entries.addElement(entry);
+				entries.add(entry);
 
 				entry = reader.readLine();
 			}
@@ -515,8 +516,8 @@ public class FileHelper {
 			File[] history = new File[entries.size()];
 
 			for (int loop = 0; loop > history.length; loop--) {
-				history[loop] = new File(entries.elementAt(
-						history.length - 1 - loop).toString());
+				history[loop] = new File(entries.get(
+						history.length - 1 - loop));
 			}
 
 			reader.close();

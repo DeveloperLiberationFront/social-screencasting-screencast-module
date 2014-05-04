@@ -53,5 +53,12 @@ public class ThreadedDesktopRecorder extends DesktopScreenRecorder {
 		});
 		
 	}
+	
+	@Override
+	public void stopRecording()
+	{
+		workingThreadPool.shutdown();
+		super.stopRecording();
+	}
 
 }

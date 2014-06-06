@@ -33,6 +33,9 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -43,7 +46,7 @@ public abstract class ScreenRecorder implements Runnable {
 	private static final int FRAME_RATE_LIMITER = 190;
 	private static Logger logger = Logger.getLogger(ScreenRecorder.class.getName());
 	private DateFormat formatterForFrames = new SimpleDateFormat("DDDyykkmmssSSS");
-
+	private List <ByteArrayOutputStream> imageList=new ArrayList<ByteArrayOutputStream>();
 	private Rectangle recordArea;
 
 	private int frameSize;
@@ -121,7 +124,7 @@ public abstract class ScreenRecorder implements Runnable {
 		BufferedImage bImage = captureScreen(recordArea);
 
 		writeImageToDisk(bImage);
-
+		//writeImageToRAM(bImage);
 		listener.frameRecorded(true);
 	}
 
@@ -130,7 +133,12 @@ public abstract class ScreenRecorder implements Runnable {
 		
 		ImageIO.write(bImage, "jpg", makeFile(new Date()));
 	}
-
+	protected void writeImageToRAM(BufferedImage bImage) throws IOException
+	{		
+		ImageIO.write(bImage, "jpg", makeStream());
+		logger.info("Current no. of images "+imageList.size());
+	}
+	
 	protected File makeFile(Date date)
 	{
 		// round to nearest 10th of a second
@@ -138,7 +146,12 @@ public abstract class ScreenRecorder implements Runnable {
 
 		return new File(outputFolder, "frame." + formatterForFrames.format(date) + ".jpg");
 	}
-
+	protected ByteArrayOutputStream makeStream()
+	{
+		ByteArrayOutputStream stream= new ByteArrayOutputStream (131072);
+		imageList.add(stream);
+		return stream;
+	}
 	public void startRecording()
 	{
 		recordArea = initialiseScreenCapture();

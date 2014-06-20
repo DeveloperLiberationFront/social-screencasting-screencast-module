@@ -23,6 +23,8 @@ import org.apache.log4j.Logger;
 
 import sun.awt.ComponentFactory;
 
+// From http://www.rune-server.org/programming/application-development/387765-directrobot-fast-java-robot-allows-screen-recording.html
+
 @SuppressWarnings("restriction")
 public final class DirectRobot
 {

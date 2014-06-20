@@ -1,0 +1,932 @@
+0    [main] INFO  root  - Logging initialized
+95   [main] DEBUG ScreenRecordingModule  - Screen recording module started
+129  [main] ERROR ScreenRecorder  - Problem writing initialized area
+130  [main] INFO  ScreenRecordingModule  - recording for 60 seconds
+130  [main] DEBUG ScreenRecordingModule  - 1
+1131 [main] DEBUG ScreenRecordingModule  - 2
+2131 [main] DEBUG ScreenRecordingModule  - 3
+3131 [main] DEBUG ScreenRecordingModule  - 4
+4131 [main] DEBUG ScreenRecordingModule  - 5
+5132 [main] DEBUG ScreenRecordingModule  - 6
+6134 [main] DEBUG ScreenRecordingModule  - 7
+0    [main] INFO  root  - Logging initialized
+108  [main] DEBUG ScreenRecordingModule  - Screen recording module started
+134  [main] ERROR ScreenRecorder  - Problem writing initialized area
+135  [main] INFO  ScreenRecordingModule  - recording for 60 seconds
+135  [main] DEBUG ScreenRecordingModule  - 1
+1143 [main] DEBUG ScreenRecordingModule  - 2
+2143 [main] DEBUG ScreenRecordingModule  - 3
+3148 [main] DEBUG ScreenRecordingModule  - 4
+4150 [main] DEBUG ScreenRecordingModule  - 5
+5152 [main] DEBUG ScreenRecordingModule  - 6
+6153 [main] DEBUG ScreenRecordingModule  - 7
+7153 [main] DEBUG ScreenRecordingModule  - 8
+8153 [main] DEBUG ScreenRecordingModule  - 9
+9154 [main] DEBUG ScreenRecordingModule  - 10
+10163 [main] DEBUG ScreenRecordingModule  - 11
+11164 [main] DEBUG ScreenRecordingModule  - 12
+12166 [main] DEBUG ScreenRecordingModule  - 13
+13169 [main] DEBUG ScreenRecordingModule  - 14
+14169 [main] DEBUG ScreenRecordingModule  - 15
+15169 [main] DEBUG ScreenRecordingModule  - 16
+16170 [main] DEBUG ScreenRecordingModule  - 17
+17171 [main] DEBUG ScreenRecordingModule  - 18
+18172 [main] DEBUG ScreenRecordingModule  - 19
+19172 [main] DEBUG ScreenRecordingModule  - 20
+0    [main] INFO  root  - Logging initialized
+3040 [main] DEBUG ScreenRecordingModule  - Screen recording module started
+3069 [main] ERROR ScreenRecorder  - Problem writing initialized area
+3069 [main] INFO  ScreenRecordingModule  - recording for 60 seconds
+3069 [main] INFO  ScreenRecordingModule  - 1
+4069 [main] INFO  ScreenRecordingModule  - 2
+5075 [main] INFO  ScreenRecordingModule  - 3
+6075 [main] INFO  ScreenRecordingModule  - 4
+7079 [main] INFO  ScreenRecordingModule  - 5
+8079 [main] INFO  ScreenRecordingModule  - 6
+9092 [main] INFO  ScreenRecordingModule  - 7
+10103 [main] INFO  ScreenRecordingModule  - 8
+11104 [main] INFO  ScreenRecordingModule  - 9
+12104 [main] INFO  ScreenRecordingModule  - 10
+13105 [main] INFO  ScreenRecordingModule  - 11
+14106 [main] INFO  ScreenRecordingModule  - 12
+15106 [main] INFO  ScreenRecordingModule  - 13
+16107 [main] INFO  ScreenRecordingModule  - 14
+17108 [main] INFO  ScreenRecordingModule  - 15
+18108 [main] INFO  ScreenRecordingModule  - 16
+19109 [main] INFO  ScreenRecordingModule  - 17
+0    [main] INFO  root  - Logging initialized
+0    [main] INFO  root  - Logging initialized
+3024 [main] DEBUG ScreenRecordingModule  - Screen recording module started
+3048 [main] ERROR ScreenRecorder  - Problem writing initialized area
+3049 [main] INFO  ScreenRecordingModule  - recording for 60 seconds
+3049 [main] INFO  ScreenRecordingModule  - 1
+4049 [main] INFO  ScreenRecordingModule  - 2
+5050 [main] INFO  ScreenRecordingModule  - 3
+6050 [main] INFO  ScreenRecordingModule  - 4
+7051 [main] INFO  ScreenRecordingModule  - 5
+8052 [main] INFO  ScreenRecordingModule  - 6
+9052 [main] INFO  ScreenRecordingModule  - 7
+10054 [main] INFO  ScreenRecordingModule  - 8
+11055 [main] INFO  ScreenRecordingModule  - 9
+12055 [main] INFO  ScreenRecordingModule  - 10
+13056 [main] INFO  ScreenRecordingModule  - 11
+14059 [main] INFO  ScreenRecordingModule  - 12
+15060 [main] INFO  ScreenRecordingModule  - 13
+16060 [main] INFO  ScreenRecordingModule  - 14
+17061 [main] INFO  ScreenRecordingModule  - 15
+18062 [main] INFO  ScreenRecordingModule  - 16
+19062 [main] INFO  ScreenRecordingModule  - 17
+20064 [main] INFO  ScreenRecordingModule  - 18
+21064 [main] INFO  ScreenRecordingModule  - 19
+22065 [main] INFO  ScreenRecordingModule  - 20
+23065 [main] INFO  ScreenRecordingModule  - 21
+24065 [main] INFO  ScreenRecordingModule  - 22
+25097 [main] INFO  ScreenRecordingModule  - 23
+0    [main] INFO  root  - Logging initialized
+5935 [main] DEBUG ScreenRecordingModule  - Screen recording module started
+5976 [main] ERROR ScreenRecorder  - Problem writing initialized area
+5977 [main] INFO  ScreenRecordingModule  - recording for 60 seconds
+5977 [main] INFO  ScreenRecordingModule  - 1
+6977 [main] INFO  ScreenRecordingModule  - 2
+7982 [main] INFO  ScreenRecordingModule  - 3
+8983 [main] INFO  ScreenRecordingModule  - 4
+9983 [main] INFO  ScreenRecordingModule  - 5
+10984 [main] INFO  ScreenRecordingModule  - 6
+11984 [main] INFO  ScreenRecordingModule  - 7
+12985 [main] INFO  ScreenRecordingModule  - 8
+13999 [main] INFO  ScreenRecordingModule  - 9
+15004 [main] INFO  ScreenRecordingModule  - 10
+16004 [main] INFO  ScreenRecordingModule  - 11
+17006 [main] INFO  ScreenRecordingModule  - 12
+18007 [main] INFO  ScreenRecordingModule  - 13
+19011 [main] INFO  ScreenRecordingModule  - 14
+20013 [main] INFO  ScreenRecordingModule  - 15
+21030 [main] INFO  ScreenRecordingModule  - 16
+22030 [main] INFO  ScreenRecordingModule  - 17
+23030 [main] INFO  ScreenRecordingModule  - 18
+24031 [main] INFO  ScreenRecordingModule  - 19
+25031 [main] INFO  ScreenRecordingModule  - 20
+26043 [main] INFO  ScreenRecordingModule  - 21
+27054 [main] INFO  ScreenRecordingModule  - 22
+28055 [main] INFO  ScreenRecordingModule  - 23
+29055 [main] INFO  ScreenRecordingModule  - 24
+30056 [main] INFO  ScreenRecordingModule  - 25
+31056 [main] INFO  ScreenRecordingModule  - 26
+32063 [main] INFO  ScreenRecordingModule  - 27
+33065 [main] INFO  ScreenRecordingModule  - 28
+34066 [main] INFO  ScreenRecordingModule  - 29
+35068 [main] INFO  ScreenRecordingModule  - 30
+36071 [main] INFO  ScreenRecordingModule  - 31
+37073 [main] INFO  ScreenRecordingModule  - 32
+38089 [main] INFO  ScreenRecordingModule  - 33
+39091 [main] INFO  ScreenRecordingModule  - 34
+40093 [main] INFO  ScreenRecordingModule  - 35
+41094 [main] INFO  ScreenRecordingModule  - 36
+42097 [main] INFO  ScreenRecordingModule  - 37
+43129 [main] INFO  ScreenRecordingModule  - 38
+44141 [main] INFO  ScreenRecordingModule  - 39
+45186 [main] INFO  ScreenRecordingModule  - 40
+46188 [main] INFO  ScreenRecordingModule  - 41
+47188 [main] INFO  ScreenRecordingModule  - 42
+48201 [main] INFO  ScreenRecordingModule  - 43
+49256 [main] INFO  ScreenRecordingModule  - 44
+50280 [main] INFO  ScreenRecordingModule  - 45
+51281 [main] INFO  ScreenRecordingModule  - 46
+52282 [main] INFO  ScreenRecordingModule  - 47
+53282 [main] INFO  ScreenRecordingModule  - 48
+54283 [main] INFO  ScreenRecordingModule  - 49
+55287 [main] INFO  ScreenRecordingModule  - 50
+56291 [main] INFO  ScreenRecordingModule  - 51
+57291 [main] INFO  ScreenRecordingModule  - 52
+58304 [main] INFO  ScreenRecordingModule  - 53
+59306 [main] INFO  ScreenRecordingModule  - 54
+60307 [main] INFO  ScreenRecordingModule  - 55
+61308 [main] INFO  ScreenRecordingModule  - 56
+62421 [main] INFO  ScreenRecordingModule  - 57
+63422 [main] INFO  ScreenRecordingModule  - 58
+64422 [main] INFO  ScreenRecordingModule  - 59
+65423 [main] INFO  ScreenRecordingModule  - 60
+66423 [main] DEBUG ScreenRecordingModule  - Screen recording module stopped
+66425 [Screen Recorder] INFO  ScreenRecordingModule  - Recording Stopped
+66528 [main] ERROR ScreenRecorder  - Problem while quitting
+0    [main] INFO  root  - Logging initialized
+35   [main] ERROR DesktopScreenRecorder  - Problem in Loading Mouse Cursor Files
+java.lang.IllegalArgumentException: input == null!
+	at javax.imageio.ImageIO.read(Unknown Source)
+	at com.wet.wired.jsr.recorder.DesktopScreenRecorder.<init>(DesktopScreenRecorder.java:64)
+	at com.wet.wired.jsr.recorder.ThreadedDesktopRecorder.<init>(ThreadedDesktopRecorder.java:31)
+	at edu.ncsu.lubick.ScreenRecordingModule.<init>(ScreenRecordingModule.java:54)
+	at edu.ncsu.lubick.ScreenRecordingModule.main(ScreenRecordingModule.java:66)
+0    [main] INFO  root  - Logging initialized
+29   [main] ERROR DesktopScreenRecorder  - Problem in Loading Mouse Cursor Files
+java.lang.IllegalArgumentException: input == null!
+	at javax.imageio.ImageIO.read(Unknown Source)
+	at com.wet.wired.jsr.recorder.DesktopScreenRecorder.<init>(DesktopScreenRecorder.java:64)
+	at com.wet.wired.jsr.recorder.ThreadedDesktopRecorder.<init>(ThreadedDesktopRecorder.java:31)
+	at edu.ncsu.lubick.ScreenRecordingModule.<init>(ScreenRecordingModule.java:54)
+	at edu.ncsu.lubick.ScreenRecordingModule.main(ScreenRecordingModule.java:66)
+11408 [main] DEBUG ScreenRecordingModule  - Screen recording module started
+11434 [main] ERROR ScreenRecorder  - Problem writing initialized area
+11434 [main] INFO  ScreenRecordingModule  - recording for 60 seconds
+11434 [main] INFO  ScreenRecordingModule  - 1
+0    [main] INFO  root  - Logging initialized
+73   [main] DEBUG ScreenRecordingModule  - Screen recording module started
+103  [main] ERROR ScreenRecorder  - Problem writing initialized area
+103  [main] INFO  ScreenRecordingModule  - recording for 60 seconds
+103  [main] INFO  ScreenRecordingModule  - 1
+1103 [main] INFO  ScreenRecordingModule  - 2
+2103 [main] INFO  ScreenRecordingModule  - 3
+3104 [main] INFO  ScreenRecordingModule  - 4
+4104 [main] INFO  ScreenRecordingModule  - 5
+5104 [main] INFO  ScreenRecordingModule  - 6
+6105 [main] INFO  ScreenRecordingModule  - 7
+7105 [main] INFO  ScreenRecordingModule  - 8
+8106 [main] INFO  ScreenRecordingModule  - 9
+0    [main] INFO  root  - Logging initialized
+3420 [main] DEBUG ScreenRecordingModule  - Screen recording module started
+3473 [main] INFO  ScreenRecordingModule  - recording for 180 seconds
+3474 [main] INFO  ScreenRecordingModule  - 1
+4475 [main] INFO  ScreenRecordingModule  - 2
+5476 [main] INFO  ScreenRecordingModule  - 3
+6477 [main] INFO  ScreenRecordingModule  - 4
+7492 [main] INFO  ScreenRecordingModule  - 5
+8534 [main] INFO  ScreenRecordingModule  - 6
+9538 [main] INFO  ScreenRecordingModule  - 7
+10558 [main] INFO  ScreenRecordingModule  - 8
+11558 [main] INFO  ScreenRecordingModule  - 9
+12559 [main] INFO  ScreenRecordingModule  - 10
+0    [main] INFO  root  - Logging initialized
+6398 [main] DEBUG ScreenRecordingModule  - Screen recording module started
+6477 [main] INFO  ScreenRecordingModule  - recording for 180 seconds
+6477 [main] INFO  ScreenRecordingModule  - 1
+7478 [main] INFO  ScreenRecordingModule  - 2
+8479 [main] INFO  ScreenRecordingModule  - 3
+9479 [main] INFO  ScreenRecordingModule  - 4
+10480 [main] INFO  ScreenRecordingModule  - 5
+11481 [main] INFO  ScreenRecordingModule  - 6
+12482 [main] INFO  ScreenRecordingModule  - 7
+13495 [main] INFO  ScreenRecordingModule  - 8
+14495 [main] INFO  ScreenRecordingModule  - 9
+15571 [main] INFO  ScreenRecordingModule  - 10
+16575 [main] INFO  ScreenRecordingModule  - 11
+17628 [main] INFO  ScreenRecordingModule  - 12
+18642 [main] INFO  ScreenRecordingModule  - 13
+19770 [main] INFO  ScreenRecordingModule  - 14
+20873 [main] INFO  ScreenRecordingModule  - 15
+21873 [main] INFO  ScreenRecordingModule  - 16
+22887 [main] INFO  ScreenRecordingModule  - 17
+23888 [main] INFO  ScreenRecordingModule  - 18
+24888 [main] INFO  ScreenRecordingModule  - 19
+25889 [main] INFO  ScreenRecordingModule  - 20
+26889 [main] INFO  ScreenRecordingModule  - 21
+27889 [main] INFO  ScreenRecordingModule  - 22
+28889 [main] INFO  ScreenRecordingModule  - 23
+29890 [main] INFO  ScreenRecordingModule  - 24
+30891 [main] INFO  ScreenRecordingModule  - 25
+32050 [main] INFO  ScreenRecordingModule  - 26
+33479 [main] INFO  ScreenRecordingModule  - 27
+34638 [main] INFO  ScreenRecordingModule  - 28
+35821 [main] INFO  ScreenRecordingModule  - 29
+37008 [main] INFO  ScreenRecordingModule  - 30
+38374 [main] INFO  ScreenRecordingModule  - 31
+39374 [main] INFO  ScreenRecordingModule  - 32
+40604 [main] INFO  ScreenRecordingModule  - 33
+41604 [main] INFO  ScreenRecordingModule  - 34
+42604 [main] INFO  ScreenRecordingModule  - 35
+43604 [main] INFO  ScreenRecordingModule  - 36
+44605 [main] INFO  ScreenRecordingModule  - 37
+45606 [main] INFO  ScreenRecordingModule  - 38
+46606 [main] INFO  ScreenRecordingModule  - 39
+47607 [main] INFO  ScreenRecordingModule  - 40
+48608 [main] INFO  ScreenRecordingModule  - 41
+49608 [main] INFO  ScreenRecordingModule  - 42
+50609 [main] INFO  ScreenRecordingModule  - 43
+51610 [main] INFO  ScreenRecordingModule  - 44
+52610 [main] INFO  ScreenRecordingModule  - 45
+53610 [main] INFO  ScreenRecordingModule  - 46
+54610 [main] INFO  ScreenRecordingModule  - 47
+0    [main] INFO  root  - Logging initialized
+3555 [main] DEBUG ScreenRecordingModule  - Screen recording module started
+3633 [main] INFO  ScreenRecordingModule  - recording for 180 seconds
+3642 [main] INFO  ScreenRecordingModule  - 1
+4644 [main] INFO  ScreenRecordingModule  - 2
+5645 [main] INFO  ScreenRecordingModule  - 3
+6645 [main] INFO  ScreenRecordingModule  - 4
+7692 [main] INFO  ScreenRecordingModule  - 5
+8692 [main] INFO  ScreenRecordingModule  - 6
+9693 [main] INFO  ScreenRecordingModule  - 7
+0    [main] INFO  root  - Logging initialized
+2059 [main] DEBUG ScreenRecordingModule  - Screen recording module started
+2132 [main] INFO  ScreenRecordingModule  - recording for 180 seconds
+2142 [main] INFO  ScreenRecordingModule  - 1
+3151 [main] INFO  ScreenRecordingModule  - 2
+4152 [main] INFO  ScreenRecordingModule  - 3
+5153 [main] INFO  ScreenRecordingModule  - 4
+6154 [main] INFO  ScreenRecordingModule  - 5
+7155 [main] INFO  ScreenRecordingModule  - 6
+8189 [main] INFO  ScreenRecordingModule  - 7
+9189 [main] INFO  ScreenRecordingModule  - 8
+10189 [main] INFO  ScreenRecordingModule  - 9
+11190 [main] INFO  ScreenRecordingModule  - 10
+12191 [main] INFO  ScreenRecordingModule  - 11
+13192 [main] INFO  ScreenRecordingModule  - 12
+14192 [main] INFO  ScreenRecordingModule  - 13
+15193 [main] INFO  ScreenRecordingModule  - 14
+16193 [main] INFO  ScreenRecordingModule  - 15
+17238 [main] INFO  ScreenRecordingModule  - 16
+18246 [main] INFO  ScreenRecordingModule  - 17
+19246 [main] INFO  ScreenRecordingModule  - 18
+20247 [main] INFO  ScreenRecordingModule  - 19
+21247 [main] INFO  ScreenRecordingModule  - 20
+22247 [main] INFO  ScreenRecordingModule  - 21
+23351 [main] INFO  ScreenRecordingModule  - 22
+24388 [main] INFO  ScreenRecordingModule  - 23
+25436 [main] INFO  ScreenRecordingModule  - 24
+26846 [main] INFO  ScreenRecordingModule  - 25
+27896 [main] INFO  ScreenRecordingModule  - 26
+28912 [main] INFO  ScreenRecordingModule  - 27
+29912 [main] INFO  ScreenRecordingModule  - 28
+30913 [main] INFO  ScreenRecordingModule  - 29
+31914 [main] INFO  ScreenRecordingModule  - 30
+32914 [main] INFO  ScreenRecordingModule  - 31
+33914 [main] INFO  ScreenRecordingModule  - 32
+34914 [main] INFO  ScreenRecordingModule  - 33
+35915 [main] INFO  ScreenRecordingModule  - 34
+36916 [main] INFO  ScreenRecordingModule  - 35
+37916 [main] INFO  ScreenRecordingModule  - 36
+38917 [main] INFO  ScreenRecordingModule  - 37
+39917 [main] INFO  ScreenRecordingModule  - 38
+40917 [main] INFO  ScreenRecordingModule  - 39
+41918 [main] INFO  ScreenRecordingModule  - 40
+42919 [main] INFO  ScreenRecordingModule  - 41
+43919 [main] INFO  ScreenRecordingModule  - 42
+44920 [main] INFO  ScreenRecordingModule  - 43
+45920 [main] INFO  ScreenRecordingModule  - 44
+46920 [main] INFO  ScreenRecordingModule  - 45
+47921 [main] INFO  ScreenRecordingModule  - 46
+48921 [main] INFO  ScreenRecordingModule  - 47
+49922 [main] INFO  ScreenRecordingModule  - 48
+50922 [main] INFO  ScreenRecordingModule  - 49
+51922 [main] INFO  ScreenRecordingModule  - 50
+52923 [main] INFO  ScreenRecordingModule  - 51
+53923 [main] INFO  ScreenRecordingModule  - 52
+54924 [main] INFO  ScreenRecordingModule  - 53
+55925 [main] INFO  ScreenRecordingModule  - 54
+56925 [main] INFO  ScreenRecordingModule  - 55
+57925 [main] INFO  ScreenRecordingModule  - 56
+58925 [main] INFO  ScreenRecordingModule  - 57
+59926 [main] INFO  ScreenRecordingModule  - 58
+60927 [main] INFO  ScreenRecordingModule  - 59
+61927 [main] INFO  ScreenRecordingModule  - 60
+62928 [main] INFO  ScreenRecordingModule  - 61
+63966 [main] INFO  ScreenRecordingModule  - 62
+64967 [main] INFO  ScreenRecordingModule  - 63
+65967 [main] INFO  ScreenRecordingModule  - 64
+66967 [main] INFO  ScreenRecordingModule  - 65
+67967 [main] INFO  ScreenRecordingModule  - 66
+68967 [main] INFO  ScreenRecordingModule  - 67
+69968 [main] INFO  ScreenRecordingModule  - 68
+70968 [main] INFO  ScreenRecordingModule  - 69
+71969 [main] INFO  ScreenRecordingModule  - 70
+72970 [main] INFO  ScreenRecordingModule  - 71
+73970 [main] INFO  ScreenRecordingModule  - 72
+74971 [main] INFO  ScreenRecordingModule  - 73
+75971 [main] INFO  ScreenRecordingModule  - 74
+76972 [main] INFO  ScreenRecordingModule  - 75
+77972 [main] INFO  ScreenRecordingModule  - 76
+78973 [main] INFO  ScreenRecordingModule  - 77
+79973 [main] INFO  ScreenRecordingModule  - 78
+80973 [main] INFO  ScreenRecordingModule  - 79
+81974 [main] INFO  ScreenRecordingModule  - 80
+82974 [main] INFO  ScreenRecordingModule  - 81
+83974 [main] INFO  ScreenRecordingModule  - 82
+84975 [main] INFO  ScreenRecordingModule  - 83
+85975 [main] INFO  ScreenRecordingModule  - 84
+86975 [main] INFO  ScreenRecordingModule  - 85
+87975 [main] INFO  ScreenRecordingModule  - 86
+88976 [main] INFO  ScreenRecordingModule  - 87
+89976 [main] INFO  ScreenRecordingModule  - 88
+90977 [main] INFO  ScreenRecordingModule  - 89
+92027 [main] INFO  ScreenRecordingModule  - 90
+93028 [main] INFO  ScreenRecordingModule  - 91
+94028 [main] INFO  ScreenRecordingModule  - 92
+95029 [main] INFO  ScreenRecordingModule  - 93
+96029 [main] INFO  ScreenRecordingModule  - 94
+97030 [main] INFO  ScreenRecordingModule  - 95
+98030 [main] INFO  ScreenRecordingModule  - 96
+99031 [main] INFO  ScreenRecordingModule  - 97
+100031 [main] INFO  ScreenRecordingModule  - 98
+101031 [main] INFO  ScreenRecordingModule  - 99
+102032 [main] INFO  ScreenRecordingModule  - 100
+103032 [main] INFO  ScreenRecordingModule  - 101
+104033 [main] INFO  ScreenRecordingModule  - 102
+105033 [main] INFO  ScreenRecordingModule  - 103
+106033 [main] INFO  ScreenRecordingModule  - 104
+107034 [main] INFO  ScreenRecordingModule  - 105
+108038 [main] INFO  ScreenRecordingModule  - 106
+109039 [main] INFO  ScreenRecordingModule  - 107
+110039 [main] INFO  ScreenRecordingModule  - 108
+111040 [main] INFO  ScreenRecordingModule  - 109
+112041 [main] INFO  ScreenRecordingModule  - 110
+113042 [main] INFO  ScreenRecordingModule  - 111
+114042 [main] INFO  ScreenRecordingModule  - 112
+115043 [main] INFO  ScreenRecordingModule  - 113
+116043 [main] INFO  ScreenRecordingModule  - 114
+117045 [main] INFO  ScreenRecordingModule  - 115
+118046 [main] INFO  ScreenRecordingModule  - 116
+119051 [main] INFO  ScreenRecordingModule  - 117
+120051 [main] INFO  ScreenRecordingModule  - 118
+121052 [main] INFO  ScreenRecordingModule  - 119
+122052 [main] INFO  ScreenRecordingModule  - 120
+123054 [main] INFO  ScreenRecordingModule  - 121
+124055 [main] INFO  ScreenRecordingModule  - 122
+125057 [main] INFO  ScreenRecordingModule  - 123
+126058 [main] INFO  ScreenRecordingModule  - 124
+127058 [main] INFO  ScreenRecordingModule  - 125
+128059 [main] INFO  ScreenRecordingModule  - 126
+129060 [main] INFO  ScreenRecordingModule  - 127
+130060 [main] INFO  ScreenRecordingModule  - 128
+131061 [main] INFO  ScreenRecordingModule  - 129
+132061 [main] INFO  ScreenRecordingModule  - 130
+133062 [main] INFO  ScreenRecordingModule  - 131
+134062 [main] INFO  ScreenRecordingModule  - 132
+135062 [main] INFO  ScreenRecordingModule  - 133
+136063 [main] INFO  ScreenRecordingModule  - 134
+137063 [main] INFO  ScreenRecordingModule  - 135
+138064 [main] INFO  ScreenRecordingModule  - 136
+139065 [main] INFO  ScreenRecordingModule  - 137
+140065 [main] INFO  ScreenRecordingModule  - 138
+141065 [main] INFO  ScreenRecordingModule  - 139
+142066 [main] INFO  ScreenRecordingModule  - 140
+143067 [main] INFO  ScreenRecordingModule  - 141
+144067 [main] INFO  ScreenRecordingModule  - 142
+145067 [main] INFO  ScreenRecordingModule  - 143
+146067 [main] INFO  ScreenRecordingModule  - 144
+147068 [main] INFO  ScreenRecordingModule  - 145
+148068 [main] INFO  ScreenRecordingModule  - 146
+149069 [main] INFO  ScreenRecordingModule  - 147
+150069 [main] INFO  ScreenRecordingModule  - 148
+151070 [main] INFO  ScreenRecordingModule  - 149
+152071 [main] INFO  ScreenRecordingModule  - 150
+153071 [main] INFO  ScreenRecordingModule  - 151
+154071 [main] INFO  ScreenRecordingModule  - 152
+155072 [main] INFO  ScreenRecordingModule  - 153
+156072 [main] INFO  ScreenRecordingModule  - 154
+157072 [main] INFO  ScreenRecordingModule  - 155
+158072 [main] INFO  ScreenRecordingModule  - 156
+159073 [main] INFO  ScreenRecordingModule  - 157
+160073 [main] INFO  ScreenRecordingModule  - 158
+161073 [main] INFO  ScreenRecordingModule  - 159
+162074 [main] INFO  ScreenRecordingModule  - 160
+163074 [main] INFO  ScreenRecordingModule  - 161
+164074 [main] INFO  ScreenRecordingModule  - 162
+165074 [main] INFO  ScreenRecordingModule  - 163
+166143 [main] INFO  ScreenRecordingModule  - 164
+167145 [main] INFO  ScreenRecordingModule  - 165
+168145 [main] INFO  ScreenRecordingModule  - 166
+169145 [main] INFO  ScreenRecordingModule  - 167
+170146 [main] INFO  ScreenRecordingModule  - 168
+171196 [main] INFO  ScreenRecordingModule  - 169
+172197 [main] INFO  ScreenRecordingModule  - 170
+173227 [main] INFO  ScreenRecordingModule  - 171
+174227 [main] INFO  ScreenRecordingModule  - 172
+175238 [main] INFO  ScreenRecordingModule  - 173
+176238 [main] INFO  ScreenRecordingModule  - 174
+177239 [main] INFO  ScreenRecordingModule  - 175
+178240 [main] INFO  ScreenRecordingModule  - 176
+179240 [main] INFO  ScreenRecordingModule  - 177
+180241 [main] INFO  ScreenRecordingModule  - 178
+181241 [main] INFO  ScreenRecordingModule  - 179
+182241 [main] INFO  ScreenRecordingModule  - 180
+183242 [main] DEBUG ScreenRecordingModule  - Screen recording module stopped
+183560 [Screen Recorder] INFO  ScreenRecordingModule  - Recording Stopped
+0    [main] INFO  root  - Logging initialized
+21294 [main] DEBUG ScreenRecordingModule  - Screen recording module started
+29165 [main] INFO  ScreenRecordingModule  - recording for 180 seconds
+29168 [main] INFO  ScreenRecordingModule  - 1
+30169 [main] INFO  ScreenRecordingModule  - 2
+31184 [main] INFO  ScreenRecordingModule  - 3
+32184 [main] INFO  ScreenRecordingModule  - 4
+33185 [main] INFO  ScreenRecordingModule  - 5
+34185 [main] INFO  ScreenRecordingModule  - 6
+35191 [main] INFO  ScreenRecordingModule  - 7
+36193 [main] INFO  ScreenRecordingModule  - 8
+37195 [main] INFO  ScreenRecordingModule  - 9
+38209 [main] INFO  ScreenRecordingModule  - 10
+39212 [main] INFO  ScreenRecordingModule  - 11
+40212 [main] INFO  ScreenRecordingModule  - 12
+41212 [main] INFO  ScreenRecordingModule  - 13
+42213 [main] INFO  ScreenRecordingModule  - 14
+43216 [main] INFO  ScreenRecordingModule  - 15
+44218 [main] INFO  ScreenRecordingModule  - 16
+45218 [main] INFO  ScreenRecordingModule  - 17
+46218 [main] INFO  ScreenRecordingModule  - 18
+47220 [main] INFO  ScreenRecordingModule  - 19
+48221 [main] INFO  ScreenRecordingModule  - 20
+49222 [main] INFO  ScreenRecordingModule  - 21
+50222 [main] INFO  ScreenRecordingModule  - 22
+51223 [main] INFO  ScreenRecordingModule  - 23
+52223 [main] INFO  ScreenRecordingModule  - 24
+53224 [main] INFO  ScreenRecordingModule  - 25
+54224 [main] INFO  ScreenRecordingModule  - 26
+55224 [main] INFO  ScreenRecordingModule  - 27
+56225 [main] INFO  ScreenRecordingModule  - 28
+57275 [main] INFO  ScreenRecordingModule  - 29
+58275 [main] INFO  ScreenRecordingModule  - 30
+59278 [main] INFO  ScreenRecordingModule  - 31
+60278 [main] INFO  ScreenRecordingModule  - 32
+61279 [main] INFO  ScreenRecordingModule  - 33
+62280 [main] INFO  ScreenRecordingModule  - 34
+63281 [main] INFO  ScreenRecordingModule  - 35
+64281 [main] INFO  ScreenRecordingModule  - 36
+65282 [main] INFO  ScreenRecordingModule  - 37
+66283 [main] INFO  ScreenRecordingModule  - 38
+67283 [main] INFO  ScreenRecordingModule  - 39
+68284 [main] INFO  ScreenRecordingModule  - 40
+69284 [main] INFO  ScreenRecordingModule  - 41
+70284 [main] INFO  ScreenRecordingModule  - 42
+71285 [main] INFO  ScreenRecordingModule  - 43
+72285 [main] INFO  ScreenRecordingModule  - 44
+73564 [main] INFO  ScreenRecordingModule  - 45
+74642 [main] INFO  ScreenRecordingModule  - 46
+75779 [main] INFO  ScreenRecordingModule  - 47
+76842 [main] INFO  ScreenRecordingModule  - 48
+77844 [main] INFO  ScreenRecordingModule  - 49
+78845 [main] INFO  ScreenRecordingModule  - 50
+79846 [main] INFO  ScreenRecordingModule  - 51
+80847 [main] INFO  ScreenRecordingModule  - 52
+81847 [main] INFO  ScreenRecordingModule  - 53
+82847 [main] INFO  ScreenRecordingModule  - 54
+83847 [main] INFO  ScreenRecordingModule  - 55
+84847 [main] INFO  ScreenRecordingModule  - 56
+85848 [main] INFO  ScreenRecordingModule  - 57
+86849 [main] INFO  ScreenRecordingModule  - 58
+87850 [main] INFO  ScreenRecordingModule  - 59
+88850 [main] INFO  ScreenRecordingModule  - 60
+89851 [main] INFO  ScreenRecordingModule  - 61
+90852 [main] INFO  ScreenRecordingModule  - 62
+91852 [main] INFO  ScreenRecordingModule  - 63
+92853 [main] INFO  ScreenRecordingModule  - 64
+93860 [main] INFO  ScreenRecordingModule  - 65
+94920 [main] INFO  ScreenRecordingModule  - 66
+95921 [main] INFO  ScreenRecordingModule  - 67
+96921 [main] INFO  ScreenRecordingModule  - 68
+97986 [main] INFO  ScreenRecordingModule  - 69
+98987 [main] INFO  ScreenRecordingModule  - 70
+99987 [main] INFO  ScreenRecordingModule  - 71
+100988 [main] INFO  ScreenRecordingModule  - 72
+101995 [main] INFO  ScreenRecordingModule  - 73
+102995 [main] INFO  ScreenRecordingModule  - 74
+103996 [main] INFO  ScreenRecordingModule  - 75
+104996 [main] INFO  ScreenRecordingModule  - 76
+105996 [main] INFO  ScreenRecordingModule  - 77
+106997 [main] INFO  ScreenRecordingModule  - 78
+107998 [main] INFO  ScreenRecordingModule  - 79
+108998 [main] INFO  ScreenRecordingModule  - 80
+109999 [main] INFO  ScreenRecordingModule  - 81
+110999 [main] INFO  ScreenRecordingModule  - 82
+111999 [main] INFO  ScreenRecordingModule  - 83
+112999 [main] INFO  ScreenRecordingModule  - 84
+114000 [main] INFO  ScreenRecordingModule  - 85
+115001 [main] INFO  ScreenRecordingModule  - 86
+116002 [main] INFO  ScreenRecordingModule  - 87
+117002 [main] INFO  ScreenRecordingModule  - 88
+118003 [main] INFO  ScreenRecordingModule  - 89
+119003 [main] INFO  ScreenRecordingModule  - 90
+120003 [main] INFO  ScreenRecordingModule  - 91
+121003 [main] INFO  ScreenRecordingModule  - 92
+122004 [main] INFO  ScreenRecordingModule  - 93
+123005 [main] INFO  ScreenRecordingModule  - 94
+124005 [main] INFO  ScreenRecordingModule  - 95
+125005 [main] INFO  ScreenRecordingModule  - 96
+126005 [main] INFO  ScreenRecordingModule  - 97
+127005 [main] INFO  ScreenRecordingModule  - 98
+128006 [main] INFO  ScreenRecordingModule  - 99
+129006 [main] INFO  ScreenRecordingModule  - 100
+130007 [main] INFO  ScreenRecordingModule  - 101
+131007 [main] INFO  ScreenRecordingModule  - 102
+132007 [main] INFO  ScreenRecordingModule  - 103
+133007 [main] INFO  ScreenRecordingModule  - 104
+134008 [main] INFO  ScreenRecordingModule  - 105
+135008 [main] INFO  ScreenRecordingModule  - 106
+136009 [main] INFO  ScreenRecordingModule  - 107
+137009 [main] INFO  ScreenRecordingModule  - 108
+138010 [main] INFO  ScreenRecordingModule  - 109
+139010 [main] INFO  ScreenRecordingModule  - 110
+140010 [main] INFO  ScreenRecordingModule  - 111
+141010 [main] INFO  ScreenRecordingModule  - 112
+142011 [main] INFO  ScreenRecordingModule  - 113
+143011 [main] INFO  ScreenRecordingModule  - 114
+144011 [main] INFO  ScreenRecordingModule  - 115
+145012 [main] INFO  ScreenRecordingModule  - 116
+146013 [main] INFO  ScreenRecordingModule  - 117
+147013 [main] INFO  ScreenRecordingModule  - 118
+148014 [main] INFO  ScreenRecordingModule  - 119
+149014 [main] INFO  ScreenRecordingModule  - 120
+150015 [main] INFO  ScreenRecordingModule  - 121
+0    [main] INFO  root  - Logging initialized
+146  [main] DEBUG ScreenRecordingModule  - Screen recording module started
+180  [main] INFO  ScreenRecordingModule  - recording for 180 seconds
+184  [main] INFO  ScreenRecordingModule  - 1
+1213 [main] INFO  ScreenRecordingModule  - 2
+2214 [main] INFO  ScreenRecordingModule  - 3
+3214 [main] INFO  ScreenRecordingModule  - 4
+4214 [main] INFO  ScreenRecordingModule  - 5
+5214 [main] INFO  ScreenRecordingModule  - 6
+6214 [main] INFO  ScreenRecordingModule  - 7
+7215 [main] INFO  ScreenRecordingModule  - 8
+8215 [main] INFO  ScreenRecordingModule  - 9
+9216 [main] INFO  ScreenRecordingModule  - 10
+10217 [main] INFO  ScreenRecordingModule  - 11
+11218 [main] INFO  ScreenRecordingModule  - 12
+12218 [main] INFO  ScreenRecordingModule  - 13
+13218 [main] INFO  ScreenRecordingModule  - 14
+14219 [main] INFO  ScreenRecordingModule  - 15
+15219 [main] INFO  ScreenRecordingModule  - 16
+16219 [main] INFO  ScreenRecordingModule  - 17
+17220 [main] INFO  ScreenRecordingModule  - 18
+18220 [main] INFO  ScreenRecordingModule  - 19
+19220 [main] INFO  ScreenRecordingModule  - 20
+20220 [main] INFO  ScreenRecordingModule  - 21
+21222 [main] INFO  ScreenRecordingModule  - 22
+22223 [main] INFO  ScreenRecordingModule  - 23
+23223 [main] INFO  ScreenRecordingModule  - 24
+24223 [main] INFO  ScreenRecordingModule  - 25
+25223 [main] INFO  ScreenRecordingModule  - 26
+26224 [main] INFO  ScreenRecordingModule  - 27
+27225 [main] INFO  ScreenRecordingModule  - 28
+28225 [main] INFO  ScreenRecordingModule  - 29
+29226 [main] INFO  ScreenRecordingModule  - 30
+30227 [main] INFO  ScreenRecordingModule  - 31
+31227 [main] INFO  ScreenRecordingModule  - 32
+32227 [main] INFO  ScreenRecordingModule  - 33
+33228 [main] INFO  ScreenRecordingModule  - 34
+34228 [main] INFO  ScreenRecordingModule  - 35
+35229 [main] INFO  ScreenRecordingModule  - 36
+36230 [main] INFO  ScreenRecordingModule  - 37
+37230 [main] INFO  ScreenRecordingModule  - 38
+38231 [main] INFO  ScreenRecordingModule  - 39
+39231 [main] INFO  ScreenRecordingModule  - 40
+40231 [main] INFO  ScreenRecordingModule  - 41
+41232 [main] INFO  ScreenRecordingModule  - 42
+42232 [main] INFO  ScreenRecordingModule  - 43
+0    [main] INFO  root  - Logging initialized
+9394 [main] DEBUG ScreenRecordingModule  - Screen recording module started
+9464 [main] INFO  ScreenRecordingModule  - recording for 180 seconds
+9473 [main] INFO  ScreenRecordingModule  - 1
+10474 [main] INFO  ScreenRecordingModule  - 2
+11474 [main] INFO  ScreenRecordingModule  - 3
+12474 [main] INFO  ScreenRecordingModule  - 4
+13475 [main] INFO  ScreenRecordingModule  - 5
+14476 [main] INFO  ScreenRecordingModule  - 6
+15477 [main] INFO  ScreenRecordingModule  - 7
+16477 [main] INFO  ScreenRecordingModule  - 8
+17478 [main] INFO  ScreenRecordingModule  - 9
+18478 [main] INFO  ScreenRecordingModule  - 10
+19478 [main] INFO  ScreenRecordingModule  - 11
+20479 [main] INFO  ScreenRecordingModule  - 12
+21479 [main] INFO  ScreenRecordingModule  - 13
+22480 [main] INFO  ScreenRecordingModule  - 14
+23481 [main] INFO  ScreenRecordingModule  - 15
+24482 [main] INFO  ScreenRecordingModule  - 16
+25482 [main] INFO  ScreenRecordingModule  - 17
+26482 [main] INFO  ScreenRecordingModule  - 18
+27482 [main] INFO  ScreenRecordingModule  - 19
+28483 [main] INFO  ScreenRecordingModule  - 20
+29484 [main] INFO  ScreenRecordingModule  - 21
+30485 [main] INFO  ScreenRecordingModule  - 22
+31485 [main] INFO  ScreenRecordingModule  - 23
+32485 [main] INFO  ScreenRecordingModule  - 24
+33485 [main] INFO  ScreenRecordingModule  - 25
+34485 [main] INFO  ScreenRecordingModule  - 26
+35486 [main] INFO  ScreenRecordingModule  - 27
+36486 [main] INFO  ScreenRecordingModule  - 28
+37486 [main] INFO  ScreenRecordingModule  - 29
+38487 [main] INFO  ScreenRecordingModule  - 30
+39488 [main] INFO  ScreenRecordingModule  - 31
+40489 [main] INFO  ScreenRecordingModule  - 32
+41489 [main] INFO  ScreenRecordingModule  - 33
+42490 [main] INFO  ScreenRecordingModule  - 34
+43490 [main] INFO  ScreenRecordingModule  - 35
+0    [main] INFO  root  - Logging initialized
+7184 [main] ERROR ScreenRecordingModule  - Could not clear out file frame.17114160140000.jpgin output folder
+7349 [main] DEBUG ScreenRecordingModule  - Screen recording module started
+7409 [main] INFO  ScreenRecordingModule  - recording for 180 seconds
+7413 [main] INFO  ScreenRecordingModule  - 1
+8413 [main] INFO  ScreenRecordingModule  - 2
+9414 [main] INFO  ScreenRecordingModule  - 3
+10414 [main] INFO  ScreenRecordingModule  - 4
+11414 [main] INFO  ScreenRecordingModule  - 5
+12415 [main] INFO  ScreenRecordingModule  - 6
+13415 [main] INFO  ScreenRecordingModule  - 7
+14415 [main] INFO  ScreenRecordingModule  - 8
+15415 [main] INFO  ScreenRecordingModule  - 9
+16416 [main] INFO  ScreenRecordingModule  - 10
+17416 [main] INFO  ScreenRecordingModule  - 11
+18416 [main] INFO  ScreenRecordingModule  - 12
+19417 [main] INFO  ScreenRecordingModule  - 13
+20417 [main] INFO  ScreenRecordingModule  - 14
+21418 [main] INFO  ScreenRecordingModule  - 15
+0    [main] INFO  root  - Logging initialized
+4932 [main] DEBUG ScreenRecordingModule  - Screen recording module started
+4994 [main] INFO  ScreenRecordingModule  - recording for 180 seconds
+5001 [main] INFO  ScreenRecordingModule  - 1
+6002 [main] INFO  ScreenRecordingModule  - 2
+7003 [main] INFO  ScreenRecordingModule  - 3
+8003 [main] INFO  ScreenRecordingModule  - 4
+9004 [main] INFO  ScreenRecordingModule  - 5
+10005 [main] INFO  ScreenRecordingModule  - 6
+11005 [main] INFO  ScreenRecordingModule  - 7
+12005 [main] INFO  ScreenRecordingModule  - 8
+13005 [main] INFO  ScreenRecordingModule  - 9
+14006 [main] INFO  ScreenRecordingModule  - 10
+15006 [main] INFO  ScreenRecordingModule  - 11
+16007 [main] INFO  ScreenRecordingModule  - 12
+17010 [main] INFO  ScreenRecordingModule  - 13
+18010 [main] INFO  ScreenRecordingModule  - 14
+19011 [main] INFO  ScreenRecordingModule  - 15
+20011 [main] INFO  ScreenRecordingModule  - 16
+21031 [main] INFO  ScreenRecordingModule  - 17
+22032 [main] INFO  ScreenRecordingModule  - 18
+23033 [main] INFO  ScreenRecordingModule  - 19
+24033 [main] INFO  ScreenRecordingModule  - 20
+25033 [main] INFO  ScreenRecordingModule  - 21
+26033 [main] INFO  ScreenRecordingModule  - 22
+27034 [main] INFO  ScreenRecordingModule  - 23
+28034 [main] INFO  ScreenRecordingModule  - 24
+29035 [main] INFO  ScreenRecordingModule  - 25
+30035 [main] INFO  ScreenRecordingModule  - 26
+31036 [main] INFO  ScreenRecordingModule  - 27
+0    [main] INFO  root  - Logging initialized
+9845 [main] DEBUG ScreenRecordingModule  - Screen recording module started
+9902 [main] INFO  ScreenRecordingModule  - recording for 180 seconds
+9909 [main] INFO  ScreenRecordingModule  - 1
+10909 [main] INFO  ScreenRecordingModule  - 2
+11909 [main] INFO  ScreenRecordingModule  - 3
+12909 [main] INFO  ScreenRecordingModule  - 4
+13909 [main] INFO  ScreenRecordingModule  - 5
+14910 [main] INFO  ScreenRecordingModule  - 6
+15910 [main] INFO  ScreenRecordingModule  - 7
+16911 [main] INFO  ScreenRecordingModule  - 8
+17911 [main] INFO  ScreenRecordingModule  - 9
+18911 [main] INFO  ScreenRecordingModule  - 10
+19912 [main] INFO  ScreenRecordingModule  - 11
+20912 [main] INFO  ScreenRecordingModule  - 12
+21913 [main] INFO  ScreenRecordingModule  - 13
+22913 [main] INFO  ScreenRecordingModule  - 14
+23913 [main] INFO  ScreenRecordingModule  - 15
+24914 [main] INFO  ScreenRecordingModule  - 16
+25915 [main] INFO  ScreenRecordingModule  - 17
+26915 [main] INFO  ScreenRecordingModule  - 18
+0    [main] INFO  root  - Logging initialized
+4778 [main] DEBUG ScreenRecordingModule  - Screen recording module started
+4849 [main] INFO  ScreenRecordingModule  - recording for 180 seconds
+4852 [main] INFO  ScreenRecordingModule  - 1
+5852 [main] INFO  ScreenRecordingModule  - 2
+6853 [main] INFO  ScreenRecordingModule  - 3
+7853 [main] INFO  ScreenRecordingModule  - 4
+8854 [main] INFO  ScreenRecordingModule  - 5
+9855 [main] INFO  ScreenRecordingModule  - 6
+10875 [main] INFO  ScreenRecordingModule  - 7
+11876 [main] INFO  ScreenRecordingModule  - 8
+12877 [main] INFO  ScreenRecordingModule  - 9
+13878 [main] INFO  ScreenRecordingModule  - 10
+14878 [main] INFO  ScreenRecordingModule  - 11
+15879 [main] INFO  ScreenRecordingModule  - 12
+16879 [main] INFO  ScreenRecordingModule  - 13
+17880 [main] INFO  ScreenRecordingModule  - 14
+18880 [main] INFO  ScreenRecordingModule  - 15
+19881 [main] INFO  ScreenRecordingModule  - 16
+20881 [main] INFO  ScreenRecordingModule  - 17
+21881 [main] INFO  ScreenRecordingModule  - 18
+22881 [main] INFO  ScreenRecordingModule  - 19
+23882 [main] INFO  ScreenRecordingModule  - 20
+0    [main] INFO  root  - Logging initialized
+3557 [main] DEBUG ScreenRecordingModule  - Screen recording module started
+3580 [main] INFO  ScreenRecordingModule  - recording for 180 seconds
+3586 [main] INFO  ScreenRecordingModule  - 1
+4587 [main] INFO  ScreenRecordingModule  - 2
+5587 [main] INFO  ScreenRecordingModule  - 3
+6588 [main] INFO  ScreenRecordingModule  - 4
+7588 [main] INFO  ScreenRecordingModule  - 5
+8588 [main] INFO  ScreenRecordingModule  - 6
+9588 [main] INFO  ScreenRecordingModule  - 7
+10589 [main] INFO  ScreenRecordingModule  - 8
+11590 [main] INFO  ScreenRecordingModule  - 9
+12594 [main] INFO  ScreenRecordingModule  - 10
+0    [main] INFO  root  - Logging initialized
+4131 [main] DEBUG ScreenRecordingModule  - Screen recording module started
+4161 [main] INFO  ScreenRecordingModule  - recording for 180 seconds
+4165 [main] INFO  ScreenRecordingModule  - 1
+5171 [main] INFO  ScreenRecordingModule  - 2
+6171 [main] INFO  ScreenRecordingModule  - 3
+7171 [main] INFO  ScreenRecordingModule  - 4
+8172 [main] INFO  ScreenRecordingModule  - 5
+9173 [main] INFO  ScreenRecordingModule  - 6
+10174 [main] INFO  ScreenRecordingModule  - 7
+11176 [main] INFO  ScreenRecordingModule  - 8
+12177 [main] INFO  ScreenRecordingModule  - 9
+13177 [main] INFO  ScreenRecordingModule  - 10
+14178 [main] INFO  ScreenRecordingModule  - 11
+15178 [main] INFO  ScreenRecordingModule  - 12
+16178 [main] INFO  ScreenRecordingModule  - 13
+17178 [main] INFO  ScreenRecordingModule  - 14
+18179 [main] INFO  ScreenRecordingModule  - 15
+19180 [main] INFO  ScreenRecordingModule  - 16
+20181 [main] INFO  ScreenRecordingModule  - 17
+21181 [main] INFO  ScreenRecordingModule  - 18
+22182 [main] INFO  ScreenRecordingModule  - 19
+23182 [main] INFO  ScreenRecordingModule  - 20
+24182 [main] INFO  ScreenRecordingModule  - 21
+25183 [main] INFO  ScreenRecordingModule  - 22
+26184 [main] INFO  ScreenRecordingModule  - 23
+27184 [main] INFO  ScreenRecordingModule  - 24
+28185 [main] INFO  ScreenRecordingModule  - 25
+29185 [main] INFO  ScreenRecordingModule  - 26
+0    [main] INFO  root  - Logging initialized
+5552 [main] DEBUG ScreenRecordingModule  - Screen recording module started
+5607 [main] INFO  ScreenRecordingModule  - recording for 180 seconds
+5613 [main] INFO  ScreenRecordingModule  - 1
+6613 [main] INFO  ScreenRecordingModule  - 2
+7614 [main] INFO  ScreenRecordingModule  - 3
+8615 [main] INFO  ScreenRecordingModule  - 4
+9615 [main] INFO  ScreenRecordingModule  - 5
+10624 [main] INFO  ScreenRecordingModule  - 6
+11625 [main] INFO  ScreenRecordingModule  - 7
+12625 [main] INFO  ScreenRecordingModule  - 8
+13626 [main] INFO  ScreenRecordingModule  - 9
+14626 [main] INFO  ScreenRecordingModule  - 10
+15627 [main] INFO  ScreenRecordingModule  - 11
+16627 [main] INFO  ScreenRecordingModule  - 12
+17627 [main] INFO  ScreenRecordingModule  - 13
+18627 [main] INFO  ScreenRecordingModule  - 14
+19628 [main] INFO  ScreenRecordingModule  - 15
+20629 [main] INFO  ScreenRecordingModule  - 16
+21630 [main] INFO  ScreenRecordingModule  - 17
+22630 [main] INFO  ScreenRecordingModule  - 18
+23631 [main] INFO  ScreenRecordingModule  - 19
+24632 [main] INFO  ScreenRecordingModule  - 20
+25633 [main] INFO  ScreenRecordingModule  - 21
+26634 [main] INFO  ScreenRecordingModule  - 22
+27635 [main] INFO  ScreenRecordingModule  - 23
+28635 [main] INFO  ScreenRecordingModule  - 24
+29635 [main] INFO  ScreenRecordingModule  - 25
+30636 [main] INFO  ScreenRecordingModule  - 26
+31636 [main] INFO  ScreenRecordingModule  - 27
+32636 [main] INFO  ScreenRecordingModule  - 28
+33636 [main] INFO  ScreenRecordingModule  - 29
+34636 [main] INFO  ScreenRecordingModule  - 30
+35637 [main] INFO  ScreenRecordingModule  - 31
+36637 [main] INFO  ScreenRecordingModule  - 32
+37638 [main] INFO  ScreenRecordingModule  - 33
+38639 [main] INFO  ScreenRecordingModule  - 34
+39639 [main] INFO  ScreenRecordingModule  - 35
+40640 [main] INFO  ScreenRecordingModule  - 36
+41640 [main] INFO  ScreenRecordingModule  - 37
+42640 [main] INFO  ScreenRecordingModule  - 38
+43641 [main] INFO  ScreenRecordingModule  - 39
+44641 [main] INFO  ScreenRecordingModule  - 40
+45642 [main] INFO  ScreenRecordingModule  - 41
+46648 [main] INFO  ScreenRecordingModule  - 42
+47648 [main] INFO  ScreenRecordingModule  - 43
+48648 [main] INFO  ScreenRecordingModule  - 44
+49649 [main] INFO  ScreenRecordingModule  - 45
+50649 [main] INFO  ScreenRecordingModule  - 46
+0    [main] INFO  root  - Logging initialized
+8407 [main] DEBUG ScreenRecordingModule  - Screen recording module started
+8466 [main] INFO  ScreenRecordingModule  - recording for 180 seconds
+8472 [main] INFO  ScreenRecordingModule  - 1
+9472 [main] INFO  ScreenRecordingModule  - 2
+10472 [main] INFO  ScreenRecordingModule  - 3
+11473 [main] INFO  ScreenRecordingModule  - 4
+12473 [main] INFO  ScreenRecordingModule  - 5
+13475 [main] INFO  ScreenRecordingModule  - 6
+14475 [main] INFO  ScreenRecordingModule  - 7
+15475 [main] INFO  ScreenRecordingModule  - 8
+16475 [main] INFO  ScreenRecordingModule  - 9
+17476 [main] INFO  ScreenRecordingModule  - 10
+18476 [main] INFO  ScreenRecordingModule  - 11
+19477 [main] INFO  ScreenRecordingModule  - 12
+20477 [main] INFO  ScreenRecordingModule  - 13
+21477 [main] INFO  ScreenRecordingModule  - 14
+22477 [main] INFO  ScreenRecordingModule  - 15
+23478 [main] INFO  ScreenRecordingModule  - 16
+24478 [main] INFO  ScreenRecordingModule  - 17
+25479 [main] INFO  ScreenRecordingModule  - 18
+26479 [main] INFO  ScreenRecordingModule  - 19
+27479 [main] INFO  ScreenRecordingModule  - 20
+28480 [main] INFO  ScreenRecordingModule  - 21
+29480 [main] INFO  ScreenRecordingModule  - 22
+30481 [main] INFO  ScreenRecordingModule  - 23
+31481 [main] INFO  ScreenRecordingModule  - 24
+32481 [main] INFO  ScreenRecordingModule  - 25
+33481 [main] INFO  ScreenRecordingModule  - 26
+34482 [main] INFO  ScreenRecordingModule  - 27
+35484 [main] INFO  ScreenRecordingModule  - 28
+36485 [main] INFO  ScreenRecordingModule  - 29
+37486 [main] INFO  ScreenRecordingModule  - 30
+38486 [main] INFO  ScreenRecordingModule  - 31
+39487 [main] INFO  ScreenRecordingModule  - 32
+40487 [main] INFO  ScreenRecordingModule  - 33
+41488 [main] INFO  ScreenRecordingModule  - 34
+42497 [main] INFO  ScreenRecordingModule  - 35
+43497 [main] INFO  ScreenRecordingModule  - 36
+44497 [main] INFO  ScreenRecordingModule  - 37
+45498 [main] INFO  ScreenRecordingModule  - 38
+46498 [main] INFO  ScreenRecordingModule  - 39
+47498 [main] INFO  ScreenRecordingModule  - 40
+48498 [main] INFO  ScreenRecordingModule  - 41
+49499 [main] INFO  ScreenRecordingModule  - 42
+50499 [main] INFO  ScreenRecordingModule  - 43
+51500 [main] INFO  ScreenRecordingModule  - 44
+52500 [main] INFO  ScreenRecordingModule  - 45
+53500 [main] INFO  ScreenRecordingModule  - 46
+54562 [main] INFO  ScreenRecordingModule  - 47
+0    [main] INFO  root  - Logging initialized
+15922 [main] DEBUG ScreenRecordingModule  - Screen recording module started
+16003 [main] INFO  ScreenRecordingModule  - recording for 180 seconds
+16004 [main] INFO  ScreenRecordingModule  - 1
+17005 [main] INFO  ScreenRecordingModule  - 2
+18005 [main] INFO  ScreenRecordingModule  - 3
+19005 [main] INFO  ScreenRecordingModule  - 4
+20005 [main] INFO  ScreenRecordingModule  - 5
+21006 [main] INFO  ScreenRecordingModule  - 6
+22006 [main] INFO  ScreenRecordingModule  - 7
+23007 [main] INFO  ScreenRecordingModule  - 8
+24008 [main] INFO  ScreenRecordingModule  - 9
+25008 [main] INFO  ScreenRecordingModule  - 10
+26009 [main] INFO  ScreenRecordingModule  - 11
+27009 [main] INFO  ScreenRecordingModule  - 12
+28011 [main] INFO  ScreenRecordingModule  - 13
+29011 [main] INFO  ScreenRecordingModule  - 14
+30011 [main] INFO  ScreenRecordingModule  - 15
+31011 [main] INFO  ScreenRecordingModule  - 16
+32012 [main] INFO  ScreenRecordingModule  - 17
+33014 [main] INFO  ScreenRecordingModule  - 18
+34014 [main] INFO  ScreenRecordingModule  - 19
+35015 [main] INFO  ScreenRecordingModule  - 20
+36016 [main] INFO  ScreenRecordingModule  - 21
+37017 [main] INFO  ScreenRecordingModule  - 22
+38017 [main] INFO  ScreenRecordingModule  - 23
+39018 [main] INFO  ScreenRecordingModule  - 24
+40018 [main] INFO  ScreenRecordingModule  - 25
+41018 [main] INFO  ScreenRecordingModule  - 26
+42019 [main] INFO  ScreenRecordingModule  - 27
+43019 [main] INFO  ScreenRecordingModule  - 28
+44020 [main] INFO  ScreenRecordingModule  - 29
+45020 [main] INFO  ScreenRecordingModule  - 30
+46021 [main] INFO  ScreenRecordingModule  - 31
+47022 [main] INFO  ScreenRecordingModule  - 32
+48022 [main] INFO  ScreenRecordingModule  - 33
+49030 [main] INFO  ScreenRecordingModule  - 34
+50030 [main] INFO  ScreenRecordingModule  - 35
+51031 [main] INFO  ScreenRecordingModule  - 36
+52031 [main] INFO  ScreenRecordingModule  - 37
+53031 [main] INFO  ScreenRecordingModule  - 38
+54032 [main] INFO  ScreenRecordingModule  - 39
+55032 [main] INFO  ScreenRecordingModule  - 40
+56032 [main] INFO  ScreenRecordingModule  - 41
+57045 [main] INFO  ScreenRecordingModule  - 42
+58046 [main] INFO  ScreenRecordingModule  - 43
+59047 [main] INFO  ScreenRecordingModule  - 44
+60047 [main] INFO  ScreenRecordingModule  - 45

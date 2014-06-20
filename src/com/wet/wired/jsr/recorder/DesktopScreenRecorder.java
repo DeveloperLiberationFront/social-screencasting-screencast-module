@@ -43,6 +43,8 @@ import org.apache.log4j.Logger;
 
 public class DesktopScreenRecorder extends ScreenRecorder {
 	private static Logger logger = Logger.getLogger(DesktopScreenRecorder.class.getName());
+	
+
 	public static boolean useWhiteCursor;
 	private Robot robot;
 	private BufferedImage mouseCursor;

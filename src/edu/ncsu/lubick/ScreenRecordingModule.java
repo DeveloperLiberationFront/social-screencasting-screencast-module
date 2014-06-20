@@ -25,6 +25,8 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 
 	private boolean isRecording;
 
+	private boolean isPaused;
+
 	//Static initializer to get the logging path set up and create the hub
 	static {
 		try
@@ -100,6 +102,22 @@ public class ScreenRecordingModule implements ScreenRecorderListener
 			recorder.startRecording();
 			isRecording = true;
 		}
+	}
+	
+	public void pauseRecording() {
+		if (!isPaused) {
+			recorder.pause(true);
+			isPaused = true;
+		}
+		
+	}
+	
+	public void unpauseRecording() {
+		if (isPaused) {
+			recorder.pause(false);
+			isPaused = false;
+		}
+		
 	}
 
 

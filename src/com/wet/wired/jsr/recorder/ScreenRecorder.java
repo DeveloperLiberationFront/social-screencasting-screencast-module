@@ -54,6 +54,7 @@ public abstract class ScreenRecorder implements Runnable {
 	private ScreenRecorderListener listener;
 
 	private File outputFolder;
+	private boolean isPaused;
 
 	public ScreenRecorder(File outputFolder, ScreenRecorderListener listener)
 	{
@@ -94,15 +95,18 @@ public abstract class ScreenRecorder implements Runnable {
 				time = System.currentTimeMillis();
 			}
 			lastFrameTime = time;
-
-			try
+			
+			if (!isPaused)
 			{
-				recordFrame();
-			}
-			catch (Exception e)
-			{
-				logger.error("Problem in main loop", e);
-				break;
+				try
+				{
+					recordFrame();
+				}
+				catch (Exception e)
+				{
+					logger.error("Problem in main loop", e);
+					break;
+				}
 			}
 		}
 
@@ -178,6 +182,11 @@ public abstract class ScreenRecorder implements Runnable {
 	public int getFrameSize()
 	{
 		return frameSize;
+	}
+
+	public void pause(boolean b)
+	{
+		isPaused = b;
 	}
 
 }

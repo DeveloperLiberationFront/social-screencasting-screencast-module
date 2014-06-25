@@ -1,6 +1,7 @@
 package com.wet.wired.jsr.recorder;
 
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -32,7 +33,7 @@ public class ThreadedDesktopRecorder extends DesktopScreenRecorder {
 	}
 	
 	@Override
-	protected void writeImageToDisk(final BufferedImage bImage) throws IOException
+	protected void writeImageToDisk(final RenderedImage bImage) throws IOException
 	{
 		
 		final Date dateOfFrame = new Date();

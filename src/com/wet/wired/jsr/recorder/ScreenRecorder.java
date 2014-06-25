@@ -28,6 +28,7 @@ package com.wet.wired.jsr.recorder;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
@@ -129,7 +130,7 @@ public abstract class ScreenRecorder implements Runnable {
 		listener.frameRecorded(true);
 	}
 
-	protected void writeImageToDisk(BufferedImage bImage) throws IOException
+	protected void writeImageToDisk(RenderedImage bImage) throws IOException
 	{
 		
 		ImageIO.write(bImage, "jpg", makeFile(new Date()));

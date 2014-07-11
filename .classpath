@@ -7,7 +7,6 @@
 		</accessrules>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="D:/workspace/Misc Libraries/log4j-1.2.17.jar"/>
-	<classpathentry kind="lib" path="D:/workspace/Misc Libraries/jmf.jar"/>
+	<classpathentry kind="lib" path="externalJars/log4j-1.2.17.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -30,6 +30,7 @@ import java.awt.AWTException;
 import java.awt.Graphics2D;
 import java.awt.MouseInfo;
 import java.awt.Point;
+import java.awt.PointerInfo;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
@@ -83,8 +84,14 @@ public class DesktopScreenRecorder extends ScreenRecorder {
 
 	@Override
 	public BufferedImage captureScreen(Rectangle recordArea) {
-		Point mousePosition = MouseInfo.getPointerInfo().getLocation();
+		
 		BufferedImage image = robot.createScreenCapture(recordArea);
+		
+		PointerInfo pointerInfo = MouseInfo.getPointerInfo();	//sometimes the mouse doesn't exist?
+		if (pointerInfo == null) {
+			return image;
+		}
+		Point mousePosition = pointerInfo.getLocation();
 
 		Graphics2D grfx = image.createGraphics();
 
